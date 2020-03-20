@@ -28,10 +28,10 @@ public class Lexer
 	//!Generates list of all tokens in input file, throws exception if unexpected input
 	public ArrayList<String> readTokens() throws Exception
 	{
-
+		//Continues iterating till no more tokens can be read, or an error is encountered
 	}
 
-	private String readToken()
+	private String readToken() throws Exception
 	{
 		string token = "";
 	    char ch;
@@ -73,7 +73,7 @@ public class Lexer
 				{
 					this.state = ;
 				}
-				
+
 			}
 
 	    }
