@@ -1,0 +1,55 @@
+K ::= and 
+	| or
+	| not
+	| add
+	| sub
+	| mult
+	| if 
+	| then
+	| else
+	| while
+	| for
+	| eq
+	| input
+	| output
+	| halt
+	| num
+	| bool
+	| string
+	| proc
+	| T
+	| F
+
+I ::= ([a-z][a-z0-9]*)
+
+N ::= (-?[1-9][0-9]*|0)
+
+S ::= "[a-z0-9☐]{0,8}"
+
+Q ::= K | I | N | S
+		| Q < Q
+		| Q > Q
+		| Q ☐ Q
+		| Q # Q
+		| Q = Q
+		| Q , Q
+		| (Q)
+		| {Q}
+		| Q;
+
+a-z = A
+0-9 = N
+1-9 = O
+a-z0-9 = Z
+a-z0-9☐ = S
+
+Q ::= (and|or|not|add|sub|mult|if|then|else|while|for|eq|input|output|halt|num|bool|string|proc|T|F)|(AZ*)|(-?ON*|0)|("[a-z0-9☐]{0,8}")
+		| Q < Q
+		| Q > Q
+		| Q ☐ Q
+		| Q # Q
+		| Q = Q
+		| Q , Q
+		| (Q)
+		| {Q}
+		| Q;
