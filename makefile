@@ -8,7 +8,7 @@ JC = javac
 
 CLASSES = \
         src/spl.java \
-        src/lexer/Lexer.java \
+        src/Lexer.java \
 
 default: classes
 
