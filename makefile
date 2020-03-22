@@ -7,7 +7,8 @@ JC = javac
         $(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-        spl.java \
+        src/spl.java \
+        src/lexer/Lexer.java \
 
 default: classes
 
