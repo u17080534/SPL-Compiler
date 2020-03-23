@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import javafx.util.*;
 
 public class Lexer 
 {
@@ -14,7 +15,51 @@ public class Lexer
 	//!Start State ID
 	private int startState;
 	//!List of Tokens Read from Input
-	private List<String> tokens;
+	private List<Pair<String, String>> tokens;
+
+	private enum Token
+	{ 
+		NULL("_"),
+		TOK_AND("tok_and"), 
+		TOK_OR("tok_or"), 
+		TOK_NOT("tok_not"),
+		TOK_ADD("tok_add"),
+		TOK_SUB("tok_sub"),
+		TOK_MULT("tok_mult"),
+		TOK_IF("tok_if"),
+		TOK_THEN("tok_then"),
+		TOK_ELSE("tok_else"),
+		TOK_WHILE("tok_while"),
+		TOK_FOR("tok_for"),
+		TOK_EQ("tok_eq"),
+		TOK_INPUT("tok_input"),
+		TOK_OUTPUT("tok_output"),
+		TOK_HALT("tok_halt"),
+		TOK_NUM("tok_num"),
+		TOK_BOOL("tok_bool"),
+		TOK_STRING("tok_string"),
+		TOK_PROC("tok_proc"),
+		TOK_T("tok_t"),
+		TOK_F("tok_f"),
+		TOK_GT("tok_greater"),
+		TOK_LT("tok_less"),
+		TOK_OP("tok_oparen"),
+		TOK_CP("tok_cparen"),
+		TOK_OB("tok_obrace"),
+		TOK_CB("tok_cbrace"),
+		TOK_ASS("tok_assign"),
+		TOK_COMM("tok_comma"),
+		TOK_SEMI("tok_semi"),
+		TOK_STR("tok_str"),
+		TOK_INT("tok_int"),
+		TOK_ID("tok_id");
+
+		private String str; 
+
+		private Token(String str) { this.str = str; } 
+
+		@Override public String toString() { return this.str; } 
+	}
 
 	public Lexer(BufferedReader buffer)
 	{
@@ -26,31 +71,43 @@ public class Lexer
 		this.acceptStates.add(new Integer(24));
 		this.acceptStates.add(new Integer(32));
 		this.acceptStates.add(new Integer(65));
-		this.tokens = new ArrayList<String>();
+
+		this.tokens = new ArrayList<Pair<String, String>>();
+
 		this.buffer = buffer;
 	}
 
+	public List<Pair<String, String>> getTokens()
+	{
+		return this.tokens;
+	}
+
 	//!Generates list of all tokens in input file, throws exception if unexpected input
-	public ArrayList<String> readTokens() throws Exception
+	public List<Pair<String, String>> readTokens() throws Exception
 	{
 		//Continues iterating till no more tokens can be read, or an error is encountered
 
-		ArrayList<String> tokens = new ArrayList<String>();
-		String token;
+		boolean tokenize = true;
+		Pair<String, String> token;
 
-		while((token = this.readToken()) != "")
-			tokens.add(token);
+		while(tokenize)
+		{
+			try
+			{
+				tokenize = this.readToken();
+			}
+			catch(Exception exp)
+			{
+				tokenize = false;
+				throw exp;
+			}
+		}
 
-		return tokens;
+		return this.tokens;
 	}
 
-	private String readToken() throws Exception
+	private boolean readToken() throws Exception
 	{
-	    char ch = ' ';
-		String token = "";
-		int state = this.startState;
-		Stack<Character> charStack = new Stack<Character>();
-
 	    //Each State Contains its own IF Statement, which contains each of its transitions
 	    /*
 			Consider transitions of currState
@@ -69,6 +126,13 @@ public class Lexer
 			-> read in next char and repeat
 	    */
 
+		char ch = ' ';
+		String token = "";
+		Token tokenRep = Token.NULL;
+		int state = this.startState;
+		Stack<Character> charStack = new Stack<Character>();
+		boolean cont = true;
+
 		Tokenized:
 	    while(!this.emptyStream())
 	    {	
@@ -78,16 +142,9 @@ public class Lexer
 	    	}
 	    	catch(IOException e)
 	    	{
-	    		//End of file in accept state
-			    if(isAcceptState(state))
-					while(!charStack.empty())
-						token = (Character) charStack.pop() + token;
-
-				return token;
+	    		ch = ' ';
+	    		cont = false;
 	    	}
-
-	    	// System.out.println("ch "+ch);
-	    	// System.out.println("state "+state);
 
 			if(state == 0)
 			{
@@ -95,6 +152,8 @@ public class Lexer
 				{
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
+
+					tokenRep = Token.TOK_INT;
 
 					//Return Token Directly when following input is irrelevant
 					break Tokenized;
@@ -124,6 +183,8 @@ public class Lexer
 				{
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
+
+					tokenRep = Token.TOK_STR;
 
 					break Tokenized;
 				}
@@ -266,6 +327,8 @@ public class Lexer
                 	while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
+					tokenRep = Token.TOK_ID;
+
 					break Tokenized;
                 }
 				else
@@ -285,6 +348,8 @@ public class Lexer
                 {
                 	while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
+
+					tokenRep = Token.TOK_INT;
 
 					break Tokenized;
                 }
@@ -323,8 +388,15 @@ public class Lexer
 					state = 25;
 					charStack.push(new Character(ch));
 				}
-				else if(matchChar(ch, "FT"))
+				else if(ch == 'T')
 				{
+					tokenRep = Token.TOK_T;
+					state = 32;
+					charStack.push(new Character(ch));
+				}
+				else if(ch == 'F')
+				{
+					tokenRep = Token.TOK_F;
 					state = 32;
 					charStack.push(new Character(ch));
 				}
@@ -410,6 +482,7 @@ public class Lexer
 			{
 				if(ch == 'u')
 				{
+					tokenRep = Token.TOK_MULT;
 					charStack.push(new Character(ch));
 					state = 28;
 				}
@@ -440,8 +513,15 @@ public class Lexer
 			{
 				if(ch == 'n')
 				{
+					tokenRep = Token.TOK_INPUT;
 					charStack.push(new Character(ch));
 					state = 33;
+				}
+				else if(ch == 'f')
+				{
+					tokenRep = Token.TOK_IF;
+					charStack.push(new Character(ch));
+					state = 32;
 				}
 				else if(charIsLetter(ch))
 				{
@@ -455,6 +535,7 @@ public class Lexer
 			{
 				if(ch == 'a')
 				{
+					tokenRep = Token.TOK_HALT;
 					charStack.push(new Character(ch));
 					state = 28;
 				}
@@ -517,6 +598,7 @@ public class Lexer
 			{
 				if(ch == 'u')
 				{
+					tokenRep = Token.TOK_INPUT;
 					charStack.push(new Character(ch));
 					state = 31;
 				}
@@ -532,11 +614,13 @@ public class Lexer
 			{
 				if(ch == 'o')
 				{
+					tokenRep = Token.TOK_NOT;
 					charStack.push(new Character(ch));
 					state = 31;
 				}
 				else if(ch == 'u')
 				{
+					tokenRep = Token.TOK_NUM;
 					charStack.push(new Character(ch));
 					state = 36;
 				}
@@ -567,6 +651,7 @@ public class Lexer
 			{
 				if(ch == 'o')
 				{
+					tokenRep = Token.TOK_FOR;
 					charStack.push(new Character(ch));
 					state = 38;
 				}
@@ -597,11 +682,13 @@ public class Lexer
 			{
 				if(ch == 'q')
 				{
+					tokenRep = Token.TOK_EQ;
 					charStack.push(new Character(ch));
 					state = 32;
 				}
 				else if(ch == 'l')
 				{
+					tokenRep = Token.TOK_ELSE;
 					charStack.push(new Character(ch));
 					state = 40;
 				}
@@ -647,6 +734,7 @@ public class Lexer
 			{
 				if(ch == 'o')
 				{
+					tokenRep = Token.TOK_BOOL;
 					charStack.push(new Character(ch));
 					state = 43;
 				}
@@ -690,8 +778,15 @@ public class Lexer
 			}
 			else if(state == 45)
 			{
-				if(ch == 'd' || ch == 'n')
+				if(ch == 'd')
 				{
+					tokenRep = Token.TOK_ADD;
+					charStack.push(new Character(ch));
+					state = 46;
+				}
+				else if(ch == 'n')
+				{
+					tokenRep = Token.TOK_AND;
 					charStack.push(new Character(ch));
 					state = 46;
 				}
@@ -722,11 +817,13 @@ public class Lexer
 			{
 				if(ch == 'u')
 				{
+					tokenRep = Token.TOK_OUTPUT;
 					charStack.push(new Character(ch));
 					state = 48;
 				}
 				else if(ch == 'r')
 				{
+					tokenRep = Token.TOK_OR;
 					charStack.push(new Character(ch));
 					state = 32;
 				}
@@ -757,6 +854,7 @@ public class Lexer
 			{
 				if(ch == 'r')
 				{
+					tokenRep = Token.TOK_PROC;
 					charStack.push(new Character(ch));
 					state = 50;
 				}
@@ -802,11 +900,13 @@ public class Lexer
 			{
 				if(ch == 't')
 				{
+					tokenRep = Token.TOK_STRING;
 					charStack.push(new Character(ch));
 					state = 53;
 				}
 				else if(ch == 'u')
 				{
+					tokenRep = Token.TOK_SUB;
 					charStack.push(new Character(ch));
 					state = 57;
 				}
@@ -897,6 +997,7 @@ public class Lexer
 			{
 				if(ch == 'h')
 				{
+					tokenRep = Token.TOK_THEN;
 					charStack.push(new Character(ch));
 					state = 59;
 				}
@@ -942,6 +1043,7 @@ public class Lexer
 			{
 				if(ch == 'h')
 				{
+					tokenRep = Token.TOK_WHILE;
 					charStack.push(new Character(ch));
 					state = 62;
 				}
@@ -990,6 +1092,25 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
+					if(token.indexOf('(') >= 0)
+						tokenRep = Token.TOK_OP;
+					else if(token.indexOf(')') >= 0)
+						tokenRep = Token.TOK_CP;
+					else if(token.indexOf('{') >= 0)
+						tokenRep = Token.TOK_OB;
+					else if(token.indexOf('}') >= 0)
+						tokenRep = Token.TOK_CB;
+					else if(token.indexOf('=') >= 0)
+						tokenRep = Token.TOK_ASS;
+					else if(token.indexOf('>') >= 0)
+						tokenRep = Token.TOK_GT;
+					else if(token.indexOf('<') >= 0)
+						tokenRep = Token.TOK_LT;
+					else if(token.indexOf(',') >= 0)
+						tokenRep = Token.TOK_COMM;
+					else if(token.indexOf(';') >= 0)
+						tokenRep = Token.TOK_SEMI;
+
 					break Tokenized;
 				}
 				else
@@ -1003,7 +1124,10 @@ public class Lexer
 		if(ch != ' ')
 	    	this.bufferStack.push(ch);
 
-	   	return token;
+	    if(tokenRep != Token.NULL)
+	    	this.tokens.add(new Pair<String, String>(token, tokenRep.toString()));
+
+	   	return cont;
 	}
 
 	private boolean emptyStream()
@@ -1033,9 +1157,9 @@ public class Lexer
 
 		ch = (char) this.readChar;
 
-		while(this.readChar == '\n')
+		while(this.readChar == '\n' || this.readChar == '\r')
 		{
-			this.buffer.read();
+			this.readChar = this.buffer.read();
 			ch = (char) this.readChar;
 		}
 
@@ -1055,7 +1179,7 @@ public class Lexer
 
 	public boolean charIsLetter(char ch)
 	{
-		String str = "abcdefghijklmnopqrstuvwxyz";
+		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		return str.indexOf(ch) >= 0;
 	}
 
