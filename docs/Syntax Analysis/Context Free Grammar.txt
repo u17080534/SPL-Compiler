@@ -1,0 +1,73 @@
+# PROG → CODE  
+# PROG → CODE; PROC_DEFS 
+PROG → CODE PROG2
+PROG2 → e
+PROG2 → ; PROC_DEFS
+# PROC_DEFS → PROC 
+# PROC_DEFS → PROC PROC_DEFS  
+PROC_DEFS → PROC PROC_DEFS2
+PROC_DEFS2 → e  
+PROC_DEFS2 → PROC_DEFS  
+PROC → proc UserDefinedIdentifier{PROG}
+  
+# CODE → INSTR  
+# CODE → INSTR; CODE
+CODE → INSTR CODE2
+CODE2 → e
+CODE2 → ; CODE
+
+INSTR → halt  
+INSTR → DECL  
+INSTR → IO  
+INSTR → CALL  
+INSTR → ASSIGN  
+INSTR → COND_BRANCH  
+INSTR → COND_LOOP
+
+IO → input(VAR)  
+IO → output(VAR)
+
+CALL → userDefinedIdentifier
+
+# DECL → TYPENAME  
+# DECL → TYPENAME; DECL
+DECL → TYPENAME DECL2
+DECL2 → e
+DECL2 → ; DECL
+
+TYPE → num 
+TYPE → string  
+TYPE → bool
+
+NAME → userDefinedIdentifier
+
+VAR → userDefinedIdentifier
+
+ASSIGN → VAR=stringLiteral  
+ASSIGN → VAR=VAR  
+ASSIGN → VAR=NUMEXPR  
+ASSIGN → VAR=BOOL
+
+NUMEXPR → VAR  
+NUMEXPR → integerLiteral  
+NUMEXPR → CALC
+
+CALC → add(NUMEXPR,NUMEXPR)  
+CALC → sub(NUMEXPR,NUMEXPR)  
+CALC → mult(NUMEXPR,NUMEXPR)
+
+COND_BRANCH → if(BOOL)then{CODE}  
+COND_BRANCH → if(BOOL)then{CODE}else{CODE}
+
+BOOL → eq(VAR,VAR)  
+BOOL → (VAR<VAR)  
+BOOL → (VAR>VAR)  
+BOOL → not BOOL  
+BOOL → and(BOOL,BOOL)  
+BOOL → or(BOOL,BOOL)  
+BOOL → T  
+BOOL → F  
+BOOL → VAR
+
+COND_LOOP → while(BOOL){CODE}
+COND_LOOP → for(VAR = 0; VAR < VAR ; VAR = add (VAR, 1)){CODE}
