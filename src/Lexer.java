@@ -4,6 +4,7 @@ import javafx.util.*;
 
 public class Lexer 
 {
+	private String filename;
 	//!Character Read Directly from Buffer
 	private int readChar;
 	//!Buffer for Reading Input File
@@ -65,7 +66,7 @@ public class Lexer
 		@Override public String toString() { return this.str; } 
 	}
 
-	public Lexer(BufferedReader buffer)
+	public Lexer(String file) throws Exception
 	{
 	    this.startState = 26; //start state
 		this.acceptStates = new ArrayList<Integer>();
@@ -78,7 +79,17 @@ public class Lexer
 
 		this.tokens = new ArrayList<Pair<String, String>>();
 
-		this.buffer = buffer;
+		this.filename = file;
+
+		try
+		{
+			this.buffer = new BufferedReader(new FileReader(new File("../input/" + this.filename + ".spl")));
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
+
 		this.row = 1;
 		this.col = 0;
 	}
@@ -108,6 +119,39 @@ public class Lexer
 				throw exp;
 			}
 		}
+
+		String tokenFile = this.filename + ".tok";
+        File file = new File("../output/" + tokenFile);
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+
+        try
+        {
+            fileWriter = new FileWriter(file);
+
+            bufferedWriter = new BufferedWriter(fileWriter);
+
+            for(int index = 0; index < tokens.size(); index++)
+            {
+                bufferedWriter.write((index + 1) + ": " + tokens.get(index).getKey() + " (" + tokens.get(index).getValue() + ")\n");
+            }
+        } 
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                bufferedWriter.close();
+                fileWriter.close();
+            } 
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
 
 		return this.tokens;
 	}
@@ -321,7 +365,7 @@ public class Lexer
 					String badstr = "";
 					while(!charStack.empty())
 						badstr = (Character) charStack.pop() + badstr;
-					throw new Exception("[line: " + this.row + ", col: " + (this.col - 10) + "]: " + "'" + badstr + "' strings have at most 8 characters");
+					throw new Exception("[line: " + this.row + ", col: " + (this.col - 9) + "]: " + "'" + badstr + "' strings have at most 8 characters");
 				}
 			}
 			// else if(state == 18)

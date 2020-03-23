@@ -1,5 +1,9 @@
-1: if tok_if
-2: 3 tok_int
-3: ( tok_oparen
-4: eq tok_eq
-5: "  7" tok_str
+1: if (tok_if)
+2: 3 (tok_int)
+3: ( (tok_oparen)
+4: eq (tok_eq)
+5: "  7" (tok_str)
+6: "1234569" (tok_str)
+7: { (tok_obrace)
+8: add (tok_add)
+9: sub (tok_sub)
