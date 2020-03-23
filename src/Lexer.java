@@ -1235,13 +1235,7 @@ public class Lexer
 
 	public boolean isAcceptState(int id)
 	{
-		try
-		{
-	    	this.buffer.reset();
-		}
-		catch(IOException e) {}
-
-		return true;
+		return this.acceptStates.contains(id);
 	}
 
 	public boolean isValidChar(char ch)
