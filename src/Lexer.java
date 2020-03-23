@@ -16,6 +16,10 @@ public class Lexer
 	private int startState;
 	//!List of Tokens Read from Input
 	private List<Pair<String, String>> tokens;
+	//!Row of Input File
+	int row;
+	//!Column of Input File
+	int col;
 
 	private enum Token
 	{ 
@@ -75,6 +79,8 @@ public class Lexer
 		this.tokens = new ArrayList<Pair<String, String>>();
 
 		this.buffer = buffer;
+		this.row = 1;
+		this.col = 1;
 	}
 
 	public List<Pair<String, String>> getTokens()
@@ -146,6 +152,9 @@ public class Lexer
 	    		cont = false;
 	    	}
 
+	    	if(!isValidChar(ch))
+	    		throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' is not a valid character");
+
 			if(state == 0)
 			{
 				if(isAcceptState(0))
@@ -159,7 +168,7 @@ public class Lexer
 					break Tokenized;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 1)
 			{
@@ -174,7 +183,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 2)
 			{
@@ -189,7 +198,7 @@ public class Lexer
 					break Tokenized;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 3)
 			{
@@ -204,7 +213,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 4)
 			else if(state == 5)
@@ -220,7 +229,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 6)
 			else if(state == 7)
@@ -236,7 +245,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 8)
 			else if(state == 9)
@@ -252,7 +261,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 10)
 			else if(state == 11)
@@ -268,7 +277,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 12)
 			else if(state == 13)
@@ -284,7 +293,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 14)
 			else if(state == 15)
@@ -300,7 +309,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			// else if(state == 16)
 			else if(state == 17)
@@ -311,7 +320,12 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception("Unexpected Input: Strings can only be up to 8 characters in length");
+				{
+					String badstr = "";
+					while(!charStack.empty())
+						badstr = (Character) charStack.pop() + badstr;
+					throw new Exception("[line: " + this.row + ", col: " + (this.col - 10) + "]: " + "'" + badstr + "' strings have at most 8 characters");
+				}
 			}
 			// else if(state == 18)
 			// else if(state == 19)
@@ -332,7 +346,7 @@ public class Lexer
 					break Tokenized;
                 }
 				else
-					throw new Exception("Unexpected Input: Identifier Token Rejected");
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "Unexpected Input: Identifier Token Rejected");
 			}
 			// else if(state == 21)
 			// else if(state == 22)
@@ -354,7 +368,7 @@ public class Lexer
 					break Tokenized;
                 }
                 else
-					throw new Exception("Unexpected Input: Integer Token Rejected");
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "Unexpected Input: Integer Token Rejected");
 			}
 			else if(state == 25)
 			{
@@ -364,7 +378,7 @@ public class Lexer
                 	state = 24;
                 }
                 else
-                	throw new Exception("Unexpected Input: Integer Token Rejected");
+                	throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "Unexpected Input: Integer Token Rejected");
 			}
 			else if(state == 26)
 			{
@@ -476,7 +490,7 @@ public class Lexer
 					state = 0;
 				}
 				else
-					throw new Exception("Unexpected Input: \"" + ch + "\"");
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "Unexpected Input: \"" + ch + "\"");
 			}         
 			else if(state == 27)
 			{
@@ -492,7 +506,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 28)
 			{    
@@ -507,7 +521,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 29)
 			{
@@ -529,7 +543,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 30)
 			{
@@ -545,7 +559,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 31)
 			{       
@@ -560,7 +574,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 32)
 			{
@@ -577,7 +591,7 @@ public class Lexer
 					break Tokenized;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 33)
 			{      
@@ -592,7 +606,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 34)
 			{
@@ -608,7 +622,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 35)
 			{
@@ -630,7 +644,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 36)
 			{
@@ -645,7 +659,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 37)
 			{
@@ -661,7 +675,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 38)
 			{
@@ -676,7 +690,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 39)
 			{
@@ -698,7 +712,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 40)
 			{
@@ -713,7 +727,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 41)
 			{      
@@ -728,7 +742,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 42)
 			{
@@ -744,7 +758,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 43)
 			{
@@ -759,7 +773,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 44)
 			{
@@ -774,7 +788,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 45)
 			{
@@ -796,7 +810,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 46)
 			{
@@ -811,7 +825,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 47)
 			{
@@ -833,7 +847,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 48)
 			{
@@ -848,7 +862,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 49)
 			{
@@ -864,7 +878,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 50)
 			{
@@ -879,7 +893,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 51)
 			{
@@ -894,7 +908,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 52)
 			{
@@ -916,7 +930,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 53)
 			{
@@ -931,7 +945,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 54)
 			{
@@ -946,7 +960,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 55)
 			{
@@ -961,7 +975,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 56)
 			{
@@ -976,7 +990,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 57)
 			{
@@ -991,7 +1005,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 58)
 			{
@@ -1007,7 +1021,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 59)
 			{
@@ -1022,7 +1036,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 60)
 			{
@@ -1037,7 +1051,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 61)
 			{
@@ -1053,7 +1067,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 62)
 			{
@@ -1068,7 +1082,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 63)
 			{
@@ -1083,7 +1097,7 @@ public class Lexer
 					state = 20;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 65)
 			{
@@ -1110,14 +1124,21 @@ public class Lexer
 						tokenRep = Token.TOK_COMM;
 					else if(token.indexOf(';') >= 0)
 						tokenRep = Token.TOK_SEMI;
+					else if(token.indexOf('#') >= 0)
+					{
+						this.row++;
+						this.col = 1;
+					}
 
 					break Tokenized;
 				}
 				else
-					throw new Exception("Unexpected Input: " + ch);
+					throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' was unexpected in this case");
 			}
 			else
-				throw new Exception("Unexpected Behaviour when Traversing RegEx based DFA");
+				throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "Unexpected Input Behaviour: " + ch);
+
+			this.col++;
 	    } 
 		
 	    //If token followed by space, save time by skipping it
@@ -1126,6 +1147,8 @@ public class Lexer
 
 	    if(tokenRep != Token.NULL)
 	    	this.tokens.add(new Pair<String, String>(token, tokenRep.toString()));
+
+		this.col++;
 
 	   	return cont;
 	}
@@ -1153,7 +1176,7 @@ public class Lexer
 	    }
 
 	    if(this.readChar == -1)
-			throw new IOException("Empty Input Stream");
+			throw new IOException("[line: " + this.row + ", col: " + this.col + "]: " + "Empty Input Stream");
 
 		ch = (char) this.readChar;
 
@@ -1175,6 +1198,12 @@ public class Lexer
 		catch(IOException e) {}
 
 		return true;
+	}
+
+	public boolean isValidChar(char ch)
+	{
+		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>(){}# =,;\"";
+		return str.indexOf(ch) >= 0;
 	}
 
 	public boolean charIsLetter(char ch)

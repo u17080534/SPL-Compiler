@@ -3,6 +3,7 @@
 3: ( tok_oparen
 4: eq tok_eq
 5: "  7" tok_str
-6: { tok_obrace
-7: add tok_add
-8: sub tok_sub
+6: "1234569" tok_str
+7: { tok_obrace
+8: add tok_add
+9: sub tok_sub

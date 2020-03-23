@@ -22,7 +22,7 @@ public class spl
 		}
 		catch(IOException ex)
 		{
-			System.out.println(ex);
+			System.out.println("Lexical Error " + ex.getMessage());
 		}
     } 
 
@@ -39,7 +39,7 @@ public class spl
         {
             tokens = this.lexer.getTokens();
             System.out.println("Tokens:\n" + tokens);
-            System.out.println("Lexical Error:\n" + ex.getMessage());
+            System.out.println(ex.getMessage());
         }
 
         String tokenFile = this.filename + ".tok";
