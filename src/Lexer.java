@@ -80,7 +80,7 @@ public class Lexer
 
 		this.buffer = buffer;
 		this.row = 1;
-		this.col = 1;
+		this.col = 0;
 	}
 
 	public List<Pair<String, String>> getTokens()
@@ -151,9 +151,6 @@ public class Lexer
 	    		ch = ' ';
 	    		cont = false;
 	    	}
-
-	    	if(!isValidChar(ch))
-	    		throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' is not a valid character");
 
 			if(state == 0)
 			{
@@ -1127,7 +1124,7 @@ public class Lexer
 					else if(token.indexOf('#') >= 0)
 					{
 						this.row++;
-						this.col = 1;
+						this.col = 0;
 					}
 
 					break Tokenized;
@@ -1139,6 +1136,9 @@ public class Lexer
 				throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "Unexpected Input Behaviour: " + ch);
 
 			this.col++;
+
+			if(!isValidChar(ch))
+	    		throw new Exception("[line: " + this.row + ", col: " + this.col + "]: " + "'" + ch + "' is not a valid character");
 	    } 
 		
 	    //If token followed by space, save time by skipping it
