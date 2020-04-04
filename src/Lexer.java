@@ -2,6 +2,50 @@ import java.util.*;
 import java.io.*;
 import javafx.util.*;
 
+enum Token
+{ 
+	NULL("_"),
+	TOK_AND("tok_and"), 
+	TOK_OR("tok_or"), 
+	TOK_NOT("tok_not"),
+	TOK_ADD("tok_add"),
+	TOK_SUB("tok_sub"),
+	TOK_MULT("tok_mult"),
+	TOK_IF("tok_if"),
+	TOK_THEN("tok_then"),
+	TOK_ELSE("tok_else"),
+	TOK_WHILE("tok_while"),
+	TOK_FOR("tok_for"),
+	TOK_EQ("tok_eq"),
+	TOK_INPUT("tok_input"),
+	TOK_OUTPUT("tok_output"),
+	TOK_HALT("tok_halt"),
+	TOK_NUM("tok_num"),
+	TOK_BOOL("tok_bool"),
+	TOK_STRING("tok_string"),
+	TOK_PROC("tok_proc"),
+	TOK_T("tok_t"),
+	TOK_F("tok_f"),
+	TOK_GT("tok_greater"),
+	TOK_LT("tok_less"),
+	TOK_OP("tok_oparen"),
+	TOK_CP("tok_cparen"),
+	TOK_OB("tok_obrace"),
+	TOK_CB("tok_cbrace"),
+	TOK_ASS("tok_assign"),
+	TOK_COMM("tok_comma"),
+	TOK_SEMI("tok_semi"),
+	TOK_STR("tok_str"),//literal
+	TOK_INT("tok_int"),//literal
+	TOK_ID("tok_id");
+
+	private String str; 
+
+	private Token(String str) { this.str = str; } 
+
+	@Override public String toString() { return this.str; } 
+}
+
 public class Lexer 
 {
 	private String filename;
@@ -16,55 +60,11 @@ public class Lexer
 	//!Start State ID
 	private int startState;
 	//!List of Tokens Read from Input
-	private List<Pair<String, String>> tokens;
+	private List<Pair<String, Token>> tokens;
 	//!Row of Input File
 	int row;
 	//!Column of Input File
 	int col;
-
-	private enum Token
-	{ 
-		NULL("_"),
-		TOK_AND("tok_and"), 
-		TOK_OR("tok_or"), 
-		TOK_NOT("tok_not"),
-		TOK_ADD("tok_add"),
-		TOK_SUB("tok_sub"),
-		TOK_MULT("tok_mult"),
-		TOK_IF("tok_if"),
-		TOK_THEN("tok_then"),
-		TOK_ELSE("tok_else"),
-		TOK_WHILE("tok_while"),
-		TOK_FOR("tok_for"),
-		TOK_EQ("tok_eq"),
-		TOK_INPUT("tok_input"),
-		TOK_OUTPUT("tok_output"),
-		TOK_HALT("tok_halt"),
-		TOK_NUM("tok_num"),
-		TOK_BOOL("tok_bool"),
-		TOK_STRING("tok_string"),
-		TOK_PROC("tok_proc"),
-		TOK_T("tok_t"),
-		TOK_F("tok_f"),
-		TOK_GT("tok_greater"),
-		TOK_LT("tok_less"),
-		TOK_OP("tok_oparen"),
-		TOK_CP("tok_cparen"),
-		TOK_OB("tok_obrace"),
-		TOK_CB("tok_cbrace"),
-		TOK_ASS("tok_assign"),
-		TOK_COMM("tok_comma"),
-		TOK_SEMI("tok_semi"),
-		TOK_STR("tok_str"),
-		TOK_INT("tok_int"),
-		TOK_ID("tok_id");
-
-		private String str; 
-
-		private Token(String str) { this.str = str; } 
-
-		@Override public String toString() { return this.str; } 
-	}
 
 	public Lexer(String file) throws Exception
 	{
@@ -77,7 +77,7 @@ public class Lexer
 		this.acceptStates.add(new Integer(32));
 		this.acceptStates.add(new Integer(65));
 
-		this.tokens = new ArrayList<Pair<String, String>>();
+		this.tokens = new ArrayList<Pair<String, Token>>();
 
 		this.filename = file;
 
@@ -94,18 +94,17 @@ public class Lexer
 		this.col = 0;
 	}
 
-	public List<Pair<String, String>> getTokens()
+	public List<Pair<String, Token>> getTokens()
 	{
 		return this.tokens;
 	}
 
 	//!Generates list of all tokens in input file, throws exception if unexpected input
-	public List<Pair<String, String>> readTokens() throws Exception
+	public List<Pair<String, Token>> readTokens() throws Exception
 	{
 		//Continues iterating till no more tokens can be read, or an error is encountered
 
 		boolean tokenize = true;
-		Pair<String, String> token;
 
 		while(tokenize)
 		{
@@ -131,7 +130,7 @@ public class Lexer
 
             bufferedWriter = new BufferedWriter(fileWriter);
 
-            for(int index = 0; index < tokens.size(); index++)
+            for(int index = 0; index < this.tokens.size(); index++)
             {
                 bufferedWriter.write((index + 1) + ": " + tokens.get(index).getKey() + " (" + tokens.get(index).getValue() + ")\n");
             }
@@ -1190,7 +1189,7 @@ public class Lexer
 	    	this.bufferStack.push(ch);
 
 	    if(tokenRep != Token.NULL)
-	    	this.tokens.add(new Pair<String, String>(token, tokenRep.toString()));
+	    	this.tokens.add(new Pair<String, Token>(token, tokenRep));
 
 		this.col++;
 

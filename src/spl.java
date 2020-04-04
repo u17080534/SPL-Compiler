@@ -8,6 +8,7 @@ public class spl
     private String filename;
 	private File file;
     private Lexer lexer;
+    private Parser parser;
 
     //!Compiler uses the passed in filename - expected to be within current directory
     public spl(String file)
@@ -18,6 +19,7 @@ public class spl
         try
         {
             this.lexer = new Lexer(this.filename);
+            this.parser = new Parser(this.filename);
         }
         catch(Exception e)
         {
@@ -25,9 +27,9 @@ public class spl
         }
     } 
 
-    public void tokenize()
+    public void parse()
     {
-        List<Pair<String, String>> tokens;
+        List<Pair<String, Token>> tokens;
 
         try
         {
@@ -40,11 +42,13 @@ public class spl
             System.out.println("Tokens:\t" + tokens);
             System.out.println("Lexical Error " + ex.getMessage());
         }
+
+        this.parser.parseAST(tokens);
     }
   
     public static void main(String[] args) 
     { 
         spl splCompiler = new spl("../input/test.spl");
-        splCompiler.tokenize();
+        splCompiler.parse();
     } 
 }

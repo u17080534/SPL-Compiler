@@ -4,15 +4,15 @@ JC = javac
 .SUFFIXES: .java .class
 
 .java.class:
-        $(JC) $(JFLAGS) $*.java
+		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-        src/spl.java \
-        src/Lexer.java \
+		src/Lexer.java \
+		src/spl.java \
 
 default: classes
 
 classes: $(CLASSES:.java=.class)
 
 clean:
-        $(RM) *.class
+		$(RM) src/*.class
