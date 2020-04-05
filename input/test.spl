@@ -1,2 +1,15 @@
-num i; string a#
-i = add(sub(1, add(1,add(1, 1))), mult(3, i))
+proc hello
+{
+	num i;
+	string axify;
+	a = "hello";
+	input(i);
+	i = add(sub(1, add(1,add(1, 1))), mult(3, i));
+	output(a);
+	output(i)
+}
+
+proc main
+{
+	hello
+}

@@ -16,7 +16,6 @@ public class Grammar
 
 		try
         {
-            // while(index < tokenstream.size())
             while(lookahead != Token.NULL)
            		S();
         }
@@ -69,6 +68,7 @@ public class Grammar
 	//PROG → CODE PROG'
 	private static void PROG() throws Exception
 	{
+		System.out.println("\t! PROG !");
 		try
 		{
 			CODE();
@@ -88,7 +88,9 @@ public class Grammar
 			if(lookahead == Token.TOK_SEMI)
 			{
 				readToken();
+
 				PROC_DEFS();
+
 				return;
 			}
 		}
@@ -101,6 +103,7 @@ public class Grammar
 	// PROC_DEFS → PROC PROC_DEFS'
 	private static void PROC_DEFS() throws Exception
 	{
+		System.out.println("\t! PROC_DEFS !");
 		try
 		{
 			PROC();
@@ -131,6 +134,7 @@ public class Grammar
 	// PROC → proc UserDefinedIdentifier { PROG }
 	private static void PROC() throws Exception
 	{
+		System.out.println("\t! PROC !");
 		try
 		{
 			if(lookahead == Token.TOK_PROC)
@@ -159,12 +163,14 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new Exception("Unexpected Token: " + lookahead + " -> 'proc' expected.");
+		throw new Exception("Unexpected Token: " + lookahead + " - 'proc' expected.");
 	}
 
 	// CODE → INSTR CODE'
 	private static void CODE() throws Exception
 	{
+		System.out.println("\t! CODE !");
+
 		try
 		{
 			INSTR();
@@ -184,7 +190,10 @@ public class Grammar
 			if(lookahead == Token.TOK_SEMI)
 			{
 				readToken();
-				CODE();
+
+				if(lookahead != Token.NULL)
+					CODE();
+
 				return;
 			}
 		}
@@ -197,12 +206,12 @@ public class Grammar
 	// DECL → TYPE NAME DECL'
 	private static void DECL() throws Exception
 	{
-		System.out.println("DECL!");
+		System.out.println("\t! DECL !");
 		try
 		{
 			TYPE();
 			NAME();
-			DECL_();
+			CODE_();
 		}
 		catch(Exception ex)
 		{
@@ -218,7 +227,7 @@ public class Grammar
 			if(lookahead == Token.TOK_SEMI)
 			{
 				readToken();
-				DECL();
+				// CODE();
 				return;
 			}		
 		}
@@ -267,6 +276,8 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid conditional syntax.");
 	}
 
 	// COND_BRANCH'→ else { CODE } | ϵ
@@ -309,11 +320,14 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid loop syntax.");
 	}
 
 	// IO → input ( VAR ) | output ( VAR )
 	private static void IO() throws Exception
 	{
+		System.out.println("\t! IO !");
 		try
 		{
 			if(lookahead == Token.TOK_INPUT)
@@ -349,6 +363,8 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid I/O operator given.");
 	}
 
 	// BOOL → T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
@@ -448,7 +464,7 @@ public class Grammar
 			throw ex;
 		}
 
-		System.out.println("ERROR!");
+		throw new Exception("Invalid boolean expression given.");
 	}
 
 	// BOOL' → BOOL , BOOL"
@@ -470,7 +486,7 @@ public class Grammar
 			throw ex;
 		}
 
-		System.out.println("ERROR!");
+		throw new Exception("Missing arguments.");
 	}
 
 	// BOOL" → BOOL )
@@ -490,13 +506,13 @@ public class Grammar
 			throw ex;
 		}
 
-		System.out.println("ERROR!");
+		throw new Exception("Missing close parenthesis.");
 	}
 
 	// CALC → add ( CALC' | → sub ( CALC' | mult ( CALC'
 	private static void CALC() throws Exception
 	{
-		System.out.println("CALC!");
+		System.out.println("\t! CALC !");
 
 		try
 		{
@@ -509,6 +525,8 @@ public class Grammar
 					CALC_();
 					return;
 				}
+
+				throw new Exception("Missing open parenthesis.");
 			}
 			else if(lookahead == Token.TOK_SUB)
 			{
@@ -519,6 +537,8 @@ public class Grammar
 					CALC_();
 					return;
 				}
+
+				throw new Exception("Missing open parenthesis.");
 			}
 			else if(lookahead == Token.TOK_MULT)
 			{
@@ -529,6 +549,8 @@ public class Grammar
 					CALC_();
 					return;
 				}
+
+				throw new Exception("Missing open parenthesis.");
 			}		
 		}
 		catch(Exception ex)
@@ -536,7 +558,7 @@ public class Grammar
 			throw ex;
 		}	
 
-		System.out.println("ERROR!");
+		throw new Exception("Invalid calc operation.");
 	}
 
 	// CALC' → NUMEXPR , CALC"
@@ -558,7 +580,7 @@ public class Grammar
 			throw ex;
 		}
 
-		System.out.println("ERROR!");
+		throw new Exception("Missing parameter in calc operation.");
 	}
 
 	// CALC" → NUMEXPR )
@@ -585,12 +607,12 @@ public class Grammar
 	// ASSIGN → VAR = ASSIGN'
 	private static void ASSIGN() throws Exception
 	{
-		System.out.println("ASSIGN! " + lookahead);
+		System.out.println("\t! ASSIGN !");
 
 		try
 		{
 			VAR();
-			if(lookahead == Token.TOK_ASS)
+			if(lookahead == Token.TOK_ASSN)
 			{
 				readToken();
 				ASSIGN_();
@@ -601,6 +623,8 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid assignment: Unknown Operator.");
 	}
 
 	// ASSIGN' → stringLiteral | VAR | NUMEXPR | BOOL
@@ -608,7 +632,7 @@ public class Grammar
 	{
 		try
 		{
-			if(lookahead == Token.TOK_STR)
+			if(lookahead == Token.TOK_S)
 			{
 				readToken();
 				return;
@@ -618,7 +642,7 @@ public class Grammar
 				VAR();
 				return;
 			}
-			else if(lookahead == Token.TOK_INT || lookahead == Token.TOK_ADD || lookahead == Token.TOK_SUB || lookahead == Token.TOK_MULT)
+			else if(lookahead == Token.TOK_N || lookahead == Token.TOK_ADD || lookahead == Token.TOK_SUB || lookahead == Token.TOK_MULT)
 			{
 				NUMEXPR();
 				return;
@@ -633,12 +657,14 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid assignment: Bad Right Operand.");
 	}
 
 	// INSTR → halt | DECL | IO | CALL | ASSIGN  | COND_BRANCH | COND_LOOP
 	private static void INSTR() throws Exception 
 	{ 
-		System.out.println("INSTR! " + lookahead);
+		System.out.println("\t! INSTR !" + lookahead);
 
 		try
 		{
@@ -657,16 +683,6 @@ public class Grammar
 				IO();
 				return;
 			}
-			else if(lookahead == Token.TOK_ID && look(1) == Token.TOK_ASS)
-			{
-				ASSIGN();
-				return;
-			}
-			else if(lookahead == Token.TOK_ID)
-			{
-				CALL();
-				return;
-			}
 			else if(lookahead == Token.TOK_IF)
 			{
 				COND_BRANCH();
@@ -677,21 +693,32 @@ public class Grammar
 				COND_LOOP();
 				return;
 			}
+			else if(lookahead == Token.TOK_ID && look(1) == Token.TOK_ASSN)
+			{
+				ASSIGN();
+				return;
+			}
+			else if(lookahead == Token.TOK_ID)
+			{
+				CALL();
+				return;
+			}
 		}
 		catch(Exception ex)
 		{
 			throw ex;
 		}
 
-		System.out.println("ERROR! Unexpected");index=tokenstream.size();
+		throw new Exception("Instruction expected following semicolon. (;)");
 	}
 
 	// NUMEXPR → integerLiteral | VAR | CALC
 	private static void NUMEXPR() throws Exception
 	{
+		System.out.println("\t! NUMEXPR !");
 		try
 		{
-			if(lookahead == Token.TOK_INT)
+			if(lookahead == Token.TOK_N)
 			{
 				readToken();
 				return;
@@ -712,12 +739,13 @@ public class Grammar
 			throw ex;
 		}
 
-		System.out.println("ERROR! Should be numberical expr");
+		throw new Exception("Invalid numerical expression given.");
 	}
 
 	// TYPE → num | string | bool
 	private static void TYPE() throws Exception
 	{
+		System.out.println("\t! TYPE !");
 		try
 		{
 			if(lookahead == Token.TOK_NUM)
@@ -741,13 +769,13 @@ public class Grammar
 			throw ex;
 		}
 
-		System.out.println("ERROR! Should be numberical expr");
+		throw new Exception("Invalid type specified.");
 	}
 
 	// CALL → userDefinedIdentifier
 	private static void CALL() throws Exception
 	{
-		System.out.println("CALL!");
+		System.out.println("\t! CALL !");
 
 		try
 		{
@@ -761,12 +789,14 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid identifier called.");
 	}
 
 	// NAME → userDefinedIdentifier
 	private static void NAME() throws Exception
 	{
-		System.out.println("NAME!");
+		System.out.println("\t! NAME !");
 		try
 		{
 			if(lookahead == Token.TOK_ID)
@@ -779,12 +809,14 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid identifier used.");
 	}
 
 	// VAR → userDefinedIdentifier
 	private static void VAR() throws Exception
 	{
-		System.out.println("VAR!");
+		System.out.println("\t! VAR !");
 		try
 		{
 			if(lookahead == Token.TOK_ID)
@@ -797,5 +829,7 @@ public class Grammar
 		{
 			throw ex;
 		}
+
+		throw new Exception("Invalid identifier used.");
 	}
 } 

@@ -24,20 +24,20 @@ enum Token
 	TOK_BOOL("tok_bool"),
 	TOK_STRING("tok_string"),
 	TOK_PROC("tok_proc"),
-	TOK_T("tok_t"),
-	TOK_F("tok_f"),
 	TOK_GT("tok_greater"),
 	TOK_LT("tok_less"),
-	TOK_OP("tok_oparen"),
-	TOK_CP("tok_cparen"),
-	TOK_OB("tok_obrace"),
-	TOK_CB("tok_cbrace"),
-	TOK_ASS("tok_assign"),
+	TOK_OP("tok_open_paren"),
+	TOK_CP("tok_close_paren"),
+	TOK_OB("tok_open_brace"),
+	TOK_CB("tok_close_brace"),
+	TOK_ASSN("tok_assign"),
 	TOK_COMM("tok_comma"),
 	TOK_SEMI("tok_semi"),
-	TOK_STR("tok_str"),//literal
-	TOK_INT("tok_int"),//literal
-	TOK_ID("tok_id");
+	TOK_T("tok_true"),
+	TOK_F("tok_false"),
+	TOK_S("tok_string_literal"),//literal
+	TOK_N("tok_number_literal"),//literal
+	TOK_ID("tok_identifier");
 
 	private String str; 
 
@@ -240,7 +240,7 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_INT;
+					tokenRep = Token.TOK_N;
 
 					//Return Token Directly when following input is irrelevant
 					break Tokenized;
@@ -271,7 +271,7 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_STR;
+					tokenRep = Token.TOK_S;
 
 					break Tokenized;
 				}
@@ -429,7 +429,7 @@ public class Lexer
                 	while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_INT;
+					tokenRep = Token.TOK_N;
 
 					break Tokenized;
                 }
@@ -732,7 +732,6 @@ public class Lexer
 			{
 				if(ch == 'u')
 				{
-					tokenRep = Token.TOK_INPUT;
 					charStack.push(new Character(ch));
 					state = 31;
 				}
@@ -1505,7 +1504,7 @@ public class Lexer
 					else if(token.indexOf('}') >= 0)
 						tokenRep = Token.TOK_CB;
 					else if(token.indexOf('=') >= 0)
-						tokenRep = Token.TOK_ASS;
+						tokenRep = Token.TOK_ASSN;
 					else if(token.indexOf('>') >= 0)
 						tokenRep = Token.TOK_GT;
 					else if(token.indexOf('<') >= 0)
@@ -1573,7 +1572,7 @@ public class Lexer
 
 		ch = (char) this.readChar;
 
-		while(this.readChar == '\n' || this.readChar == '\r')
+		while(this.readChar == '\n' || this.readChar == '\r' || this.readChar == '\t')
 		{
 			this.readChar = this.buffer.read();
 			ch = (char) this.readChar;

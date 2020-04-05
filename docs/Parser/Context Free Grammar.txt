@@ -14,9 +14,9 @@ CODE 		→ INSTR CODE'
 
 CODE' 		→ ; CODE | ϵ
 
-DECL 		→ TYPE NAME DECL'
+DECL 		→ TYPE NAME CODE'
 
-DECL' 		→ ; DECL | ϵ
+# DECL' 	→ ; INSTR | ϵ
 
 COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
 
