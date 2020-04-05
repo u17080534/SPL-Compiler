@@ -3,16 +3,13 @@ JC = javac
 
 .SUFFIXES: .java .class
 
-.java.class:
-		$(JC) $(JFLAGS) $*.java
-
-CLASSES = \
-		src/Lexer.java \
-		src/spl.java \
+classes:
+		$(JC) $(JFLAGS) src/*.java
 
 default: classes
 
-classes: $(CLASSES:.java=.class)
+run:
+	java ./src/spl
 
 clean:
-		$(RM) src/*.class
+		rm src/*.class

@@ -11,9 +11,8 @@ public class Parser
 		//parse the file.tok into tokens
 	}
 
-	public void parseAST(List<Pair<String, Token>> tokens)
+	public void parse(List<Pair<String, Token>> tokens)
 	{
 		Grammar.tokens(tokens);
-		Grammar.PROG();
 	}
 } 

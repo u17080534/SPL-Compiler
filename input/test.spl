@@ -1,2 +1,2 @@
-if (eq(1,1))#
-  
+num i; string a#
+i = add(sub(1, add(1,add(1, 1))), mult(3, i))

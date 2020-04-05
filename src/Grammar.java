@@ -12,76 +12,275 @@ public class Grammar
 	{
 		tokenstream = stream;
 		index = 0;
-		lookahead = tokenstream.get(index).getValue();
+		lookahead = look(0);
+
+		try
+        {
+            // while(index < tokenstream.size())
+            while(lookahead != Token.NULL)
+           		S();
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Syntax Error: " + ex.getMessage());
+        }
 	}
 
 	public static void readToken()
 	{
 		Pair<String, Token> read = tokenstream.get(index);
 
-		System.out.println(read);
-
-		if(++index < tokenstream.size())
-			lookahead = tokenstream.get(index).getValue();
+		if(index + 1 < tokenstream.size())
+			lookahead = tokenstream.get(++index).getValue();
 		else
 			lookahead = Token.NULL;
+
+		System.out.println(read);
+	}
+
+	private static Token look(int ahead)
+	{
+		if(index + ahead >= tokenstream.size())
+			return Token.NULL;
+
+		return tokenstream.get(index + ahead).getValue();
+	}
+
+	//S	→ PROC | PROG
+	private static void S() throws Exception
+	{
+		try
+		{
+			if(lookahead == Token.TOK_PROC)
+			{
+				PROC();
+			}
+			else
+			{
+				PROG();
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	//PROG → CODE PROG'
-	public static void PROG()
+	private static void PROG() throws Exception
 	{
-		CODE();
-		PROG_();
+		try
+		{
+			CODE();
+			PROG_();
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	// PROG' → ; PROC_DEFS | ϵ
-	public static void PROG_()
+	private static void PROG_() throws Exception
 	{
-		if(lookahead == Token.NULL)
+		try
 		{
-			return;
+			if(lookahead == Token.TOK_SEMI)
+			{
+				readToken();
+				PROC_DEFS();
+				return;
+			}
 		}
-		else if(lookahead == Token.TOK_SEMI)
+		catch(Exception ex)
 		{
-			readToken();
-			PROC_DEFS();
-			return;
+			throw ex;
 		}
-
-		//error
 	}
 
 	// PROC_DEFS → PROC PROC_DEFS'
-	public static void PROC_DEFS()
+	private static void PROC_DEFS() throws Exception
 	{
-		PROC();
-		PROC_DEFS_();
+		try
+		{
+			PROC();
+			PROC_DEFS_();
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	// PROC_DEFS' → PROC_DEFS | ϵ
-	public static void PROC_DEFS_()
+	private static void PROC_DEFS_() throws Exception
 	{
-		if(lookahead == Token.NULL)
+		try
 		{
-			return;
+			if(lookahead == Token.TOK_PROC)
+			{
+				PROC_DEFS();
+			}
 		}
-
-		PROC_DEFS();
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	// PROC → proc UserDefinedIdentifier { PROG }
-	public static void PROC()
+	private static void PROC() throws Exception
 	{
-		if(lookahead == Token.TOK_PROC)
+		try
 		{
-			readToken();
-			if(lookahead == Token.TOK_ID)
+			if(lookahead == Token.TOK_PROC)
+			{
+				readToken();
+				if(lookahead == Token.TOK_ID)
+				{
+					readToken();
+					if(lookahead == Token.TOK_OB)
+					{
+						readToken();
+						PROG();
+						if(lookahead == Token.TOK_CB)
+						{
+							readToken();
+							return;
+						}
+					}
+
+					throw new Exception("Missing Braces after proc defition.");
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		throw new Exception("Unexpected Token: " + lookahead + " -> 'proc' expected.");
+	}
+
+	// CODE → INSTR CODE'
+	private static void CODE() throws Exception
+	{
+		try
+		{
+			INSTR();
+			CODE_();
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	// CODE' → ; CODE | ϵ
+	private static void CODE_() throws Exception
+	{
+		try
+		{
+			if(lookahead == Token.TOK_SEMI)
+			{
+				readToken();
+				CODE();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	// DECL → TYPE NAME DECL'
+	private static void DECL() throws Exception
+	{
+		System.out.println("DECL!");
+		try
+		{
+			TYPE();
+			NAME();
+			DECL_();
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	// DECL' → ; DECL | ϵ
+	private static void DECL_() throws Exception
+	{
+		try
+		{
+			if(lookahead == Token.TOK_SEMI)
+			{
+				readToken();
+				DECL();
+				return;
+			}		
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	// COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
+	private static void COND_BRANCH() throws Exception
+	{
+		try
+		{
+			if(lookahead == Token.TOK_IF)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					BOOL();
+
+					if(lookahead == Token.TOK_CP)
+					{
+						readToken();
+						if(lookahead == Token.TOK_THEN)
+						{
+							readToken();
+							if(lookahead == Token.TOK_OB)
+							{
+								readToken();
+								CODE();
+								if(lookahead == Token.TOK_CB)
+								{
+									readToken();
+									COND_BRANCH_();
+									return;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	// COND_BRANCH'→ else { CODE } | ϵ
+	private static void COND_BRANCH_() throws Exception
+	{
+		try
+		{
+			if(lookahead == Token.TOK_ELSE)
 			{
 				readToken();
 				if(lookahead == Token.TOK_OB)
 				{
 					readToken();
-					PROG();
+					CODE();
 					if(lookahead == Token.TOK_CB)
 					{
 						readToken();
@@ -90,143 +289,51 @@ public class Grammar
 				}
 			}
 		}
-
-		//error
-	}
-
-	// CODE → INSTR CODE'
-	public static void CODE()
-	{
-		INSTR();
-		CODE_();
-	}
-
-	// CODE' → ; CODE | ϵ
-	public static void CODE_()
-	{
-		if(lookahead == Token.NULL)
+		catch(Exception ex)
 		{
-			return;
+			throw ex;
 		}
-
-		CODE();
-	}
-
-	// DECL → TYPE DECL'
-	public static void DECL()
-	{
-		TYPE();
-		DECL_();
-	}
-
-	// DECL' → ; DECL | ϵ
-	public static void DECL_()
-	{
-		if(lookahead == Token.NULL)
-		{
-			return;
-		}
-
-		DECL();
-	}
-
-	// COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
-	public static void COND_BRANCH()
-	{
-		if(lookahead == Token.TOK_IF)
-		{
-			readToken();
-			if(lookahead == Token.TOK_OP)
-			{
-				readToken();
-				BOOL();
-
-				if(lookahead == Token.TOK_CP)
-				{
-					readToken();
-					if(lookahead == Token.TOK_THEN)
-					{
-						readToken();
-						if(lookahead == Token.TOK_OB)
-						{
-							readToken();
-							CODE();
-							if(lookahead == Token.TOK_CB)
-							{
-								readToken();
-								COND_BRANCH_();
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-		//error
-	}
-
-	// COND_BRANCH'→ else { CODE } | ϵ
-	public static void COND_BRANCH_()
-	{
-		if(lookahead == Token.NULL)
-		{
-			return;
-		}
-		else if(lookahead == Token.TOK_ELSE)
-		{
-			readToken();
-			if(lookahead == Token.TOK_OB)
-			{
-				readToken();
-				CODE();
-				if(lookahead == Token.TOK_CB)
-				{
-					readToken();
-					return;
-				}
-			}
-		}
-		//error
 	}
 
 	// COND_LOOP → while ( BOOL ) { CODE } | for ( VAR = 0; VAR < VAR ; VAR = add ( VAR , 1 ) ) { CODE }
-	public static void COND_LOOP()
+	private static void COND_LOOP() throws Exception
 	{
+		try
+		{
+			if(lookahead == Token.TOK_WHILE)
+			{
 
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	// IO → input ( VAR ) | output ( VAR )
-	public static void IO()
+	private static void IO() throws Exception
 	{
-
-	}
-
-	// BOOL → T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
-	public static void BOOL()
-	{
-		if(lookahead == Token.TOK_T)
+		try
 		{
-			readToken();
-			return;
-		}
-		else if(lookahead == Token.TOK_F)
-		{
-			readToken();
-			return;
-		}
-		else if(lookahead == Token.TOK_ID)
-		{
-			VAR();
-			return;
-		}
-		else if(lookahead == Token.TOK_EQ)
-		{
-			readToken();
-			if(lookahead == Token.TOK_OP)
+			if(lookahead == Token.TOK_INPUT)
 			{
 				readToken();
-				VAR();
-				if(lookahead == Token.TOK_COMM)
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					VAR();
+					if(lookahead == Token.TOK_CP)
+					{
+						readToken();
+						return;
+					}
+				}
+			}
+			else if(lookahead == Token.TOK_OUTPUT)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
 				{
 					readToken();
 					VAR();
@@ -238,168 +345,457 @@ public class Grammar
 				}
 			}
 		}
-		else if(lookahead == Token.TOK_OP)
+		catch(Exception ex)
 		{
-			readToken();
-			VAR();
+			throw ex;
+		}
+	}
 
-			if(lookahead == Token.TOK_LT)
+	// BOOL → T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
+	private static void BOOL() throws Exception
+	{
+		try
+		{
+			if(lookahead == Token.TOK_T)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_F)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_ID)
+			{
+				VAR();
+				return;
+			}
+			else if(lookahead == Token.TOK_EQ)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					VAR();
+					if(lookahead == Token.TOK_COMM)
+					{
+						readToken();
+						VAR();
+						if(lookahead == Token.TOK_CP)
+						{
+							readToken();
+							return;
+						}
+					}
+				}
+			}
+			else if(lookahead == Token.TOK_OP)
 			{
 				readToken();
 				VAR();
-				if(lookahead == Token.TOK_CP)
+
+				if(lookahead == Token.TOK_LT)
 				{
 					readToken();
+					VAR();
+					if(lookahead == Token.TOK_CP)
+					{
+						readToken();
+						return;
+					}
+				}
+				else if(lookahead == Token.TOK_GT)
+				{
+					readToken();
+					VAR();
+					if(lookahead == Token.TOK_CP)
+					{
+						readToken();
+						return;
+					}
+				}
+			}
+			else if(lookahead == Token.TOK_NOT)
+			{
+				readToken();
+				BOOL();
+				return;
+			}
+			else if(lookahead == Token.TOK_AND)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					BOOL_();
 					return;
 				}
 			}
-			else if(lookahead == Token.TOK_GT)
+			else if(lookahead == Token.TOK_OR)
 			{
 				readToken();
-				VAR();
-				if(lookahead == Token.TOK_CP)
+				if(lookahead == Token.TOK_OP)
 				{
 					readToken();
+					BOOL_();
 					return;
 				}
 			}
 		}
-		else if(lookahead == Token.TOK_NOT)
+		catch(Exception ex)
 		{
-			readToken();
-			BOOL();
-			return;
+			throw ex;
 		}
-		else if(lookahead == Token.TOK_AND)
-		{
-			readToken();
-			if(lookahead == Token.TOK_OP)
-			{
-				readToken();
-				BOOL_();
-				return;
-			}
-		}
-		else if(lookahead == Token.TOK_OR)
-		{
-			readToken();
-			if(lookahead == Token.TOK_OP)
-			{
-				readToken();
-				BOOL_();
-				return;
-			}
-		}
+
+		System.out.println("ERROR!");
 	}
 
 	// BOOL' → BOOL , BOOL"
-	public static void BOOL_()
+	private static void BOOL_() throws Exception
 	{
-		BOOL();
-
-		if(lookahead == Token.TOK_COMM)
+		try
 		{
-			readToken();
-			BOOL__();
-			return;
+			BOOL();
+
+			if(lookahead == Token.TOK_COMM)
+			{
+				readToken();
+				BOOL__();
+				return;
+			}
 		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		System.out.println("ERROR!");
 	}
 
 	// BOOL" → BOOL )
-	public static void BOOL__()
+	private static void BOOL__() throws Exception
 	{
-		BOOL();
-		if(lookahead == Token.TOK_CP)
+		try
 		{
-			readToken();
-			return;
+			BOOL();
+			if(lookahead == Token.TOK_CP)
+			{
+				readToken();
+				return;
+			}
 		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		System.out.println("ERROR!");
 	}
 
-	// CALC → add ( NUMEXPR , CALC' | → sub ( NUMEXPR , CALC' | mult ( NUMEXPR , CALC'
-	public static void CALC()
+	// CALC → add ( CALC' | → sub ( CALC' | mult ( CALC'
+	private static void CALC() throws Exception
 	{
-		
+		System.out.println("CALC!");
+
+		try
+		{
+			if(	lookahead == Token.TOK_ADD)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					CALC_();
+					return;
+				}
+			}
+			else if(lookahead == Token.TOK_SUB)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					CALC_();
+					return;
+				}
+			}
+			else if(lookahead == Token.TOK_MULT)
+			{
+				readToken();
+				if(lookahead == Token.TOK_OP)
+				{
+					readToken();
+					CALC_();
+					return;
+				}
+			}		
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}	
+
+		System.out.println("ERROR!");
 	}
 
-	// CALC' → NUMEXPR )
-	public static void CALC_()
+	// CALC' → NUMEXPR , CALC"
+	private static void CALC_() throws Exception
 	{
-		
+		try
+		{
+			NUMEXPR();
+
+			if(lookahead == Token.TOK_COMM)
+			{
+				readToken();
+				CALC__();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		System.out.println("ERROR!");
+	}
+
+	// CALC" → NUMEXPR )
+	private static void CALC__() throws Exception
+	{
+		try
+		{
+			NUMEXPR();
+
+			if(lookahead == Token.TOK_CP)
+			{
+				readToken();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		throw new Exception("Expected closing parenthesis.");
 	}
 
 	// ASSIGN → VAR = ASSIGN'
-	public static void ASSIGN()
+	private static void ASSIGN() throws Exception
 	{
-		
+		System.out.println("ASSIGN! " + lookahead);
+
+		try
+		{
+			VAR();
+			if(lookahead == Token.TOK_ASS)
+			{
+				readToken();
+				ASSIGN_();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	// ASSIGN' → stringLiteral | VAR | NUMEXPR | BOOL
-	public static void ASSIGN_()
+	private static void ASSIGN_() throws Exception
 	{
-		
+		try
+		{
+			if(lookahead == Token.TOK_STR)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_ID)
+			{
+				VAR();
+				return;
+			}
+			else if(lookahead == Token.TOK_INT || lookahead == Token.TOK_ADD || lookahead == Token.TOK_SUB || lookahead == Token.TOK_MULT)
+			{
+				NUMEXPR();
+				return;
+			}
+			else if(lookahead == Token.TOK_T || lookahead == Token.TOK_F || lookahead == Token.TOK_EQ || lookahead == Token.TOK_OP || lookahead == Token.TOK_NOT || lookahead == Token.TOK_AND || lookahead == Token.TOK_OR) 
+			{
+				BOOL();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
 	}
 
 	// INSTR → halt | DECL | IO | CALL | ASSIGN  | COND_BRANCH | COND_LOOP
-	public static void INSTR()
-	{
-		readToken();
+	private static void INSTR() throws Exception 
+	{ 
+		System.out.println("INSTR! " + lookahead);
+
+		try
+		{
+			if(lookahead == Token.TOK_HALT)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_NUM || lookahead == Token.TOK_STRING || lookahead == Token.TOK_BOOL)
+			{
+				DECL();
+				return;
+			}
+			else if(lookahead == Token.TOK_INPUT || lookahead == Token.TOK_OUTPUT)
+			{
+				IO();
+				return;
+			}
+			else if(lookahead == Token.TOK_ID && look(1) == Token.TOK_ASS)
+			{
+				ASSIGN();
+				return;
+			}
+			else if(lookahead == Token.TOK_ID)
+			{
+				CALL();
+				return;
+			}
+			else if(lookahead == Token.TOK_IF)
+			{
+				COND_BRANCH();
+				return;
+			}
+			else if(lookahead == Token.TOK_WHILE)
+			{
+				COND_LOOP();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		System.out.println("ERROR! Unexpected");index=tokenstream.size();
 	}
 
-	// NUMEXPR → VAR | CALC | integerLiteral
-	public static void NUMEXPR()
+	// NUMEXPR → integerLiteral | VAR | CALC
+	private static void NUMEXPR() throws Exception
 	{
-		
+		try
+		{
+			if(lookahead == Token.TOK_INT)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_ID)
+			{
+				VAR();
+				return;
+			}
+			else if(lookahead == Token.TOK_ADD || lookahead == Token.TOK_SUB || lookahead == Token.TOK_MULT)
+			{
+				CALC();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+
+		System.out.println("ERROR! Should be numberical expr");
 	}
 
 	// TYPE → num | string | bool
-	public static void TYPE()
+	private static void TYPE() throws Exception
 	{
-		if(lookahead == Token.TOK_NUM)
+		try
 		{
-			readToken();
-			return;
+			if(lookahead == Token.TOK_NUM)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_STRING)
+			{
+				readToken();
+				return;
+			}
+			else if(lookahead == Token.TOK_BOOL)
+			{
+				readToken();
+				return;
+			}
 		}
-		else if(lookahead == Token.TOK_STRING)
+		catch(Exception ex)
 		{
-			readToken();
-			return;
+			throw ex;
 		}
-		else if(lookahead == Token.TOK_BOOL)
-		{
-			readToken();
-			return;
-		}
-		//error
+
+		System.out.println("ERROR! Should be numberical expr");
 	}
 
 	// CALL → userDefinedIdentifier
-	public static void CALL()
+	private static void CALL() throws Exception
 	{
-		if(lookahead == Token.TOK_ID)
+		System.out.println("CALL!");
+
+		try
 		{
-			readToken();
-			return;
+			if(lookahead == Token.TOK_ID)
+			{
+				readToken();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
 		}
 	}
 
 	// NAME → userDefinedIdentifier
-	public static void NAME()
+	private static void NAME() throws Exception
 	{
-		if(lookahead == Token.TOK_ID)
+		System.out.println("NAME!");
+		try
 		{
-			readToken();
-			return;
+			if(lookahead == Token.TOK_ID)
+			{
+				readToken();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
 		}
 	}
 
 	// VAR → userDefinedIdentifier
-	public static void VAR()
+	private static void VAR() throws Exception
 	{
-		if(lookahead == Token.TOK_ID)
+		System.out.println("VAR!");
+		try
 		{
-			readToken();
-			return;
+			if(lookahead == Token.TOK_ID)
+			{
+				readToken();
+				return;
+			}
+		}
+		catch(Exception ex)
+		{
+			throw ex;
 		}
 	}
 } 

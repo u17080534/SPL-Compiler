@@ -43,7 +43,7 @@ public class spl
             System.out.println("Lexical Error " + ex.getMessage());
         }
 
-        this.parser.parseAST(tokens);
+        this.parser.parse(tokens);
     }
   
     public static void main(String[] args) 
