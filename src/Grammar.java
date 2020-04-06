@@ -4,20 +4,28 @@ import javafx.util.*;
 
 public class Grammar
 {
-	private static int index;
-	private static List<Pair<String, Token>> tokenstream;
-	private static Token lookahead;
+	//!Index of this.lookahead
+	private int index;
+	//!Contains value of following token
+	private Token lookahead;
+	//!Token stream - may be looked ahead up to any point < size
+	private List<Pair<String, Token>> tokenstream;
 
-	public static void tokens(List<Pair<String, Token>> stream)
+	public Grammar()
 	{
-		tokenstream = stream;
-		index = 0;
-		lookahead = look(0);
+		this.index = 0;
+	}
+
+	//!Constructs AST
+	public void build(List<Pair<String, Token>> stream)
+	{
+		this.tokenstream = stream;
+		this.lookahead = look(0);
 
 		try
         {
-            while(lookahead != Token.NULL)
-           		S();
+            while(this.lookahead != Token.NULL) //Allow for contiguous program segments
+           		START();
         }
         catch(Exception ex)
         {
@@ -25,32 +33,32 @@ public class Grammar
         }
 	}
 
-	public static void readToken()
+	private void readToken()
 	{
-		Pair<String, Token> read = tokenstream.get(index);
+		Pair<String, Token> read = this.tokenstream.get(this.index);
 
-		if(index + 1 < tokenstream.size())
-			lookahead = tokenstream.get(++index).getValue();
+		if(this.index + 1 < this.tokenstream.size())
+			this.lookahead = this.tokenstream.get(++this.index).getValue();
 		else
-			lookahead = Token.NULL;
+			this.lookahead = Token.NULL;
 
 		System.out.println(read);
 	}
 
-	private static Token look(int ahead)
+	private Token look(int ahead)
 	{
-		if(index + ahead >= tokenstream.size())
+		if(this.index + ahead >= this.tokenstream.size())
 			return Token.NULL;
 
-		return tokenstream.get(index + ahead).getValue();
+		return this.tokenstream.get(this.index + ahead).getValue();
 	}
 
-	//S	→ PROC | PROG
-	private static void S() throws Exception
+	//START	→ PROC | PROG
+	private void START() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_PROC)
+			if(this.lookahead == Token.TOK_PROC)
 			{
 				PROC();
 			}
@@ -66,7 +74,7 @@ public class Grammar
 	}
 
 	//PROG → CODE PROG'
-	private static void PROG() throws Exception
+	private void PROG() throws Exception
 	{
 		System.out.println("\t! PROG !");
 		try
@@ -81,13 +89,13 @@ public class Grammar
 	}
 
 	// PROG' → ; PROC_DEFS | ϵ
-	private static void PROG_() throws Exception
+	private void PROG_() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_SEMI)
+			if(this.lookahead == Token.TOK_SEMI)
 			{
-				readToken();
+				this.readToken();
 
 				PROC_DEFS();
 
@@ -101,7 +109,7 @@ public class Grammar
 	}
 
 	// PROC_DEFS → PROC PROC_DEFS'
-	private static void PROC_DEFS() throws Exception
+	private void PROC_DEFS() throws Exception
 	{
 		System.out.println("\t! PROC_DEFS !");
 		try
@@ -116,11 +124,11 @@ public class Grammar
 	}
 
 	// PROC_DEFS' → PROC_DEFS | ϵ
-	private static void PROC_DEFS_() throws Exception
+	private void PROC_DEFS_() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_PROC)
+			if(this.lookahead == Token.TOK_PROC)
 			{
 				PROC_DEFS();
 			}
@@ -132,29 +140,29 @@ public class Grammar
 	}
 
 	// PROC → proc UserDefinedIdentifier { PROG }
-	private static void PROC() throws Exception
+	private void PROC() throws Exception
 	{
 		System.out.println("\t! PROC !");
 		try
 		{
-			if(lookahead == Token.TOK_PROC)
+			if(this.lookahead == Token.TOK_PROC)
 			{
-				readToken();
-				if(lookahead == Token.TOK_ID)
+				this.readToken();
+				if(this.lookahead == Token.TOK_ID)
 				{
-					readToken();
-					if(lookahead == Token.TOK_OB)
+					this.readToken();
+					if(this.lookahead == Token.TOK_OB)
 					{
-						readToken();
+						this.readToken();
 						PROG();
-						if(lookahead == Token.TOK_CB)
+						if(this.lookahead == Token.TOK_CB)
 						{
-							readToken();
+							this.readToken();
 							return;
 						}
 					}
 
-					throw new Exception("Missing Braces after proc defition.");
+					throw new Exception("Closing brace expected after instruction.\n\tHint: You may be missing a semicolon (;) between instructions.");
 				}
 			}
 		}
@@ -163,11 +171,11 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new Exception("Unexpected Token: " + lookahead + " - 'proc' expected.");
+		throw new Exception("Unexpected Token: " + this.lookahead + " - 'proc' expected.");
 	}
 
 	// CODE → INSTR CODE'
-	private static void CODE() throws Exception
+	private void CODE() throws Exception
 	{
 		System.out.println("\t! CODE !");
 
@@ -183,15 +191,15 @@ public class Grammar
 	}
 
 	// CODE' → ; CODE | ϵ
-	private static void CODE_() throws Exception
+	private void CODE_() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_SEMI)
+			if(this.lookahead == Token.TOK_SEMI)
 			{
-				readToken();
+				this.readToken();
 
-				if(lookahead != Token.NULL)
+				if(this.lookahead != Token.NULL)
 					CODE();
 
 				return;
@@ -203,8 +211,8 @@ public class Grammar
 		}
 	}
 
-	// DECL → TYPE NAME DECL'
-	private static void DECL() throws Exception
+	// DECL → TYPE NAME CODE'
+	private void DECL() throws Exception
 	{
 		System.out.println("\t! DECL !");
 		try
@@ -219,50 +227,32 @@ public class Grammar
 		}
 	}
 
-	// DECL' → ; DECL | ϵ
-	private static void DECL_() throws Exception
-	{
-		try
-		{
-			if(lookahead == Token.TOK_SEMI)
-			{
-				readToken();
-				// CODE();
-				return;
-			}		
-		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
-	}
-
 	// COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
-	private static void COND_BRANCH() throws Exception
+	private void COND_BRANCH() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_IF)
+			if(this.lookahead == Token.TOK_IF)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					BOOL();
 
-					if(lookahead == Token.TOK_CP)
+					if(this.lookahead == Token.TOK_CP)
 					{
-						readToken();
-						if(lookahead == Token.TOK_THEN)
+						this.readToken();
+						if(this.lookahead == Token.TOK_THEN)
 						{
-							readToken();
-							if(lookahead == Token.TOK_OB)
+							this.readToken();
+							if(this.lookahead == Token.TOK_OB)
 							{
-								readToken();
+								this.readToken();
 								CODE();
-								if(lookahead == Token.TOK_CB)
+								if(this.lookahead == Token.TOK_CB)
 								{
-									readToken();
+									this.readToken();
 									COND_BRANCH_();
 									return;
 								}
@@ -281,20 +271,20 @@ public class Grammar
 	}
 
 	// COND_BRANCH'→ else { CODE } | ϵ
-	private static void COND_BRANCH_() throws Exception
+	private void COND_BRANCH_() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_ELSE)
+			if(this.lookahead == Token.TOK_ELSE)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OB)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OB)
 				{
-					readToken();
+					this.readToken();
 					CODE();
-					if(lookahead == Token.TOK_CB)
+					if(this.lookahead == Token.TOK_CB)
 					{
-						readToken();
+						this.readToken();
 						return;
 					}
 				}
@@ -307,11 +297,11 @@ public class Grammar
 	}
 
 	// COND_LOOP → while ( BOOL ) { CODE } | for ( VAR = 0; VAR < VAR ; VAR = add ( VAR , 1 ) ) { CODE }
-	private static void COND_LOOP() throws Exception
+	private void COND_LOOP() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_WHILE)
+			if(this.lookahead == Token.TOK_WHILE)
 			{
 
 			}
@@ -325,35 +315,35 @@ public class Grammar
 	}
 
 	// IO → input ( VAR ) | output ( VAR )
-	private static void IO() throws Exception
+	private void IO() throws Exception
 	{
 		System.out.println("\t! IO !");
 		try
 		{
-			if(lookahead == Token.TOK_INPUT)
+			if(this.lookahead == Token.TOK_INPUT)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					VAR();
-					if(lookahead == Token.TOK_CP)
+					if(this.lookahead == Token.TOK_CP)
 					{
-						readToken();
+						this.readToken();
 						return;
 					}
 				}
 			}
-			else if(lookahead == Token.TOK_OUTPUT)
+			else if(this.lookahead == Token.TOK_OUTPUT)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					VAR();
-					if(lookahead == Token.TOK_CP)
+					if(this.lookahead == Token.TOK_CP)
 					{
-						readToken();
+						this.readToken();
 						return;
 					}
 				}
@@ -368,92 +358,92 @@ public class Grammar
 	}
 
 	// BOOL → T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
-	private static void BOOL() throws Exception
+	private void BOOL() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_T)
+			if(this.lookahead == Token.TOK_T)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_F)
+			else if(this.lookahead == Token.TOK_F)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_ID)
+			else if(this.lookahead == Token.TOK_ID)
 			{
 				VAR();
 				return;
 			}
-			else if(lookahead == Token.TOK_EQ)
+			else if(this.lookahead == Token.TOK_EQ)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					VAR();
-					if(lookahead == Token.TOK_COMM)
+					if(this.lookahead == Token.TOK_COMM)
 					{
-						readToken();
+						this.readToken();
 						VAR();
-						if(lookahead == Token.TOK_CP)
+						if(this.lookahead == Token.TOK_CP)
 						{
-							readToken();
+							this.readToken();
 							return;
 						}
 					}
 				}
 			}
-			else if(lookahead == Token.TOK_OP)
+			else if(this.lookahead == Token.TOK_OP)
 			{
-				readToken();
+				this.readToken();
 				VAR();
 
-				if(lookahead == Token.TOK_LT)
+				if(this.lookahead == Token.TOK_LT)
 				{
-					readToken();
+					this.readToken();
 					VAR();
-					if(lookahead == Token.TOK_CP)
+					if(this.lookahead == Token.TOK_CP)
 					{
-						readToken();
+						this.readToken();
 						return;
 					}
 				}
-				else if(lookahead == Token.TOK_GT)
+				else if(this.lookahead == Token.TOK_GT)
 				{
-					readToken();
+					this.readToken();
 					VAR();
-					if(lookahead == Token.TOK_CP)
+					if(this.lookahead == Token.TOK_CP)
 					{
-						readToken();
+						this.readToken();
 						return;
 					}
 				}
 			}
-			else if(lookahead == Token.TOK_NOT)
+			else if(this.lookahead == Token.TOK_NOT)
 			{
-				readToken();
+				this.readToken();
 				BOOL();
 				return;
 			}
-			else if(lookahead == Token.TOK_AND)
+			else if(this.lookahead == Token.TOK_AND)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					BOOL_();
 					return;
 				}
 			}
-			else if(lookahead == Token.TOK_OR)
+			else if(this.lookahead == Token.TOK_OR)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					BOOL_();
 					return;
 				}
@@ -468,15 +458,15 @@ public class Grammar
 	}
 
 	// BOOL' → BOOL , BOOL"
-	private static void BOOL_() throws Exception
+	private void BOOL_() throws Exception
 	{
 		try
 		{
 			BOOL();
 
-			if(lookahead == Token.TOK_COMM)
+			if(this.lookahead == Token.TOK_COMM)
 			{
-				readToken();
+				this.readToken();
 				BOOL__();
 				return;
 			}
@@ -490,14 +480,14 @@ public class Grammar
 	}
 
 	// BOOL" → BOOL )
-	private static void BOOL__() throws Exception
+	private void BOOL__() throws Exception
 	{
 		try
 		{
 			BOOL();
-			if(lookahead == Token.TOK_CP)
+			if(this.lookahead == Token.TOK_CP)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
 		}
@@ -510,42 +500,42 @@ public class Grammar
 	}
 
 	// CALC → add ( CALC' | → sub ( CALC' | mult ( CALC'
-	private static void CALC() throws Exception
+	private void CALC() throws Exception
 	{
 		System.out.println("\t! CALC !");
 
 		try
 		{
-			if(	lookahead == Token.TOK_ADD)
+			if(	this.lookahead == Token.TOK_ADD)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					CALC_();
 					return;
 				}
 
 				throw new Exception("Missing open parenthesis.");
 			}
-			else if(lookahead == Token.TOK_SUB)
+			else if(this.lookahead == Token.TOK_SUB)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					CALC_();
 					return;
 				}
 
 				throw new Exception("Missing open parenthesis.");
 			}
-			else if(lookahead == Token.TOK_MULT)
+			else if(this.lookahead == Token.TOK_MULT)
 			{
-				readToken();
-				if(lookahead == Token.TOK_OP)
+				this.readToken();
+				if(this.lookahead == Token.TOK_OP)
 				{
-					readToken();
+					this.readToken();
 					CALC_();
 					return;
 				}
@@ -562,15 +552,15 @@ public class Grammar
 	}
 
 	// CALC' → NUMEXPR , CALC"
-	private static void CALC_() throws Exception
+	private void CALC_() throws Exception
 	{
 		try
 		{
 			NUMEXPR();
 
-			if(lookahead == Token.TOK_COMM)
+			if(this.lookahead == Token.TOK_COMM)
 			{
-				readToken();
+				this.readToken();
 				CALC__();
 				return;
 			}
@@ -584,15 +574,15 @@ public class Grammar
 	}
 
 	// CALC" → NUMEXPR )
-	private static void CALC__() throws Exception
+	private void CALC__() throws Exception
 	{
 		try
 		{
 			NUMEXPR();
 
-			if(lookahead == Token.TOK_CP)
+			if(this.lookahead == Token.TOK_CP)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
 		}
@@ -605,16 +595,16 @@ public class Grammar
 	}
 
 	// ASSIGN → VAR = ASSIGN'
-	private static void ASSIGN() throws Exception
+	private void ASSIGN() throws Exception
 	{
 		System.out.println("\t! ASSIGN !");
 
 		try
 		{
 			VAR();
-			if(lookahead == Token.TOK_ASSN)
+			if(this.lookahead == Token.TOK_ASSN)
 			{
-				readToken();
+				this.readToken();
 				ASSIGN_();
 				return;
 			}
@@ -628,26 +618,26 @@ public class Grammar
 	}
 
 	// ASSIGN' → stringLiteral | VAR | NUMEXPR | BOOL
-	private static void ASSIGN_() throws Exception
+	private void ASSIGN_() throws Exception
 	{
 		try
 		{
-			if(lookahead == Token.TOK_S)
+			if(this.lookahead == Token.TOK_S)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_ID)
+			else if(this.lookahead == Token.TOK_ID)
 			{
 				VAR();
 				return;
 			}
-			else if(lookahead == Token.TOK_N || lookahead == Token.TOK_ADD || lookahead == Token.TOK_SUB || lookahead == Token.TOK_MULT)
+			else if(this.lookahead == Token.TOK_N || this.lookahead == Token.TOK_ADD || this.lookahead == Token.TOK_SUB || this.lookahead == Token.TOK_MULT)
 			{
 				NUMEXPR();
 				return;
 			}
-			else if(lookahead == Token.TOK_T || lookahead == Token.TOK_F || lookahead == Token.TOK_EQ || lookahead == Token.TOK_OP || lookahead == Token.TOK_NOT || lookahead == Token.TOK_AND || lookahead == Token.TOK_OR) 
+			else if(this.lookahead == Token.TOK_T || this.lookahead == Token.TOK_F || this.lookahead == Token.TOK_EQ || this.lookahead == Token.TOK_OP || this.lookahead == Token.TOK_NOT || this.lookahead == Token.TOK_AND || this.lookahead == Token.TOK_OR) 
 			{
 				BOOL();
 				return;
@@ -662,43 +652,43 @@ public class Grammar
 	}
 
 	// INSTR → halt | DECL | IO | CALL | ASSIGN  | COND_BRANCH | COND_LOOP
-	private static void INSTR() throws Exception 
+	private void INSTR() throws Exception 
 	{ 
-		System.out.println("\t! INSTR !" + lookahead);
+		System.out.println("\t! INSTR !" + this.lookahead);
 
 		try
 		{
-			if(lookahead == Token.TOK_HALT)
+			if(this.lookahead == Token.TOK_HALT)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_NUM || lookahead == Token.TOK_STRING || lookahead == Token.TOK_BOOL)
+			else if(this.lookahead == Token.TOK_NUM || this.lookahead == Token.TOK_STRING || this.lookahead == Token.TOK_BOOL)
 			{
 				DECL();
 				return;
 			}
-			else if(lookahead == Token.TOK_INPUT || lookahead == Token.TOK_OUTPUT)
+			else if(this.lookahead == Token.TOK_INPUT || this.lookahead == Token.TOK_OUTPUT)
 			{
 				IO();
 				return;
 			}
-			else if(lookahead == Token.TOK_IF)
+			else if(this.lookahead == Token.TOK_IF)
 			{
 				COND_BRANCH();
 				return;
 			}
-			else if(lookahead == Token.TOK_WHILE)
+			else if(this.lookahead == Token.TOK_WHILE)
 			{
 				COND_LOOP();
 				return;
 			}
-			else if(lookahead == Token.TOK_ID && look(1) == Token.TOK_ASSN)
+			else if(this.lookahead == Token.TOK_ID && this.look(1) == Token.TOK_ASSN)
 			{
 				ASSIGN();
 				return;
 			}
-			else if(lookahead == Token.TOK_ID)
+			else if(this.lookahead == Token.TOK_ID)
 			{
 				CALL();
 				return;
@@ -713,22 +703,22 @@ public class Grammar
 	}
 
 	// NUMEXPR → integerLiteral | VAR | CALC
-	private static void NUMEXPR() throws Exception
+	private void NUMEXPR() throws Exception
 	{
 		System.out.println("\t! NUMEXPR !");
 		try
 		{
-			if(lookahead == Token.TOK_N)
+			if(this.lookahead == Token.TOK_N)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_ID)
+			else if(this.lookahead == Token.TOK_ID)
 			{
 				VAR();
 				return;
 			}
-			else if(lookahead == Token.TOK_ADD || lookahead == Token.TOK_SUB || lookahead == Token.TOK_MULT)
+			else if(this.lookahead == Token.TOK_ADD || this.lookahead == Token.TOK_SUB || this.lookahead == Token.TOK_MULT)
 			{
 				CALC();
 				return;
@@ -743,24 +733,24 @@ public class Grammar
 	}
 
 	// TYPE → num | string | bool
-	private static void TYPE() throws Exception
+	private void TYPE() throws Exception
 	{
 		System.out.println("\t! TYPE !");
 		try
 		{
-			if(lookahead == Token.TOK_NUM)
+			if(this.lookahead == Token.TOK_NUM)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_STRING)
+			else if(this.lookahead == Token.TOK_STRING)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
-			else if(lookahead == Token.TOK_BOOL)
+			else if(this.lookahead == Token.TOK_BOOL)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
 		}
@@ -773,15 +763,15 @@ public class Grammar
 	}
 
 	// CALL → userDefinedIdentifier
-	private static void CALL() throws Exception
+	private void CALL() throws Exception
 	{
 		System.out.println("\t! CALL !");
 
 		try
 		{
-			if(lookahead == Token.TOK_ID)
+			if(this.lookahead == Token.TOK_ID)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
 		}
@@ -794,14 +784,14 @@ public class Grammar
 	}
 
 	// NAME → userDefinedIdentifier
-	private static void NAME() throws Exception
+	private void NAME() throws Exception
 	{
 		System.out.println("\t! NAME !");
 		try
 		{
-			if(lookahead == Token.TOK_ID)
+			if(this.lookahead == Token.TOK_ID)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
 		}
@@ -814,14 +804,14 @@ public class Grammar
 	}
 
 	// VAR → userDefinedIdentifier
-	private static void VAR() throws Exception
+	private void VAR() throws Exception
 	{
 		System.out.println("\t! VAR !");
 		try
 		{
-			if(lookahead == Token.TOK_ID)
+			if(this.lookahead == Token.TOK_ID)
 			{
-				readToken();
+				this.readToken();
 				return;
 			}
 		}

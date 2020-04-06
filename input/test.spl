@@ -1,15 +1,25 @@
 proc hello
 {
-	num i;
-	string axify;
-	a = "hello";
-	input(i);
-	i = add(sub(1, add(1,add(1, 1))), mult(3, i));
-	output(a);
-	output(i)
+    num i1;
+    num j;
+    string msg;
+    msg = "input";
+    output(msg);
+    input(i);
+    input(j);
+
+    if (T) then {
+        i = add(sub(1, add(1,add(1, j))), mult(j, i))
+    } else {
+        output(msg)
+    };
+
+    output(i)
 }
 
 proc main
 {
-	hello
+    hello
 }
+
+num i
