@@ -1,6 +1,9 @@
+package parser;
+
 import java.util.*;
 import java.io.*;
 import javafx.util.*;
+import lexer.*;
 
 public class Parser
 {
@@ -13,7 +16,7 @@ public class Parser
 		this.grammar = new Grammar();
 	}
 
-	public void parse(List<Pair<String, Token>> tokens)
+	public void parse(List<Token> tokens)
 	{
 		this.grammar.build(tokens);
 	}

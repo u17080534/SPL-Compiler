@@ -1,15 +1,21 @@
 JFLAGS = -g
 JC = javac
-
 .SUFFIXES: .java .class
+.java.class:
+		$(JC) $(JFLAGS) $*.java
 
-classes:
-		$(JC) $(JFLAGS) src/*.java
+default: spl
 
-default: classes
+spl:
+	$(JC) $(JFLAGS) \
+	src/exception/*.java \
+	src/lexer/Token.java \
+	src/lexer/Lexer.java \
+	src/ast/expression/*.java \
+	src/ast/AbstractSyntaxTree.java \
+	src/parser/Grammar.java \
+	src/parser/Parser.java \
+	src/spl.java
 
 run:
-	java ./src/spl
-
-clean:
-		rm src/*.class
+	java spl

@@ -1,50 +1,9 @@
+package lexer;
+
 import java.util.*;
 import java.io.*;
 import javafx.util.*;
-
-enum Token
-{ 
-	NULL("_"),
-	TOK_AND("tok_and"), 
-	TOK_OR("tok_or"), 
-	TOK_NOT("tok_not"),
-	TOK_ADD("tok_add"),
-	TOK_SUB("tok_sub"),
-	TOK_MULT("tok_mult"),
-	TOK_IF("tok_if"),
-	TOK_THEN("tok_then"),
-	TOK_ELSE("tok_else"),
-	TOK_WHILE("tok_while"),
-	TOK_FOR("tok_for"),
-	TOK_EQ("tok_eq"),
-	TOK_INPUT("tok_input"),
-	TOK_OUTPUT("tok_output"),
-	TOK_HALT("tok_halt"),
-	TOK_NUM("tok_num"),
-	TOK_BOOL("tok_bool"),
-	TOK_STRING("tok_string"),
-	TOK_PROC("tok_proc"),
-	TOK_GT("tok_greater"),
-	TOK_LT("tok_less"),
-	TOK_OP("tok_open_paren"),
-	TOK_CP("tok_close_paren"),
-	TOK_OB("tok_open_brace"),
-	TOK_CB("tok_close_brace"),
-	TOK_ASSN("tok_assign"),
-	TOK_COMM("tok_comma"),
-	TOK_SEMI("tok_semi"),
-	TOK_T("tok_true"),
-	TOK_F("tok_false"),
-	TOK_S("tok_string_literal"),//literal
-	TOK_N("tok_number_literal"),//literal
-	TOK_ID("tok_identifier");
-
-	private String str; 
-
-	private Token(String str) { this.str = str; } 
-
-	@Override public String toString() { return this.str; } 
-}
+import exception.*;
 
 public class Lexer 
 {
@@ -54,17 +13,17 @@ public class Lexer
 	//!Buffer for Reading Input File
 	private BufferedReader buffer;
 	//!Stack for Carrying over Rejected Characters
-	Stack<Character> bufferStack = new Stack<Character>();
+	private Stack<Character> bufferStack;
 	//!List of Accept State ID's
 	private List<Integer> acceptStates;
 	//!Start State ID
 	private int startState;
-	//!List of Tokens Read from Input
-	private List<Pair<String, Token>> tokens;
+	//!List of Toks Read from Input
+	private List<Token> tokens;
 	//!Row of Input File
-	int row;
+	private int row;
 	//!Column of Input File
-	int col;
+	private int col;
 
 	public Lexer(String file) throws Exception
 	{
@@ -76,7 +35,6 @@ public class Lexer
 		this.acceptStates.add(new Integer(24));
 		this.acceptStates.add(new Integer(32));
 		this.acceptStates.add(new Integer(65));
-		
 		this.acceptStates.add(new Integer(27));
 		this.acceptStates.add(new Integer(28));
 		this.acceptStates.add(new Integer(29));
@@ -114,30 +72,31 @@ public class Lexer
 		this.acceptStates.add(new Integer(62));
 		this.acceptStates.add(new Integer(63));		
 
-		this.tokens = new ArrayList<Pair<String, Token>>();
+		this.tokens = new ArrayList<Token>();
 
 		this.filename = file;
 
 		try
 		{
 			this.buffer = new BufferedReader(new FileReader(new File("../input/" + this.filename + ".spl")));
+			this.bufferStack = new Stack<Character>();
 		}
-		catch(Exception e)
+		catch(FileNotFoundException e)
 		{
 			throw e;
 		}
 
 		this.row = 1;
-		this.col = 0;
+		this.col = 1;
 	}
 
-	public List<Pair<String, Token>> getTokens()
+	public List<Token> getTokens()
 	{
 		return this.tokens;
 	}
 
 	//!Generates list of all tokens in input file, throws exception if unexpected input
-	public List<Pair<String, Token>> readTokens() throws Exception
+	public List<Token> readTokens() throws LexerException
 	{
 		//Continues iterating till no more tokens can be read, or an error is encountered
 		String tokenFile = this.filename + ".tok";
@@ -149,7 +108,7 @@ public class Lexer
 			{
 				tokenize = this.readToken();
 			}
-			catch(Exception exp)
+			catch(LexerException exp)
 			{
 				tokenize = false;
 				throw exp;
@@ -164,13 +123,13 @@ public class Lexer
 
             for(int index = 0; index < this.tokens.size(); index++)
             {
-                bufferedWriter.write((index + 1) + ": " + tokens.get(index).getKey() + " (" + tokens.get(index).getValue() + ")\n");
+                bufferedWriter.write((index + 1) + ": " + tokens.get(index).getInput() + " (" + tokens.get(index).getToken() + ")\n");
             }
 
             bufferedWriter.close();
             fileWriter.close();
         } 
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -178,41 +137,43 @@ public class Lexer
 		return this.tokens;
 	}
 
-	private boolean readToken() throws Exception
+    /*
+		Consider transitions of currState
+			IF currentChar matches a transition
+				-> add currentChar to charStack
+				-> change currState to transitionState
+
+			ELSE IF currentState is accept state (implied there is no matching transition)
+				-> accept token:
+					-> character stack (charStack) is cleared, and appended to the token string
+					-> continue to follow the DFA, building the charStack
+
+			ELSE
+				-> reject input;
+
+		-> read in next char and repeat
+    */
+
+	private boolean readToken() throws LexerException
 	{
-	    //Each State Contains its own IF Statement, which contains each of its transitions
-	    /*
-			Consider transitions of currState
-				IF currentChar matches a transition
-					-> add currentChar to charStack
-					-> change currState to transitionState
-
-				ELSE IF currentState is accept state (implied there is no matching transition)
-					-> accept token:
-						-> character stack (charStack) is cleared, and appended to the token string
-						-> continue to follow the DFA, building the charStack
-
-				ELSE
-					-> reject input;
-
-			-> read in next char and repeat
-	    */
+		int currRow = this.row;
+		int currCol = this.col;
 
 		char ch = 0;
 		String token = "";
-		Token tokenRep = Token.NULL;
+		Token.Tok tokenRep = Token.Tok.NULL;
 		int state = this.startState;
 		Stack<Character> charStack = new Stack<Character>();
 		boolean cont = true;
 
-		Tokenized:
+		Tokized:
 	    while(!this.emptyStream())
 	    {	
 	    	try
 	    	{   	
 	    		ch = this.read();
 	    	}
-	    	catch(IOException e)
+	    	catch(EmptyStreamException ex)
 	    	{
 	    		ch = 0;
 	    		cont = false;
@@ -225,13 +186,13 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_N;
+					tokenRep = Token.Tok.TOK_N;
 
-					//Return Token Directly when following input is irrelevant
-					break Tokenized;
+					//Return Tok Directly when following input is irrelevant
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 1)
 			{
@@ -246,7 +207,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 2)
 			{
@@ -256,12 +217,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_S;
+					tokenRep = Token.Tok.TOK_S;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 3)
 			{
@@ -276,7 +237,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 5)
 			{	
@@ -291,7 +252,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 7)
 			{
@@ -306,7 +267,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 9)
 			{
@@ -321,7 +282,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 11)
 			{
@@ -336,7 +297,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 13)
 			{
@@ -351,7 +312,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 15)
 			{
@@ -366,7 +327,7 @@ public class Lexer
 					charStack.push(new Character(ch));
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 17)
 			{
@@ -380,7 +341,7 @@ public class Lexer
 					String badstr = "";
 					while(!charStack.empty())
 						badstr = (Character) charStack.pop() + badstr;
-					throw new Exception("[line: " + this.row + ", col: " + (this.col - 9) + "]: " + "'" + badstr + "' strings have at most 8 characters");
+					throw new LexerException(tokenPosition(token), "'" + badstr + "' strings have at most 8 characters");
 				}
 			}
 			else if(state == 20)
@@ -395,12 +356,12 @@ public class Lexer
                 	while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
                 }
 				else
-					throw new Exception(tokenPosition(token) + ": Unexpected Input: Identifier Token Rejected");
+					throw new LexerException(tokenPosition(token), "Unexpected Input: Identifier Tok Rejected");
 			}
 			else if(state == 24)
 			{
@@ -411,19 +372,19 @@ public class Lexer
                 }
                 else if(charIsLetter(ch))
                 {
-					throw new Exception(tokenPosition(token) + ": Unexpected Input: Integer Token May Not Contain Alphabet Characters");
+					throw new LexerException(tokenPosition(token), "Unexpected Input: Integer Tok May Not Contain Alphabet Characters");
                 }
                 else if(isAcceptState(24))
                 {
                 	while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_N;
+					tokenRep = Token.Tok.TOK_N;
 
-					break Tokenized;
+					break Tokized;
                 }
                 else
-					throw new Exception(tokenPosition(token) + ": Unexpected Input: Integer Token Rejected");
+					throw new LexerException(tokenPosition(token), "Unexpected Input: Integer Tok Rejected");
 			}
 			else if(state == 25)
 			{
@@ -433,7 +394,7 @@ public class Lexer
                 	state = 24;
                 }
                 else
-                	throw new Exception(tokenPosition(token) + ": Unexpected Input: Integer Token Rejected");
+                	throw new LexerException(tokenPosition(token), "Unexpected Input: Integer Tok Rejected");
 			}
 			else if(state == 26)
 			{
@@ -459,13 +420,13 @@ public class Lexer
 				}
 				else if(ch == 'T')
 				{
-					tokenRep = Token.TOK_T;
+					tokenRep = Token.Tok.TOK_T;
 					state = 32;
 					charStack.push(new Character(ch));
 				}
 				else if(ch == 'F')
 				{
-					tokenRep = Token.TOK_F;
+					tokenRep = Token.Tok.TOK_F;
 					state = 32;
 					charStack.push(new Character(ch));
 				}
@@ -545,13 +506,13 @@ public class Lexer
 					state = 0;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": Unexpected Input: \"" + ch + "\"");
+					throw new LexerException(tokenPosition(token), "Unexpected Input: \"" + ch + "\"");
 			}         
 			else if(state == 27)
 			{
 				if(ch == 'u')
 				{
-					tokenRep = Token.TOK_MULT;
+					tokenRep = Token.Tok.TOK_MULT;
 					charStack.push(new Character(ch));
 					state = 28;
 				}
@@ -565,12 +526,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 28)
 			{    
@@ -589,24 +550,24 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 29)
 			{
 				if(ch == 'n')
 				{
-					tokenRep = Token.TOK_INPUT;
+					tokenRep = Token.Tok.TOK_INPUT;
 					charStack.push(new Character(ch));
 					state = 33;
 				}
 				else if(ch == 'f')
 				{
-					tokenRep = Token.TOK_IF;
+					tokenRep = Token.Tok.TOK_IF;
 					charStack.push(new Character(ch));
 					state = 32;
 				}
@@ -620,18 +581,18 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 30)
 			{
 				if(ch == 'a')
 				{
-					tokenRep = Token.TOK_HALT;
+					tokenRep = Token.Tok.TOK_HALT;
 					charStack.push(new Character(ch));
 					state = 28;
 				}
@@ -645,12 +606,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 31)
 			{       
@@ -669,12 +630,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 32)
 			{
@@ -688,10 +649,10 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 33)
 			{      
@@ -710,12 +671,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 34)
 			{
@@ -734,24 +695,24 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 35)
 			{
 				if(ch == 'o')
 				{
-					tokenRep = Token.TOK_NOT;
+					tokenRep = Token.Tok.TOK_NOT;
 					charStack.push(new Character(ch));
 					state = 31;
 				}
 				else if(ch == 'u')
 				{
-					tokenRep = Token.TOK_NUM;
+					tokenRep = Token.Tok.TOK_NUM;
 					charStack.push(new Character(ch));
 					state = 36;
 				}
@@ -765,12 +726,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 36)
 			{
@@ -789,18 +750,18 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 37)
 			{
 				if(ch == 'o')
 				{
-					tokenRep = Token.TOK_FOR;
+					tokenRep = Token.Tok.TOK_FOR;
 					charStack.push(new Character(ch));
 					state = 38;
 				}
@@ -814,12 +775,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 38)
 			{
@@ -838,24 +799,24 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 39)
 			{
 				if(ch == 'q')
 				{
-					tokenRep = Token.TOK_EQ;
+					tokenRep = Token.Tok.TOK_EQ;
 					charStack.push(new Character(ch));
 					state = 32;
 				}
 				else if(ch == 'l')
 				{
-					tokenRep = Token.TOK_ELSE;
+					tokenRep = Token.Tok.TOK_ELSE;
 					charStack.push(new Character(ch));
 					state = 40;
 				}
@@ -869,12 +830,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 40)
 			{
@@ -893,12 +854,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 41)
 			{      
@@ -917,18 +878,18 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 42)
 			{
 				if(ch == 'o')
 				{
-					tokenRep = Token.TOK_BOOL;
+					tokenRep = Token.Tok.TOK_BOOL;
 					charStack.push(new Character(ch));
 					state = 43;
 				}
@@ -942,12 +903,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 43)
 			{
@@ -966,12 +927,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 44)
 			{
@@ -990,24 +951,24 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 45)
 			{
 				if(ch == 'd')
 				{
-					tokenRep = Token.TOK_ADD;
+					tokenRep = Token.Tok.TOK_ADD;
 					charStack.push(new Character(ch));
 					state = 46;
 				}
 				else if(ch == 'n')
 				{
-					tokenRep = Token.TOK_AND;
+					tokenRep = Token.Tok.TOK_AND;
 					charStack.push(new Character(ch));
 					state = 46;
 				}
@@ -1021,12 +982,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 46)
 			{
@@ -1045,24 +1006,24 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 47)
 			{
 				if(ch == 'u')
 				{
-					tokenRep = Token.TOK_OUTPUT;
+					tokenRep = Token.Tok.TOK_OUTPUT;
 					charStack.push(new Character(ch));
 					state = 48;
 				}
 				else if(ch == 'r')
 				{
-					tokenRep = Token.TOK_OR;
+					tokenRep = Token.Tok.TOK_OR;
 					charStack.push(new Character(ch));
 					state = 32;
 				}
@@ -1076,12 +1037,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 48)
 			{
@@ -1100,18 +1061,18 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 49)
 			{
 				if(ch == 'r')
 				{
-					tokenRep = Token.TOK_PROC;
+					tokenRep = Token.Tok.TOK_PROC;
 					charStack.push(new Character(ch));
 					state = 50;
 				}
@@ -1125,12 +1086,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 50)
 			{
@@ -1149,12 +1110,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 51)
 			{
@@ -1173,24 +1134,24 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 52)
 			{
 				if(ch == 't')
 				{
-					tokenRep = Token.TOK_STRING;
+					tokenRep = Token.Tok.TOK_STRING;
 					charStack.push(new Character(ch));
 					state = 53;
 				}
 				else if(ch == 'u')
 				{
-					tokenRep = Token.TOK_SUB;
+					tokenRep = Token.Tok.TOK_SUB;
 					charStack.push(new Character(ch));
 					state = 57;
 				}
@@ -1204,12 +1165,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 53)
 			{
@@ -1228,12 +1189,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 54)
 			{
@@ -1252,12 +1213,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 55)
 			{
@@ -1276,12 +1237,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 56)
 			{
@@ -1300,12 +1261,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 57)
 			{
@@ -1324,18 +1285,18 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 58)
 			{
 				if(ch == 'h')
 				{
-					tokenRep = Token.TOK_THEN;
+					tokenRep = Token.Tok.TOK_THEN;
 					charStack.push(new Character(ch));
 					state = 59;
 				}
@@ -1349,12 +1310,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 59)
 			{
@@ -1373,12 +1334,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 60)
 			{
@@ -1397,18 +1358,18 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 61)
 			{
 				if(ch == 'h')
 				{
-					tokenRep = Token.TOK_WHILE;
+					tokenRep = Token.Tok.TOK_WHILE;
 					charStack.push(new Character(ch));
 					state = 62;
 				}
@@ -1422,12 +1383,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 62)
 			{
@@ -1446,12 +1407,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 63)
 			{
@@ -1470,12 +1431,12 @@ public class Lexer
 					while(!charStack.empty())
 						token = (Character) charStack.pop() + token;
 
-					tokenRep = Token.TOK_ID;
+					tokenRep = Token.Tok.TOK_ID;
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else if(state == 65)
 			{
@@ -1485,60 +1446,79 @@ public class Lexer
 						token = (Character) charStack.pop() + token;
 
 					if(token.indexOf('(') >= 0)
-						tokenRep = Token.TOK_OP;
+						tokenRep = Token.Tok.TOK_OP;
 					else if(token.indexOf(')') >= 0)
-						tokenRep = Token.TOK_CP;
+						tokenRep = Token.Tok.TOK_CP;
 					else if(token.indexOf('{') >= 0)
-						tokenRep = Token.TOK_OB;
+						tokenRep = Token.Tok.TOK_OB;
 					else if(token.indexOf('}') >= 0)
-						tokenRep = Token.TOK_CB;
+						tokenRep = Token.Tok.TOK_CB;
 					else if(token.indexOf('=') >= 0)
-						tokenRep = Token.TOK_ASSN;
+						tokenRep = Token.Tok.TOK_ASSN;
 					else if(token.indexOf('>') >= 0)
-						tokenRep = Token.TOK_GT;
+						tokenRep = Token.Tok.TOK_GT;
 					else if(token.indexOf('<') >= 0)
-						tokenRep = Token.TOK_LT;
+						tokenRep = Token.Tok.TOK_LT;
 					else if(token.indexOf(',') >= 0)
-						tokenRep = Token.TOK_COMM;
+						tokenRep = Token.Tok.TOK_COMM;
 					else if(token.indexOf(';') >= 0)
-						tokenRep = Token.TOK_SEMI;
+						tokenRep = Token.Tok.TOK_SEMI;
 					else if(token.indexOf('#') >= 0) 
 						{/*newline*/}
 
-					break Tokenized;
+					break Tokized;
 				}
 				else
-					throw new Exception(tokenPosition(token) + ": '" + ch + "' was unexpected in this case");
+					throw new LexerException(tokenPosition(token), ch + "' was unexpected in this case");
 			}
 			else
-				throw new Exception(tokenPosition(token) + ": Unexpected Input Behaviour: " + ch);
+				throw new LexerException(tokenPosition(token), "Unexpected Input Behaviour: " + ch);
 
 			if(!isValidChar(ch))
-	    		throw new Exception(tokenPosition(token) + ": '" + ch + "' is not a valid character");
+	    		throw new LexerException(tokenPosition(token), ch + "' is not a valid character");
 	    } 
 		
 	    //If token followed by space, save time by skipping it
 	    if(ch != 0)
 			this.bufferStack.push(ch);
 
-	    if(tokenRep != Token.NULL)
-	    	this.tokens.add(new Pair<String, Token>(token, tokenRep));
+	    if(tokenRep != Token.Tok.NULL)
+	    {
+	    	Token tokObject = new Token(token, tokenRep);
+	    	tokObject.setLocation(currRow, currCol);
+	    	this.tokens.add(tokObject);
+	    }
 
-	    System.out.println(token + " " + tokenPosition(token));
 	   	return cont;
 	}
 
 	//!Reads in next character in file stream, returns the previously last-read character
-	private char read() throws IOException
+	private char read() throws EmptyStreamException
 	{
 		if(!this.bufferStack.empty())
 			return this.bufferStack.pop();
 
-		char ch;
+		char ch = 0;
 
 		try
 		{
 			this.readChar = this.buffer.read();
+
+			ch = (char) this.readChar;
+
+			if(this.readChar == '\n' || this.readChar == '\r')
+			{
+				if(System.getProperty("line.separator").equals("\r\n"))
+					this.readChar = this.buffer.read(); //skip second char
+
+				ch = '#';
+				this.col = 0;
+				this.row++;
+			}
+			else if(this.readChar == '\t')
+				ch = ' ';
+			else
+				this.col++;
 	    }
 	    catch(IOException ex)
 	    {
@@ -1546,40 +1526,7 @@ public class Lexer
 	    }
 
 	    if(this.readChar < 0)
-			throw new IOException(tokenPosition("") + "Empty Input Stream");
-
-		ch = (char) this.readChar;
-
-		this.col++;
-
-		if(this.readChar == '\t')
-		{
-			this.readChar = this.buffer.read();
-			ch = ' ';
-		}
-
-		if(this.readChar == '\n' || this.readChar == '\r')
-		{
-			this.readChar = this.buffer.read();
-			ch = '#';
-			this.col = 0;
-			this.row++;
-		}
-
-		// boolean skipped = false;
-
-		// if(this.readChar == '\n' || this.readChar == '\r')
-		// {
-		// 	this.readChar = this.buffer.read();
-		// 	ch = '#';
-		// 	skipped = true;
-		// }
-
-		// if(skipped)
-		// {
-		// 	this.col = 0;
-		// 	this.row++;
-		// }
+			throw new EmptyStreamException("Empty Input Stream");
 
 	    return ch;
 	}

@@ -1,6 +1,8 @@
 import java.util.*;
 import java.io.*;
 import javafx.util.*;
+import lexer.*;
+import parser.*;
 
 public class spl 
 { 
@@ -29,17 +31,15 @@ public class spl
 
     public void parse()
     {
-        List<Pair<String, Token>> tokens;
+        List<Token> tokens;
 
         try
         {
             tokens = this.lexer.readTokens();
-            System.out.println("Tokens:\n" + tokens);
         }
         catch(Exception ex)
         {
             tokens = this.lexer.getTokens();
-            System.out.println("Tokens:\t" + tokens);
             System.out.println("Lexical Error " + ex.getMessage());
         }
 
