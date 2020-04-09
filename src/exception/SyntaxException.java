@@ -1,11 +1,11 @@
 package exception;
-import lexer.Token.Tok;
+import lexer.Token;
 
 public class SyntaxException extends Exception 
 {
-	private Tok token;
+	private Token token;
 
-    public SyntaxException(Tok token, String message)
+    public SyntaxException(Token token, String message)
     {
         super(message + " Token=[" + token + "]");
     	this.token = token;

@@ -6,6 +6,7 @@ public abstract class Expression
 	public static int exprCount = 0;
 	protected int id;
 	protected int level;
+	protected int scope;
 	protected String expr;
 	protected Vector<Expression> descendents;
 
@@ -45,9 +46,30 @@ public abstract class Expression
 			desc.level(this.level + 1);
 	}
 
+	public void scope()
+	{
+		this.scope = 0;
+
+		for (Expression desc : this.descendents)
+				desc.scope(this.scope);
+	}
+
+	public void scope(int scope)
+	{
+		this.scope = scope;
+
+		for (Expression desc : this.descendents)
+				desc.scope(this.scope);
+	}
+
+	public int getID()
+	{
+		return this.id;
+	}
+
 	public String getExpr()
 	{
-		return this.id + ":" + this.expr;
+		return this.expr;
 	}
 
 	public String getExpression()
@@ -99,7 +121,7 @@ public abstract class Expression
 		for(int index = 0; index++ < this.level;)
 			str += "__";
 
-		str += this.id + " " + this.expr + System.getProperty("line.separator");
+		str += this.id + " [" + this.scope + "] " + this.expr + System.getProperty("line.separator");
 
 		for (Expression desc : this.descendents)
 			str += desc.toString();

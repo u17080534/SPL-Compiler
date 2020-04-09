@@ -12,6 +12,15 @@ public class prog extends Expression
 		this.prog_Ex = e2; 
 	}  
 
+	@Override
+	public void scope(int scope)
+	{
+		this.scope = scope + 1;
+
+		for (Expression desc : this.descendents)
+			desc.scope(this.scope);
+	}
+
 	public String eval() 
 	{       
 		return this.codeEx.eval() + this.prog_Ex.eval();   

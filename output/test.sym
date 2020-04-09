@@ -1,149 +1,231 @@
-0:PROC
-1:proc 'hello'
-2:PROG
-3:CODE
-4:INSTR
-5:DECL
-6:TYPE
-7:type 'num'
-8:NAME
-9:variable 'i1'
-10:CODE_
-11:CODE
-12:INSTR
-13:DECL
-14:TYPE
-15:type 'num'
-16:NAME
-17:variable 'j'
-18:CODE_
-19:CODE
-20:INSTR
-21:DECL
-22:TYPE
-23:type 'string'
-24:NAME
-25:variable 'msg'
-26:CODE_
-27:CODE
-28:INSTR
-29:ASSIGN
-30:VAR
-31:variable 'msg'
-32:ASSIGN_
-33:= '"input"'
-34:CODE_
-35:CODE
-36:INSTR
-37:IO
-38:io 'output'
-39:VAR
-40:variable 'msg'
-41:CODE_
-42:CODE
-43:INSTR
-44:IO
-45:io 'input'
-46:VAR
-47:variable 'i'
-48:CODE_
-49:CODE
-50:INSTR
-51:IO
-52:io 'input'
-53:VAR
-54:variable 'j'
-55:CODE_
-56:CODE
-57:INSTR
-58:COND_BRANCH
-59:BOOL
-60:bool 'T'
-61:CODE
-62:INSTR
-63:ASSIGN
+0:PROG
+1:CODE
+2:INSTR
+3:DECL
+4:TYPE
+5:type 'string'
+6:NAME
+7:variable 'mix'
+8:CODE_
+9:PROC_DEFS
+10:PROC
+11:proc 'hello'
+12:PROG
+13:CODE
+14:INSTR
+15:DECL
+16:TYPE
+17:type 'num'
+18:NAME
+19:variable 'i1'
+20:CODE_
+21:CODE
+22:INSTR
+23:DECL
+24:TYPE
+25:type 'num'
+26:NAME
+27:variable 'i2'
+28:CODE_
+29:CODE
+30:INSTR
+31:DECL
+32:TYPE
+33:type 'string'
+34:NAME
+35:variable 'msg'
+36:CODE_
+37:CODE
+38:INSTR
+39:ASSIGN
+40:VAR
+41:variable 'msg'
+42:ASSIGN_
+43:= '"hello"'
+44:CODE_
+45:CODE
+46:INSTR
+47:IO
+48:io 'input'
+49:VAR
+50:variable 'i2'
+51:CODE_
+52:CODE
+53:INSTR
+54:COND_LOOP
+55:for 'for'
+56:VAR
+57:variable 'i1'
+58:VAR
+59:variable 'i1'
+60:VAR
+61:variable 'i2'
+62:VAR
+63:variable 'i1'
 64:VAR
-65:variable 'i'
-66:ASSIGN_
-67:NUMEXPR
-68:CALC
-69:calc 'add'
-70:CALC_
-71:NUMEXPR
-72:CALC
-73:calc 'sub'
-74:CALC_
-75:NUMEXPR
-76:number '1'
-77:CALC__
-78:NUMEXPR
-79:CALC
-80:calc 'add'
-81:CALC_
-82:NUMEXPR
-83:number '1'
-84:CALC__
-85:NUMEXPR
-86:CALC
-87:calc 'add'
-88:CALC_
-89:NUMEXPR
-90:number '1'
-91:CALC__
+65:variable 'i1'
+66:CODE
+67:INSTR
+68:IO
+69:io 'output'
+70:VAR
+71:variable 'msg'
+72:CODE_
+73:CODE
+74:INSTR
+75:COND_BRANCH
+76:BOOL
+77:bool 'T'
+78:CODE
+79:INSTR
+80:ASSIGN
+81:VAR
+82:variable 'i'
+83:ASSIGN_
+84:NUMEXPR
+85:CALC
+86:calc 'add'
+87:CALC_
+88:NUMEXPR
+89:CALC
+90:calc 'sub'
+91:CALC_
 92:NUMEXPR
-93:VAR
-94:variable 'j'
-95:CALC__
-96:NUMEXPR
-97:CALC
-98:calc 'mult'
-99:CALC_
-100:NUMEXPR
-101:VAR
-102:variable 'j'
-103:CALC__
-104:NUMEXPR
-105:VAR
-106:variable 'i'
-107:COND_BRANCH_
-108:CODE
-109:INSTR
-110:IO
-111:io 'output'
-112:VAR
-113:variable 'msg'
-114:CODE_
-115:PROC_DEFS
-116:PROC
-117:proc 'main'
-118:PROG
-119:CODE
-120:INSTR
-121:DECL
-122:TYPE
-123:type 'num'
-124:NAME
-125:variable 'x'
-126:CODE_
-127:CODE
-128:INSTR
-129:DECL
-130:TYPE
-131:type 'num'
-132:NAME
-133:variable 'y'
-134:PROC_DEFS_
-135:CODE
-136:INSTR
-137:IO
-138:io 'output'
-139:VAR
-140:variable 'i'141:PROC
-142:proc 'tester'
-143:PROG
+93:number '1'
+94:CALC__
+95:NUMEXPR
+96:CALC
+97:calc 'add'
+98:CALC_
+99:NUMEXPR
+100:number '1'
+101:CALC__
+102:NUMEXPR
+103:CALC
+104:calc 'add'
+105:CALC_
+106:NUMEXPR
+107:number '1'
+108:CALC__
+109:NUMEXPR
+110:VAR
+111:variable 'j'
+112:CALC__
+113:NUMEXPR
+114:CALC
+115:calc 'mult'
+116:CALC_
+117:NUMEXPR
+118:VAR
+119:variable 'j'
+120:CALC__
+121:NUMEXPR
+122:VAR
+123:variable 'i'
+124:COND_BRANCH_
+125:CODE
+126:INSTR
+127:IO
+128:io 'output'
+129:VAR
+130:variable 'msg'
+131:CODE_
+132:PROC_DEFS
+133:PROC
+134:proc 'loop'
+135:PROG
+136:CODE
+137:INSTR
+138:DECL
+139:TYPE
+140:type 'num'
+141:NAME
+142:variable 'i'
+143:CODE_
 144:CODE
 145:INSTR
-146:IO
-147:io 'input'
-148:VAR
-149:variable 'u'
+146:ASSIGN
+147:VAR
+148:variable 'i'
+149:ASSIGN_
+150:NUMEXPR
+151:number '0'
+152:CODE_
+153:CODE
+154:INSTR
+155:DECL
+156:TYPE
+157:type 'num'
+158:NAME
+159:variable 'j'
+160:CODE_
+161:CODE
+162:INSTR
+163:ASSIGN
+164:VAR
+165:variable 'j'
+166:ASSIGN_
+167:NUMEXPR
+168:number '2'
+169:CODE_
+170:CODE
+171:INSTR
+172:COND_LOOP
+173:while 'while'
+174:BOOL
+175:bool '<'
+176:CODE
+177:INSTR
+178:ASSIGN
+179:VAR
+180:variable 'i'
+181:ASSIGN_
+182:NUMEXPR
+183:CALC
+184:calc 'add'
+185:CALC_
+186:NUMEXPR
+187:VAR
+188:variable 'i'
+189:CALC__
+190:NUMEXPR
+191:VAR
+192:variable 'i'
+193:CODE_
+194:CODE
+195:INSTR
+196:IO
+197:io 'output'
+198:VAR
+199:variable 'i'
+200:CODE_
+201:CODE
+202:INSTR
+203:DECL
+204:TYPE
+205:type 'num'
+206:NAME
+207:variable 'u'
+208:PROC_DEFS_
+209:CODE
+210:INSTR
+211:CALL
+212:call 'loop'
+213:CODE_
+214:CODE
+215:INSTR
+216:IO
+217:io 'output'
+218:VAR
+219:variable 'i'
+220:PROC_DEFS_
+221:PROC_DEFS
+222:PROC
+223:proc 'tester'
+224:PROG
+225:CODE
+226:INSTR
+227:IO
+228:io 'input'
+229:VAR
+230:variable 'u'

@@ -5,12 +5,12 @@ public class proc extends Expression
 	private TokenExpression proced;   
 	private Expression progEx;   
 
-	public proc(String e1, Expression e2) 
+	public proc(TokenExpression e1, Expression e2) 
 	{ 
-		super(new TokenExpression("proc", e1), e2);
-		this.proced = (TokenExpression) this.descendents.get(0);
-		this.expr = "PROC";
+		super(e1, e2);
+		this.proced = e1;
 		this.progEx = e2; 
+		this.expr = "PROC";
 	}  
 
 	public String eval() 

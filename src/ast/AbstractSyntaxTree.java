@@ -3,6 +3,7 @@ package ast;
 import java.util.*;
 import java.io.*;	
 import ast.expression.*;
+import symtable.*;
 
 public class AbstractSyntaxTree
 {
@@ -35,29 +36,35 @@ public class AbstractSyntaxTree
 		}
 	}
 
-	public String getSymbols()
+	public void scope()
 	{
-		String str = "";
+		for (Expression root : this.roots)
+			root.scope();
+	}
+
+	public Vector<Symbol> getSymbols()
+	{
+		Vector<Symbol> symbols = new Vector<Symbol>();
 
 		for (Expression root : this.roots)
 		{
-			str += root.getExpr();
+			symbols.add(new Symbol(root.getID(), root.getExpr()));
 			for(int index = 0; index < root.countDescendents(); index++)
-				str += this.getSymbols(root.get(index));
-			str += "\n";
+				symbols.addAll(this.getSymbols(root.get(index)));
 		}
 
-		return str;
+		return symbols;
 	}
 
-	public String getSymbols(Expression exp)
+	public Vector<Symbol> getSymbols(Expression exp)
 	{	
-		String str = "\n" + exp.getExpr();
+		Vector<Symbol> symbols = new Vector<Symbol>();
 
+		symbols.add(new Symbol(exp.getID(), exp.getExpr()));
 		for(int index = 0; index < exp.countDescendents(); index++)
-			str += this.getSymbols(exp.get(index));
+			symbols.addAll(this.getSymbols(exp.get(index)));
 
-		return str;
+		return symbols;
 	}
 
 	public String getExpressions()
