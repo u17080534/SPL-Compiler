@@ -6,12 +6,15 @@ public class cond_branch_ extends Expression
 
 	public cond_branch_() 
 	{ 
-		
+		super();
+		this.expr = "COND_BRANCH_";
 	} 
 
-	public cond_branch_(Expression e) : Expression(e) 
+	public cond_branch_(Expression e) 
 	{ 
+		super(e);
 		this.codeEx = e; 
+		this.expr = "COND_BRANCH_";
 	}  
 
 	public String eval() 

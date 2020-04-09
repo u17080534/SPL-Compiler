@@ -2,15 +2,17 @@ package ast.expression;
 
 public class name extends Expression 
 {   
-	private String id;   
+	private TokenExpression variable;   
 
-	public name(String id) 
+	public name(TokenExpression id) 
 	{ 
-		this.id = id; 
+		super(id);
+		this.variable = id;
+		this.expr = "NAME";
 	}  
 
 	public String eval() 
 	{       
-		return this.id;   
+		return "";   
 	}
 }

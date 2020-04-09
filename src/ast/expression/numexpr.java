@@ -2,17 +2,21 @@ package ast.expression;
 
 public class numexpr extends Expression 
 {   
-	private String literal;
-	private Expression expr;    
+	private TokenExpression number;
+	private Expression ex;    
 
-	public numexpr(String literal) 
+	public numexpr(TokenExpression literal) 
 	{ 
-		this.literal = literal;  
+		super(literal);
+		this.number = literal;
+		this.expr = "NUMEXPR";
 	}  
 
-	public numexpr(Expression expr) 
+	public numexpr(Expression e) 
 	{ 
-		this.expr = expr;  
+		super(e);
+		this.expr = "NUMEXPR";
+		this.ex = e;  
 	}  
 
 	public String eval() 

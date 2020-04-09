@@ -6,6 +6,8 @@ public class cond_branch extends Expression
 
 	public cond_branch(Expression e1, Expression e2, Expression e3) 
 	{ 
+		super(e1, e2, e3);
+		this.expr = "COND_BRANCH";
 		this.boolEx = e1; 
 		this.codeEx = e2; 
 		this.cond_branch_Ex = e3; 

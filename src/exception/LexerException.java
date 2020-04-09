@@ -7,6 +7,7 @@ public class LexerException extends Exception
     public LexerException(String location, String message)
     {
         super(message);
+    	this.location = location;
     }
 
     @Override public String toString() 

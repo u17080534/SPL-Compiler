@@ -2,15 +2,17 @@ package ast.expression;
 
 public class call extends Expression 
 {   
-	private String id;   
+	private TokenExpression func;   
 
-	public call(String id) 
+	public call(TokenExpression id) 
 	{ 
-		this.id = id; 
+		super(id);
+		this.func = id;
+		this.expr = "CALL";
 	}  
 
 	public String eval() 
 	{       
-		return this.id;   
+		return "";   
 	}
 }

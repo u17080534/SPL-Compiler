@@ -2,15 +2,22 @@ package ast.expression;
 
 public class instr extends Expression 
 {   
-	private Expression expr;   
+	private Expression ex;   
 
-	public instr(Expression expr) 
+	public instr() 
 	{ 
-		this.expr = expr; 
+		this.expr = "INSTR";
+	} 
+
+	public instr(Expression e) 
+	{ 
+		super(e);
+		this.expr = "INSTR";
+		this.ex = e; 
 	}  
 
 	public String eval() 
 	{       
-		return this.expr.eval();   
+		return this.ex.eval();   
 	}
 }

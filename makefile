@@ -11,8 +11,8 @@ spl:
 	src/exception/*.java \
 	src/lexer/Token.java \
 	src/lexer/Lexer.java \
-	src/ast/expression/*.java \
 	src/ast/AbstractSyntaxTree.java \
+	src/ast/expression/*.java \
 	src/parser/Grammar.java \
 	src/parser/Parser.java \
 	src/spl.java

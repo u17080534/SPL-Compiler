@@ -1,16 +1,19 @@
 package ast.expression;
+import lexer.Token.*;
 
 public class var extends Expression 
 {   
-	private String id;   
+	private TokenExpression variable;   
 
-	public var(String id) 
+	public var(TokenExpression id) 
 	{ 
-		this.id = id; 
+		super(id);
+		this.variable = id;
+		this.expr = "VAR";
 	}  
 
 	public String eval() 
 	{       
-		return this.id;   
+		return "";  
 	}
 }

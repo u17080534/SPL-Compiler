@@ -2,7 +2,6 @@ package lexer;
 
 import java.util.*;
 import java.io.*;
-import javafx.util.*;
 import exception.*;
 
 public class Lexer 
@@ -99,7 +98,6 @@ public class Lexer
 	public List<Token> readTokens() throws LexerException
 	{
 		//Continues iterating till no more tokens can be read, or an error is encountered
-		String tokenFile = this.filename + ".tok";
 		boolean tokenize = true;
 
 		while(tokenize)
@@ -115,24 +113,7 @@ public class Lexer
 			}
 		}
 
-        try
-        {
-            FileWriter fileWriter = new FileWriter(new File("../output/" + tokenFile));
-
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            for(int index = 0; index < this.tokens.size(); index++)
-            {
-                bufferedWriter.write((index + 1) + ": " + tokens.get(index).getInput() + " (" + tokens.get(index).getToken() + ")\n");
-            }
-
-            bufferedWriter.close();
-            fileWriter.close();
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        this.export();
 
 		return this.tokens;
 	}
@@ -1567,5 +1548,28 @@ public class Lexer
 	private boolean emptyStream()
 	{
 		return this.readChar < 0 && this.bufferStack.empty();
+	}
+
+	public void export()
+	{
+		String tokenFile = this.filename + ".tok";
+		try
+        {
+            FileWriter fileWriter = new FileWriter(new File("../output/" + tokenFile));
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            for(int index = 0; index < this.tokens.size(); index++)
+            {
+                bufferedWriter.write((index + 1) + ": " + tokens.get(index).getInput() + " (" + tokens.get(index).getToken() + ")\n");
+            }
+
+            bufferedWriter.close();
+            fileWriter.close();
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 	}
 }

@@ -2,7 +2,6 @@ package lexer;
 
 import java.util.*;
 import java.io.*;
-import javafx.util.*;
 
 public class Token
 {

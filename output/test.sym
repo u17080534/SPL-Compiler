@@ -1,0 +1,149 @@
+0:PROC
+1:proc 'hello'
+2:PROG
+3:CODE
+4:INSTR
+5:DECL
+6:TYPE
+7:type 'num'
+8:NAME
+9:variable 'i1'
+10:CODE_
+11:CODE
+12:INSTR
+13:DECL
+14:TYPE
+15:type 'num'
+16:NAME
+17:variable 'j'
+18:CODE_
+19:CODE
+20:INSTR
+21:DECL
+22:TYPE
+23:type 'string'
+24:NAME
+25:variable 'msg'
+26:CODE_
+27:CODE
+28:INSTR
+29:ASSIGN
+30:VAR
+31:variable 'msg'
+32:ASSIGN_
+33:= '"input"'
+34:CODE_
+35:CODE
+36:INSTR
+37:IO
+38:io 'output'
+39:VAR
+40:variable 'msg'
+41:CODE_
+42:CODE
+43:INSTR
+44:IO
+45:io 'input'
+46:VAR
+47:variable 'i'
+48:CODE_
+49:CODE
+50:INSTR
+51:IO
+52:io 'input'
+53:VAR
+54:variable 'j'
+55:CODE_
+56:CODE
+57:INSTR
+58:COND_BRANCH
+59:BOOL
+60:bool 'T'
+61:CODE
+62:INSTR
+63:ASSIGN
+64:VAR
+65:variable 'i'
+66:ASSIGN_
+67:NUMEXPR
+68:CALC
+69:calc 'add'
+70:CALC_
+71:NUMEXPR
+72:CALC
+73:calc 'sub'
+74:CALC_
+75:NUMEXPR
+76:number '1'
+77:CALC__
+78:NUMEXPR
+79:CALC
+80:calc 'add'
+81:CALC_
+82:NUMEXPR
+83:number '1'
+84:CALC__
+85:NUMEXPR
+86:CALC
+87:calc 'add'
+88:CALC_
+89:NUMEXPR
+90:number '1'
+91:CALC__
+92:NUMEXPR
+93:VAR
+94:variable 'j'
+95:CALC__
+96:NUMEXPR
+97:CALC
+98:calc 'mult'
+99:CALC_
+100:NUMEXPR
+101:VAR
+102:variable 'j'
+103:CALC__
+104:NUMEXPR
+105:VAR
+106:variable 'i'
+107:COND_BRANCH_
+108:CODE
+109:INSTR
+110:IO
+111:io 'output'
+112:VAR
+113:variable 'msg'
+114:CODE_
+115:PROC_DEFS
+116:PROC
+117:proc 'main'
+118:PROG
+119:CODE
+120:INSTR
+121:DECL
+122:TYPE
+123:type 'num'
+124:NAME
+125:variable 'x'
+126:CODE_
+127:CODE
+128:INSTR
+129:DECL
+130:TYPE
+131:type 'num'
+132:NAME
+133:variable 'y'
+134:PROC_DEFS_
+135:CODE
+136:INSTR
+137:IO
+138:io 'output'
+139:VAR
+140:variable 'i'141:PROC
+142:proc 'tester'
+143:PROG
+144:CODE
+145:INSTR
+146:IO
+147:io 'input'
+148:VAR
+149:variable 'u'

@@ -2,17 +2,21 @@ package ast.expression;
 
 public class assign_ extends Expression 
 {   
-	private String literal;
-	private Expression expr;   
+	private TokenExpression literal;
+	private Expression ex;   
 
-	public assign_(String literal) 
+	public assign_(TokenExpression literal) 
 	{ 
-		this.literal = literal;  
+		super(literal);
+		this.literal = literal;
+		this.expr = "ASSIGN_";
 	}  
 
-	public assign_(Expression expr) 
+	public assign_(Expression e) 
 	{ 
-		this.expr = expr;  
+		super(e);
+		this.ex = e;  
+		this.expr = "ASSIGN_";
 	}  
 
 	public String eval() 

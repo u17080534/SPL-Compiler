@@ -32,10 +32,6 @@ BOOL' 		→ BOOL , BOOL"
 
 BOOL" 		→ BOOL )
 
-# CALC 		→ add ( NUMEXPR , CALC' | sub ( NUMEXPR , CALC' | mult ( NUMEXPR , CALC'
-
-# CALC' 	→ NUMEXPR )
-
 CALC 		→ add ( CALC' | sub ( CALC' | mult ( CALC'
 
 CALC' 		→ NUMEXPR , CALC"

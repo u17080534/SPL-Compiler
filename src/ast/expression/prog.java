@@ -4,8 +4,10 @@ public class prog extends Expression
 {   
 	private Expression codeEx, prog_Ex;   
 
-	public prog(Expression e1, Expression e2) : Expression(e1, e2) 
+	public prog(Expression e1, Expression e2)
 	{ 
+		super(e1, e2);
+		this.expr = "PROG";
 		this.codeEx = e1; 
 		this.prog_Ex = e2; 
 	}  

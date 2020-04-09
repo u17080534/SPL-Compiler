@@ -4,8 +4,10 @@ public class assign extends Expression
 {   
 	private Expression varEx, assign_Ex;   
 
-	public assign(Expression e1, Expression e2) : Expression(e1, e2)
+	public assign(Expression e1, Expression e2)
 	{ 
+		super(e1, e2);
+		this.expr = "ASSIGN";
 		this.varEx = e1; 
 		this.assign_Ex = e2; 
 	}  

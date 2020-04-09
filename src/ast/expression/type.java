@@ -1,13 +1,16 @@
 package ast.expression;
-import lexer.Token.Tok;
+import lexer.*;
+import lexer.Token;
 
 public class type extends Expression 
 {   
-	private Tok type;
+	private TokenExpression typex;
 
-	public type(Tok type) 
+	public type(TokenExpression tok) 
 	{ 
-		this.type = type; 
+		super(tok);
+		this.typex = tok;
+		this.expr = "TYPE";
 	}  
 
 	public String eval() 

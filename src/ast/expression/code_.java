@@ -6,12 +6,15 @@ public class code_ extends Expression
 
 	public code_() 
 	{ 
-
+		super();
+		this.expr = "CODE_";
 	}
 	
-	public code_(Expression e) : Expression(e) 
+	public code_(Expression e)
 	{ 
+		super(e);
 		this.codeEx = e;
+		this.expr = "CODE_";
 	}  
 
 	public String eval() 
