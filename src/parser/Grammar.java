@@ -32,12 +32,7 @@ public class Grammar
 
 		try
         {
-        	Vector<Expression> roots = new Vector<Expression>();
-
-            while(this.lookahead != Token.Tok.NULL) //Allow for contiguous program segments
-           		roots.add(START());
-
-           	tree = new AbstractSyntaxTree(roots);
+           	tree = new AbstractSyntaxTree(START());
         }
         catch(SyntaxException ex)
         {

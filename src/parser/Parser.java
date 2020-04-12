@@ -26,7 +26,9 @@ public class Parser
 		this.tree = this.grammar.build(tokens);
 		this.tree.trim();
 		this.tree.scope();
-		System.out.println(this.tree);
+
+		if(this.tree != null)
+			System.out.println(this.tree);
 
 		this.generateSymbols();
 		this.export();

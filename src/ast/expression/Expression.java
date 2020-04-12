@@ -16,12 +16,8 @@ public abstract class Expression
 		this.descendents = new Vector<Expression>();
 
 		for (Expression desc : descendents)
-		{
 			if(desc != null)
-			{
 				this.descendents.add(desc);
-			}
-		}
 
 		this.id();
 		this.level(0);

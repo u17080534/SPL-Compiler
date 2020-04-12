@@ -7,51 +7,45 @@ import symtable.*;
 
 public class AbstractSyntaxTree
 {
-	Vector<Expression> roots;
+	Expression root;
 
-	public AbstractSyntaxTree(Vector<Expression> roots)
+	public AbstractSyntaxTree(Expression root)
 	{
-		this.roots = roots;
-
 		Expression.exprCount = 0;
-
-		for (Expression root : this.roots)
-		{
-			//Recursive trim
-			root.trim();
-			root.id();
-		}
+		this.root = root;
+		this.root.trim();
+		this.root.id();
 	}
 
 	public void trim()
 	{
 		Expression.exprCount = 0;
 
-		for (Expression root : this.roots)
-		{
-			//Recursive trim
-			root.trim();
-			root.id();
-			root.level(0);
-		}
+		//Recursive trim
+		this.root.trim();
+		this.root.id();
+		this.root.level(0);
 	}
 
 	public void scope()
 	{
-		for (Expression root : this.roots)
-			root.scope();
+		this.root.scope();
+		//Find all variable declarations, name with Vn
+		//Find all variable usages, check if declared in a <= scope and assign Vn, otherwise assign U
+	}
+
+	private void scopeVariables(Expression node)
+	{
+
 	}
 
 	public Vector<Symbol> getSymbols()
 	{
 		Vector<Symbol> symbols = new Vector<Symbol>();
 
-		for (Expression root : this.roots)
-		{
-			symbols.add(new Symbol(root.getID(), root.getExpr()));
-			for(int index = 0; index < root.countDescendents(); index++)
-				symbols.addAll(this.getSymbols(root.get(index)));
-		}
+		symbols.add(new Symbol(this.root.getID(), this.root.getExpr()));
+		for(int index = 0; index < this.root.countDescendents(); index++)
+			symbols.addAll(this.getSymbols(this.root.get(index)));
 
 		return symbols;
 	}
@@ -71,16 +65,13 @@ public class AbstractSyntaxTree
 	{
 		String str = "";
 
-		for (Expression root : this.roots)
-		{
-			str += root.getExpression();
+		str += root.getExpression();
 
-			for(int index = 0; index < root.countDescendents(); index++)
-				if(root.get(index) != null)
-					str += this.getExpressions(root.get(index));
-				
-			str += "\n";
-		}
+		for(int index = 0; index < root.countDescendents(); index++)
+			if(root.get(index) != null)
+				str += this.getExpressions(root.get(index));
+			
+		str += "\n";
 
 		return str;
 	}	
@@ -102,8 +93,7 @@ public class AbstractSyntaxTree
 	@Override public String toString()
 	{
 		String str = "";
-		for (Expression root : this.roots)
-			str += root.toString();
+		str += root.toString();
 		return str;
 	}
 }
