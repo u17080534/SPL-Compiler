@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.*;
-import javafx.util.*;
 import lexer.*;
 import parser.*;
 
