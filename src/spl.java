@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 import lexer.*;
 import parser.*;
+import java.util.Scanner;
 
 public class spl 
 { 
@@ -13,9 +14,19 @@ public class spl
 
     //!Compiler uses the passed in filename - expected to be within current directory
     public spl(String file)
-    { 
+    {
+
+
+
+
         this.filename = file.substring(file.lastIndexOf('/') + 1);
         this.filename = this.filename.substring(0, this.filename.indexOf('.'));
+
+
+      //Choose between input files
+        Scanner scanner= new Scanner(System.in);
+        System.out.println("Enter an input spl file (Example:test)");
+        this.filename=scanner.next();
 
         try
         {
