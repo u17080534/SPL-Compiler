@@ -26,3 +26,5 @@ input/test.spl
 *.tok
 *.spl
 *.bat
+
+output

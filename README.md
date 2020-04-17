@@ -29,4 +29,4 @@ All details on the implementation of the algorithms for the different parts of t
 4.  Once the program is executing, all constructed data structures will be cached in the ```output``` directory (if ```[-debug]``` is enabled they will also be output in the terminal.)
 	The executable ```BASIC``` code will be produced in the current directory.
 
-	Note: If multiple files are supplied as arguments, they will be compiled as independent programs.
+Note: If multiple files are supplied as arguments, they will be compiled as independent programs.
