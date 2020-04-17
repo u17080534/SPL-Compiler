@@ -6,7 +6,7 @@ All details on the implementation of the algorithms for the different parts of t
 
 ## Usage
 
-1.  To compile the SPL-Compiler, it is require you have the following Java Software installed:
+1.  To compile the SPL-Compiler, it is require you have the following (or compatible) Java Software installed:
 	```
 	java version "1.8.0_241"
 	Java(TM) SE Runtime Environment (build 1.8.0_241-b07)
@@ -17,7 +17,7 @@ All details on the implementation of the algorithms for the different parts of t
 	```
 3.  To compile a program written in SPL:
 	```
-	java -jar spl [-debug] <filename>.spl
+	java -jar spl [-debug] <filepath><filename>.spl
 	```
 	Or to compile a given example file, you can use either:
 	```
@@ -26,3 +26,7 @@ All details on the implementation of the algorithms for the different parts of t
 	```
 	java -jar spl [-debug] -test
 	```
+4.  Once the program is executing, all constructed data structures will be cached in the ```output``` directory (if ```[-debug]``` is enabled they will also be output in the terminal.)
+	The executable ```BASIC``` code will be produced in the current directory.
+
+	Note: If multiple files are supplied as arguments, they will be compiled as independent programs.
