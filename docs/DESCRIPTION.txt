@@ -1,0 +1,61 @@
+# COMPILER ALGORITHM DESCRIPTION:
+
+00 - LEXER
+
+	The Lexer implementation is as follows:
+
+		(i) The input file is scanned, one character at a time.
+
+		(ii) The DFA (included in docs) is implemented using a while-loop with nested if-statements as follows:
+
+			Each IF considers the possible transitions of current state,
+					and the current char is the most recently read character from the input stream:
+
+				IF current Char matches a transition:
+				 -> add current Char to the char stack (which is used as a string buffer for the constructed token)
+				 -> change current State to transition State
+
+				ELSE IF current state is accept state (implied there is no matching transitions):
+				 -> accept token:
+					-> character stack is cleared, and appended to the token string
+					-> continue to follow the DFA, building the charStack
+					-> left over characters are pushed to the buffer stack
+
+				ELSE:
+				 -> reject input & throw exception;
+
+			* Clearly, the longest potential token is chosen by the lexer - this is why the buffer stack is needed: in the case that the lexer 'sees' a potential token that is longer than the currently accepted token, where it then does not find the rest of the potential token in the following characters - now these left over characters must be pushed to the stack, which is read through before the buffered character stream (so these characters are carried over for the next token to be read.)
+
+		(iii) The DFA is continously used to scan tokens from the input stream, until the input stream is finished, it then returns the scanned tokens if no errors were thrown.
+
+	CONTRIBUTIONS:
+		BYRON TOMKINSON	- Planning: NFA+DFA Design & Conversions.
+						- Programming: Lexer Class Implementation.
+						- Documentation: DFA JFLAP.
+
+		JORDAN MANAS 	- Planning: NFA+DFA Design & Conversions.
+						- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation.
+						- Documentation: Finite Automata.pdf; SPL Regular Expressions.txt; DESCRIPTION.txt.
+
+		PATRIC EDWARDS	- Planning: NFA+DFA Design & Conversions.
+						- Programming: Unit-Testing Class Implementation.
+
+01 - PARSER
+
+	The Parser & AST implementation is as follows:
+
+		The Parser is implemented as an LL(1) Parser - the expressions are determined using left-most derivation (i.e. inputs are read from left to right), and a look ahead of 1 position is used when evaluating symbols for parsing.
+
+		Each expression that is evaluated, from the given symbols, constructs a new concrete-expression-node object that it will return. Each different expression from the context-free-grammar has its own corresponding concrete-expression-node that is constructed within its own implementation as a function present in the Grammar Class. The abstract-syntax-tree is constructed by assigning a new expression-node its descendent nodes in a recursive manner.
+			If any tokens that do not comply with the grammar are encountered, the appropriate exception is thrown.
+
+		The AST is then traversed and removes any unnecessary nodes.
+
+	CONTRIBUTIONS:
+		BYRON TOMKINSON	- Planning: CFG Design.
+
+		JORDAN MANAS 	- Planning: CFG Design.
+						- Programming: AST Class Implementation; Expression Classes Implementation; Parser Class Implementation; Grammar Class Implementation; SymbolTable Class Implementation.
+						- Documentation: Context Free Grammar.txt.
+
+		PATRIC EDWARDS	- Programming: Unit-Testing Class Implementation.
