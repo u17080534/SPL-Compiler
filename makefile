@@ -1,10 +1,16 @@
-JFLAGS = -g
+JFLAGS = -g -d build
+
 JC = javac
+
+# Change to rm for linux and del for windows
+RM = del 
+
 .SUFFIXES: .java .class
+
 .java.class:
 		$(JC) $(JFLAGS) $*.java
 
-default: spl
+default: portable
 
 spl:
 	$(JC) $(JFLAGS) \
@@ -17,7 +23,14 @@ spl:
 	src/ast/expression/*.java \
 	src/parser/Grammar.java \
 	src/parser/Parser.java \
-	src/spl.java
+	src/Cache.java \
+	src/SPL.java
+
+portable: spl
+	jar cfm spl build/manifest -C build/ .
+
+clean:
+	$(RM) spl
 
 run:
-	java spl
+	java -jar spl -debug -test

@@ -1,22 +1,20 @@
-S 			→ PROG | PROC
+S 			→ PROG
 
-PROG 		→ CODE PROG'
+PROG 		→ PROC_DEFS PROG' | CODE PROG'
 
-PROG' 		→ ; PROC_DEFS | ϵ
+PROG' 		→ ; PROC_DEFS | ; CODE | ϵ
 
 PROC_DEFS 	→ PROC PROC_DEFS'
 
-PROC_DEFS'  → PROC_DEFS | ϵ
+PROC_DEFS'  → PROC_DEFS | CODE | ϵ
 
 PROC 		→ proc UserDefinedIdentifier { PROG }
 
 CODE 		→ INSTR CODE'
 
-CODE' 		→ ; CODE | ϵ
+CODE' 		→ ; CODE | ; PROC_DEFS | ϵ
 
 DECL 		→ TYPE NAME CODE'
-
-# DECL' 	→ ; INSTR | ϵ
 
 COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
 

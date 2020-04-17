@@ -6,7 +6,6 @@ import exception.*;
 
 public class Lexer 
 {
-	private String filename;
 	//!Character Read Directly from Buffer
 	private int readChar;
 	//!Buffer for Reading Input File
@@ -24,8 +23,11 @@ public class Lexer
 	//!Column of Input File
 	private int col;
 
-	public Lexer(String file) throws Exception
+	public Lexer(BufferedReader buff)
 	{
+		this.buffer = buff;
+		this.bufferStack = new Stack<Character>();
+
 	    this.startState = 26; //start state
 		this.acceptStates = new ArrayList<Integer>();
 		this.acceptStates.add(new Integer(0));
@@ -73,20 +75,8 @@ public class Lexer
 
 		this.tokens = new ArrayList<Token>();
 
-		this.filename = file;
-
-		try
-		{
-			this.buffer = new BufferedReader(new FileReader(new File("../input/" + this.filename + ".spl")));
-			this.bufferStack = new Stack<Character>();
-		}
-		catch(FileNotFoundException e)
-		{
-			throw e;
-		}
-
 		this.row = 1;
-		this.col = 1;
+		this.col = 0;
 	}
 
 	public List<Token> getTokens()
@@ -112,8 +102,6 @@ public class Lexer
 				throw exp;
 			}
 		}
-
-        this.export();
 
 		return this.tokens;
 	}
@@ -1459,10 +1447,11 @@ public class Lexer
 	    		throw new LexerException(tokenPosition(token), ch + "' is not a valid character");
 	    } 
 		
-	    //If token followed by space, save time by skipping it
+		//We have left over char after accepting a token, so push it to the buffer stack
 	    if(ch != 0)
 			this.bufferStack.push(ch);
 
+		//Add Token if it is Valid
 	    if(tokenRep != Token.Tok.NULL)
 	    {
 	    	Token tokObject = new Token(token, tokenRep);
@@ -1496,10 +1485,16 @@ public class Lexer
 				this.col = 0;
 				this.row++;
 			}
-			else if(this.readChar == '\t')
-				ch = ' ';
-			else
+			else 
+			{
+				if(this.readChar == '\t')
+				{
+					ch = ' ';
+					this.col += 4; //tab counts as 5 whitespaces
+				}
+
 				this.col++;
+			}
 	    }
 	    catch(IOException ex)
 	    {
@@ -1548,28 +1543,5 @@ public class Lexer
 	private boolean emptyStream()
 	{
 		return this.readChar < 0 && this.bufferStack.empty();
-	}
-
-	public void export()
-	{
-		String tokenFile = this.filename + ".tok";
-		try
-        {
-            FileWriter fileWriter = new FileWriter(new File("../output/" + tokenFile));
-
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            for(int index = 0; index < this.tokens.size(); index++)
-            {
-                bufferedWriter.write((index + 1) + ": " + tokens.get(index).getInput() + " (" + tokens.get(index).getToken() + ")\n");
-            }
-
-            bufferedWriter.close();
-            fileWriter.close();
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 	}
 }

@@ -1,11 +1,10 @@
 package parser;
 
 import java.util.*;
-import java.io.*;
+import exception.*;
 import lexer.*;
 import ast.*;
 import ast.expression.*;
-import exception.*;
 
 public class Grammar
 {
@@ -24,7 +23,7 @@ public class Grammar
 	}
 
 	//!Constructs AST
-	public AbstractSyntaxTree build(List<Token> stream)
+	public AbstractSyntaxTree build(List<Token> stream) throws SyntaxException
 	{
 		this.tokenstream = stream;
 		this.lookahead = look(0);
@@ -36,7 +35,7 @@ public class Grammar
         }
         catch(SyntaxException ex)
         {
-            System.out.println("Syntax Error: " + ex.getMessage());
+            throw ex;
         }
 
         return tree;
@@ -45,7 +44,6 @@ public class Grammar
 	private void readToken()
 	{
 		current = this.tokenstream.get(this.index);
-		System.out.println(current);
 
 		if(this.index + 1 < this.tokenstream.size())
 			this.lookahead = this.tokenstream.get(++this.index).getToken();
