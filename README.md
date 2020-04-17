@@ -14,6 +14,10 @@
 	```
 	Or to compile a given example file:
 	```
+	make run
+	```
+	or
+	```
 	java -jar spl [-debug] -test
 	```
 
