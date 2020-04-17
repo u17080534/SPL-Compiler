@@ -12,11 +12,10 @@
 	```
 	java -jar spl [-debug] <filename>.spl
 	```
-	Or to compile a given example file:
+	Or to compile a given example file, you can use either:
 	```
 	make run
 	```
-		or
 	```
 	java -jar spl [-debug] -test
 	```
