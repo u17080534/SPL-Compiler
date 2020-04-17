@@ -30,15 +30,15 @@
 
 	CONTRIBUTIONS:
 		BYRON TOMKINSON	- Planning: NFA+DFA Design & Conversions.
-						- Programming: Lexer Class Implementation.
-						- Documentation: DFA JFLAP.
+				- Programming: Lexer Class Implementation.
+				- Documentation: DFA JFLAP.
 
 		JORDAN MANAS 	- Planning: NFA+DFA Design & Conversions.
-						- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation.
-						- Documentation: Finite Automata.pdf; SPL Regular Expressions.txt; DESCRIPTION.txt.
+				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation.
+				- Documentation: Finite Automata.pdf; SPL Regular Expressions.txt; README.md; DESCRIPTION.txt.
 
 		PATRIC EDWARDS	- Planning: NFA+DFA Design & Conversions.
-						- Programming: Unit-Testing Class Implementation.
+				- Programming: Unit-Testing Class Implementation.
 
 01 - PARSER
 
@@ -55,7 +55,7 @@
 		BYRON TOMKINSON	- Planning: CFG Design.
 
 		JORDAN MANAS 	- Planning: CFG Design.
-						- Programming: AST Class Implementation; Expression Classes Implementation; Parser Class Implementation; Grammar Class Implementation; SymbolTable Class Implementation.
-						- Documentation: Context Free Grammar.txt.
+				- Programming: AST Class Implementation; Expression Classes Implementation; Parser Class Implementation; Grammar Class Implementation; SymbolTable Class Implementation.
+				- Documentation: Context Free Grammar.txt.
 
 		PATRIC EDWARDS	- Programming: Unit-Testing Class Implementation.
