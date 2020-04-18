@@ -1,7 +1,6 @@
-string mix;
-
 proc hello
 {
+    msg = "hello";
     num i1;
     num i2;
     string msg;
@@ -48,6 +47,7 @@ proc tester
     input(u)
 }
 
+tester
 
 proc reeceff
 {

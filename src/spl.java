@@ -53,7 +53,8 @@ public class SPL
         List<Token> tokens = this.tokenize();
 
         if(tokens != null)
-            this.parse(tokens);
+            if(this.parse(tokens))
+                this.analysis();
     }
 
     private List<Token> tokenize()
@@ -73,7 +74,7 @@ public class SPL
         return tokens;
     }
 
-    private void parse(List<Token> tokens)
+    private boolean parse(List<Token> tokens)
     {
         try
         {
@@ -93,6 +94,23 @@ public class SPL
                 this.table.add(sym);
 
             this.cache.export(this.table);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void analysis()
+    {
+        try
+        {
+            this.table.scoping();
+            System.out.println(this.table);
+        }
+        catch(UsageException ex)
+        {
+            System.out.println("Usage Exception: " + ex);
         }
     }
   

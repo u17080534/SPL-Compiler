@@ -1,14 +1,16 @@
 package ast.expression;
+
 import java.util.*;
+import symtable.Symbol;
 
 public abstract class Expression
 {   
 	public static int exprCount = 0;
 	protected int id;
 	protected int level;
-	protected int scope;
 	protected String expr;
 	protected Vector<Expression> descendents;
+	protected Symbol symbol;
 
 	public Expression(Expression... descendents)
 	{
@@ -21,6 +23,8 @@ public abstract class Expression
 
 		this.id();
 		this.level(0);
+
+		this.symbol = new Symbol(this);
 	}
 
 	//!Must Evaluate to BASIC
@@ -44,18 +48,23 @@ public abstract class Expression
 
 	public void scope()
 	{
-		this.scope = 0;
+		this.symbol.setScope(0);
 
 		for (Expression desc : this.descendents)
-				desc.scope(this.scope);
+				desc.scope(this.symbol.getScope());
 	}
 
 	public void scope(int scope)
 	{
-		this.scope = scope;
+		this.symbol.setScope(scope);
 
 		for (Expression desc : this.descendents)
-				desc.scope(this.scope);
+				desc.scope(this.symbol.getScope());
+	}
+
+	public Symbol getSymbol()
+	{
+		return this.symbol;
 	}
 
 	public int getID()
@@ -66,6 +75,11 @@ public abstract class Expression
 	public String getExpr()
 	{
 		return this.expr;
+	}
+
+	public void setExpr(String expr)
+	{
+		this.expr = expr;
 	}
 
 	public String getExpression()
@@ -117,7 +131,7 @@ public abstract class Expression
 		for(int index = 0; index++ < this.level;)
 			str += "__";
 
-		str += this.id + " [" + this.scope + "] " + this.expr + System.getProperty("line.separator");
+		str += this.id + " " + this.expr + System.getProperty("line.separator");
 
 		for (Expression desc : this.descendents)
 			str += desc.toString();

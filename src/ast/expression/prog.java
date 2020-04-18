@@ -15,10 +15,10 @@ public class prog extends Expression
 	@Override
 	public void scope(int scope)
 	{
-		this.scope = scope + 1;
+		this.symbol.setScope(scope + 1);
 
 		for (Expression desc : this.descendents)
-			desc.scope(this.scope);
+			desc.scope(this.symbol.getScope());
 	}
 
 	public String eval() 

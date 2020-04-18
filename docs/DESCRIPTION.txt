@@ -51,6 +51,8 @@
 
 		The AST is then traversed and removes any unnecessary nodes.
 
+		On construction of an expression, a linked symbol object is created, then added to the symbol table, also holding a reference to the expression node.
+
 	CONTRIBUTIONS:
 		BYRON TOMKINSON	- Planning: CFG Design.
 

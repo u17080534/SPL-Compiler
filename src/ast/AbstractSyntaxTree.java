@@ -43,7 +43,7 @@ public class AbstractSyntaxTree
 	{
 		Vector<Symbol> symbols = new Vector<Symbol>();
 
-		symbols.add(new Symbol(this.root.getID(), this.root.getExpr()));
+		symbols.add(this.root.getSymbol());
 		for(int index = 0; index < this.root.countDescendents(); index++)
 			symbols.addAll(this.getSymbols(this.root.get(index)));
 
@@ -54,7 +54,7 @@ public class AbstractSyntaxTree
 	{	
 		Vector<Symbol> symbols = new Vector<Symbol>();
 
-		symbols.add(new Symbol(exp.getID(), exp.getExpr()));
+		symbols.add(exp.getSymbol());
 		for(int index = 0; index < exp.countDescendents(); index++)
 			symbols.addAll(this.getSymbols(exp.get(index)));
 

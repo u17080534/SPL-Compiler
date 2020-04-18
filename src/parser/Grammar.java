@@ -380,7 +380,7 @@ public class Grammar
 						if(this.lookahead == Token.Tok.TOK_CB)
 						{
 							this.readToken();
-							return new cond_loop(new TokenExpression("while", e1.getInput()), e2, e3);
+							return new cond_loop(new TokenExpression("while", e2.getExpr()), e2, e3);
 						}
 						throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 					}
@@ -447,7 +447,7 @@ public class Grammar
 																				if(this.lookahead == Token.Tok.TOK_CB)
 																				{
 																					this.readToken();
-																					return new cond_loop(new TokenExpression("for", e1.getInput()), e2, e3, e4, e5, e6, e7);
+																					return new cond_loop(new TokenExpression("for", e3.getExpr() + " < " + e4.getExpr()), e2, e3, e4, e5, e6, e7);
 																				}
 																				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 																			}

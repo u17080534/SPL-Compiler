@@ -1,16 +1,16 @@
 0:PROG
-1:CODE
-2:INSTR
-3:DECL
-4:TYPE
-5:type 'string'
-6:NAME
-7:variable 'mix'
-8:CODE_
-9:PROC_DEFS
-10:PROC
-11:proc 'hello'
-12:PROG
+1:PROC_DEFS
+2:PROC
+3:proc 'hello'
+4:PROG
+5:CODE
+6:INSTR
+7:ASSIGN
+8:VAR
+9:variable 'msg'
+10:ASSIGN_
+11:= '"hello"'
+12:CODE_
 13:CODE
 14:INSTR
 15:DECL
@@ -53,7 +53,7 @@
 52:CODE
 53:INSTR
 54:COND_LOOP
-55:for 'for'
+55:for 'VAR<VAR'
 56:VAR
 57:variable 'i1'
 58:VAR
@@ -171,7 +171,7 @@
 170:CODE
 171:INSTR
 172:COND_LOOP
-173:while 'while'
+173:while 'BOOL'
 174:BOOL
 175:bool '<'
 176:CODE
@@ -230,24 +230,29 @@
 229:VAR
 230:variable 'u'
 231:PROC_DEFS_
-232:PROC_DEFS
-233:PROC
-234:proc 'reeceff'
-235:PROG
-236:CODE
-237:INSTR
-238:IO
-239:io 'input'
-240:VAR
-241:variable 'u'
-242:PROC_DEFS_
-243:PROC_DEFS
-244:PROC
-245:proc 'axe'
-246:PROG
-247:CODE
-248:INSTR
-249:IO
-250:io 'input'
-251:VAR
-252:variable 'u'
+232:CODE
+233:INSTR
+234:CALL
+235:call 'tester'
+236:CODE_
+237:PROC_DEFS
+238:PROC
+239:proc 'reeceff'
+240:PROG
+241:CODE
+242:INSTR
+243:IO
+244:io 'input'
+245:VAR
+246:variable 'u'
+247:PROC_DEFS_
+248:PROC_DEFS
+249:PROC
+250:proc 'axe'
+251:PROG
+252:CODE
+253:INSTR
+254:IO
+255:io 'input'
+256:VAR
+257:variable 'u'
