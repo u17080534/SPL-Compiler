@@ -40,9 +40,6 @@ public class UnitTest
 
             List<Token> tokens = compilers.get(index).tokenize();
 
-            if(tokens != null)
-            	System.out.println("\n" + tokens);
-
             System.out.print("\n");
         }
     } 

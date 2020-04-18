@@ -34,11 +34,6 @@ public class AbstractSyntaxTree
 		//Find all variable usages, check if declared in a <= scope and assign Vn, otherwise assign U
 	}
 
-	private void scopeVariables(Expression node)
-	{
-
-	}
-
 	public Vector<Symbol> getSymbols()
 	{
 		Vector<Symbol> symbols = new Vector<Symbol>();

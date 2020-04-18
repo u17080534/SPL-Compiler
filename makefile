@@ -24,6 +24,7 @@ spl:
 	src/ast/expression/*.java \
 	src/parser/Grammar.java \
 	src/parser/Parser.java \
+	src/analysis/Scoping.java \
 	src/Cache.java \
 	src/SPL.java \
 	test/UnitTest.java

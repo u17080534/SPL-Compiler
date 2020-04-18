@@ -49,13 +49,13 @@ proc tester
 
 tester
 
-proc reeceff
+proc foo
 {
     input(u)
 }
 
 
-proc axe
+proc bar
 {
     input(u)
 }

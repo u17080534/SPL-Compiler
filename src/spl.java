@@ -5,6 +5,7 @@ import lexer.*;
 import parser.*;
 import ast.*;
 import symtable.*;
+import analysis.*;
 
 public class SPL 
 { 
@@ -107,7 +108,7 @@ public class SPL
     {
         try
         {
-            this.table.scoping();
+            Scoping.check(this.tree, this.table);
             System.out.println(this.table);
         }
         catch(UsageException ex)

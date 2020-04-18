@@ -44,7 +44,11 @@ public class Cache
             fileWriter.close();
 
             if(this.out)
+            {
+                System.out.println("\tToken List:");
             	System.out.println(tokens);
+                System.out.print("\n");
+            }
         } 
         catch (Exception e)
         {
@@ -72,7 +76,11 @@ public class Cache
             fileWriter.close();
 
             if(this.out)
+            {
+                System.out.println("\tAbstract Syntax Tree:");
             	System.out.println(tree);
+                System.out.print("\n");
+            }
         } 
         catch (Exception e)
         {
@@ -100,7 +108,11 @@ public class Cache
             fileWriter.close();
 
             if(this.out)
-            	System.out.println(table);
+            {
+                System.out.println("\tSymbol Table:");
+                System.out.println(table);
+            	System.out.print("\n");
+            }
         } 
         catch (Exception e)
         {

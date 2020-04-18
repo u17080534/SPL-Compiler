@@ -79,26 +79,18 @@ public class Lexer
 		this.col = 0;
 	}
 
-	public List<Token> getTokens()
-	{
-		return this.tokens;
-	}
-
 	//!Generates list of all tokens in input file, throws exception if unexpected input
 	public List<Token> readTokens() throws LexerException
 	{
-		if(this.tokens.size() > 0)
+		if(this.tokens == null)
 		{
-			if(this.readChar == -1)
-			{
-				System.out.println("Returning already generated tokens.");
-				return this.tokens;
-			}
-			else
-			{
-				System.out.println("A Lexical Error was encountered, returning null.");
-				return null;
-			}
+			System.out.println("A Lexical Error was encountered, tokens may not be used.\n");
+			return null;
+		}
+		else if(this.tokens.size() > 0)
+		{
+			System.out.println("Retrieving previously generated tokens.\n");
+			return this.tokens;
 		}
 
 		//Continues iterating till no more tokens can be read, or an error is encountered
@@ -113,6 +105,7 @@ public class Lexer
 			catch(LexerException exp)
 			{
 				tokenize = false;
+				this.tokens = null;
 				throw exp;
 			}
 		}
@@ -1544,7 +1537,7 @@ public class Lexer
 	{
 		int currCol = this.col;
 		if(currCol == 0) currCol = 1;
-		return "[line: " + this.row + ", col: " + (currCol - token.length()) + "] dfa("+state+")";
+		return "[line: " + this.row + ", col: " + (currCol - token.length()) + "]";// dfa("+state+")";
 	}
 
 	private boolean emptyStream()
