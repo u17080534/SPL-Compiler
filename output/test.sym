@@ -53,7 +53,7 @@
 52:CODE
 53:INSTR
 54:COND_LOOP
-55:for 'VAR<VAR'
+55:for 'VAR < VAR'
 56:VAR
 57:variable 'i1'
 58:VAR

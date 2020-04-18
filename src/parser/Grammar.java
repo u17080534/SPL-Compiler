@@ -1004,7 +1004,7 @@ public class Grammar
 			{
 				this.readToken();
 				String e = this.current.getInput();
-				return new var(new TokenExpression("variable", e));
+				return new _var(new TokenExpression("variable", e));
 			}
 		}
 		catch(Exception ex)

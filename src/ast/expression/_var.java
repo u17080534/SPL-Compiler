@@ -1,11 +1,11 @@
 package ast.expression;
 import lexer.Token.*;
 
-public class var extends Expression 
+public class _var extends Expression 
 {   
 	private TokenExpression variable;   
 
-	public var(TokenExpression id) 
+	public _var(TokenExpression id) 
 	{ 
 		super(id);
 		this.variable = id;
