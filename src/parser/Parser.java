@@ -23,8 +23,12 @@ public class Parser
 		try
 		{
 			tree = this.grammar.build(tokens);
-			tree.trim();
-			tree.scope();
+			
+			if(tree != null)
+			{
+				tree.trim();
+				tree.scope();
+			}
 		}
 		catch(SyntaxException ex)
 		{

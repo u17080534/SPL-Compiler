@@ -3,8 +3,8 @@ JFLAGS = -g -d build
 JC = javac
 
 # Change to rm for linux and del for windows
-# RM = del 
-RM = rm 
+RM = del 
+# RM = rm 
 
 .SUFFIXES: .java .class
 
@@ -25,8 +25,9 @@ spl:
 	src/parser/Grammar.java \
 	src/parser/Parser.java \
 	src/Cache.java \
-	src/SPL.java
-
+	src/SPL.java \
+	test/UnitTest.java
+	
 portable: clean spl
 	jar cfm spl build/manifest -C build/ .
 

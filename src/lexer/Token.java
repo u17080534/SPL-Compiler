@@ -32,7 +32,8 @@ public class Token
 		return this.token;
 	}
 
-	@Override public String toString() 
+	@Override 
+	public String toString() 
 	{ 
 		return this.input + " - " + this.token + "[" + this.line + "," + this.col + "]"; 
 	} 

@@ -140,7 +140,15 @@ public class SymbolTable
 		{
 			str += this.symbols.get(index).toString();
 			if(index < this.symbols.size() - 1)
-				str += "\n";
+				if((index+1) % 5 == 0)
+					str += "\n";
+				else
+				{
+					int no_spaces = 25 - this.symbols.get(index).toString().length();
+					if(no_spaces < 0) no_spaces = 0;
+					for(int s = 0; s < no_spaces; s++)
+						str += " ";
+				}
 		}
 
 		return str;

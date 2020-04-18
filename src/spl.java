@@ -9,6 +9,7 @@ import symtable.*;
 public class SPL 
 { 
     //!Handled File
+    private String filename;
     private Cache cache;
     private Lexer lexer;
     private Parser parser;
@@ -28,6 +29,7 @@ public class SPL
             end = file.length();
 
         String filename = file.substring(start, end);
+        this.filename = filename;
         BufferedReader buffer;
 
         try
@@ -39,7 +41,7 @@ public class SPL
             throw new Exception("Error: The file \"" + file + "\" cannot be found on this machine.");
         }
 
-        this.cache = new Cache(filename);
+        this.cache = new Cache(this.filename);
         this.lexer = new Lexer(buffer);
         this.parser = new Parser();
         this.table = new SymbolTable();
@@ -57,7 +59,7 @@ public class SPL
                 this.analysis();
     }
 
-    private List<Token> tokenize()
+    public List<Token> tokenize()
     {
         List<Token> tokens = null;
 
@@ -74,7 +76,7 @@ public class SPL
         return tokens;
     }
 
-    private boolean parse(List<Token> tokens)
+    public boolean parse(List<Token> tokens)
     {
         try
         {
@@ -101,7 +103,7 @@ public class SPL
         return false;
     }
 
-    private void analysis()
+    public void analysis()
     {
         try
         {
@@ -114,20 +116,26 @@ public class SPL
         }
     }
   
+    @Override 
+    public String toString() 
+    {
+        return "SPL-Compiler version \"1.0.1\"\n\tfile : " + this.filename + ".spl";
+    }
+
     public static void main(String[] args) 
     { 
         //multiple files will compile into different programs
         Vector<SPL> compilers = new Vector<SPL>();
-        boolean debug = false;
+        boolean debug = false, test = false;
 
         try
         {
             for(int index = 0; index < args.length; index++)
             {
-                if(args[index].equals("-debug"))
+                if(args[index].equals("-test"))
+                    UnitTest.execute(); //Unit Test Exits program
+                else if(args[index].equals("-debug"))
                     debug = true;
-                else if(args[index].equals("-test"))
-                    compilers.add(new SPL("input/test.spl"));
                 else
                     compilers.add(new SPL(args[index]));
             }

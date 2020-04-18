@@ -27,18 +27,15 @@ public class Grammar
 	{
 		this.tokenstream = stream;
 		this.lookahead = look(0);
-        AbstractSyntaxTree tree = null;
 
 		try
         {
-           	tree = new AbstractSyntaxTree(START());
+           	return new AbstractSyntaxTree(START());
         }
         catch(SyntaxException ex)
         {
             throw ex;
         }
-
-        return tree;
 	}
 
 	private void readToken()

@@ -1,0 +1,27 @@
+bool Tester;
+
+proc Test{
+	Tester=True;
+	string msg;
+
+	if (Tester) then
+	{
+		msg="True"
+	};
+
+	proc ExtraTest
+	{
+		input(msg);
+
+		if (Tester) then
+		{
+			msg="True"
+		}
+		else
+		{
+			msg="false"
+		}
+	}
+
+	output(msg)
+}

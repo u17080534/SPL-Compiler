@@ -14,6 +14,9 @@ public class LexerException extends Exception
 	{ 
 		String str = this.getMessage();
 
+		if(str.indexOf("'#'") == 0)
+    		str = "newline character was unexpected in this case";
+
 		if(!this.location.equals(""))
 			str = this.location + ": " + str;
 		  
