@@ -41,7 +41,7 @@
 				- Documentation: DFA JFLAP.
 
 		JORDAN MANAS 	- Planning: NFA+DFA Design & Conversions.
-				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation; Unit-Testing Class Implementation.
+				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation; Unit-Testing Class Setup.
 				- Documentation: Finite Automata.pdf; SPL Regular Expressions.txt; README.md; DESCRIPTION.txt.
 
 		PATRIC EDWARDS	- Planning: NFA+DFA Design & Conversions.
@@ -68,3 +68,11 @@
 				- Documentation: Context Free Grammar.txt.
 
 		PATRIC EDWARDS	- Programming: Unit-Testing Class Implementation.
+
+02 - SCOPE CHECKING
+
+03 - TYPE CHECKING
+
+04 - VALUE CHECKING
+
+05 - CODE GENERATION
