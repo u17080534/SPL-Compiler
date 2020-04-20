@@ -29,10 +29,37 @@ public class Scoping
 					(a) Rename procedure to U
 		*/
 
+		Vector<Symbol> symbols = table.list();
 		Vector<Symbol> terminals = table.terminals();
-		Vector<Symbol> declarations = new Vector<Symbol>(), usages = new Vector<Symbol>();
-		Vector<Symbol> lost = new Vector<Symbol>();
+		Vector<Symbol> declarations = new Vector<Symbol>();
+		Vector<Symbol> usages = new Vector<Symbol>();
+		Vector<String> undefined = new Vector<String>();
 
+		//ASSIGN PROC NAME TO EVERY SYMBOL
+		String procName = "";
+		Stack<String> procStack = new Stack<String>();
+		for(int index = 0; index < symbols.size(); index++)
+		{
+			symbols.get(index).setProc(procName);
+
+			if(index + 1 < symbols.size())
+			{
+				if(symbols.get(index).getScope() < symbols.get(index + 1).getScope())
+				{	
+					if(symbols.get(index).getExpression().indexOf("proc") == 0)
+					{
+						procStack.push(procName);
+						procName = symbols.get(index).getExpression().substring(4);
+					}
+					else
+						throw new UsageException(symbols.get(index), "Unknown Scoping issue encountered - scope increased without proc definition...");
+				}
+				else if(symbols.get(index).getScope() > symbols.get(index + 1).getScope())
+					procName = procStack.pop();
+			}
+		}
+
+		//BUILD DECLARATIONS LIST & USAGES LIST
 		for(int index = 0; index < terminals.size(); index++)
 		{
 			if(terminals.get(index).getExpression().indexOf("variable") == 0)
@@ -43,15 +70,18 @@ public class Scoping
 					usages.add(terminals.get(index));
 			}
 			else if(terminals.get(index).getExpression().indexOf("call") == 0)
-			{
-
-			}
+				usages.add(terminals.get(index));
 			else if(terminals.get(index).getExpression().indexOf("proc") == 0)
-			{
-				
-			}
+				declarations.add(terminals.get(index));
 		}
 
+		//CHECK FOR REDEFINITIONS
+		for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
+			for(int index_decl_ = 0; index_decl_ < declarations.size(); index_decl_++)
+				if(index_decl != index_decl_ && getValue(declarations.get(index_decl).getExpression()).equals(getValue(declarations.get(index_decl_).getExpression())))
+					throw new UsageException(declarations.get(Math.max(index_decl, index_decl_)), "Identifier is used more than once");
+
+		//MARK ALL USAGES WITHOUT A VALID DEFINITION
 		for(int index_use = 0; index_use < usages.size(); index_use++)
 		{
 			boolean declared = false;
@@ -59,45 +89,69 @@ public class Scoping
 			for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 			{
 				Symbol decl = declarations.get(index_decl);
-				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getScope() <= usage.getScope() && decl.getID() < usage.getID())
+				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID() && (decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && decl.getProc().equals(usage.getProc()))))
 					declared = true;
 			}
 
 			if(!declared)
-				usage.setExpression("variable \'U\'");
+			{
+				undefined.add(usage.toString());
+				if(usage.getExpression().indexOf("variable") == 0)
+					usage.setExpression("variable \'U\'");
+				else if(usage.getExpression().indexOf("call") == 0)
+					usage.setExpression("call \'U\'");
+			}
 		}
 
-
+		//RENAME ALL VALID USAGES TO THE NEW NAME OF DEFINITION
 		int varcount = 0;
-
+		int proccount = 0;
 		for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 		{
 			Symbol decl = declarations.get(index_decl);
 
-			String rename;
+			String rename = decl.getExpression();
 
 			for(int index_use = 0; index_use < usages.size(); index_use++)
 			{
 				Symbol usage = usages.get(index_use);
 
-				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getScope() <= usage.getScope() && decl.getID() < usage.getID())
-					usage.setExpression("variable 'V" + varcount + "'");
+				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID())
+				{
+					if(decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && decl.getProc().equals(usage.getProc())))
+					{
+						if(usage.getExpression().indexOf("variable") == 0)
+							usage.setExpression("variable 'V" + varcount + "'");
+
+						if(usage.getExpression().indexOf("call") == 0)
+							usage.setExpression("call 'P" + proccount + "'");
+					}
+				}
 			}
 
-			rename = "variable 'V" + (varcount++) + "'";
+			if(decl.getExpression().indexOf("variable") == 0)
+				rename = "variable 'V" + (varcount++) + "'";
+			if(decl.getExpression().indexOf("proc") == 0)
+				rename = "proc 'P" + (proccount++) + "'";
 
 			decl.setExpression(rename);
 		}
 
-		System.out.println(declarations);
-		System.out.println(usages);
+		if(undefined.size() > 0)
+		{
+			String str = undefined.get(0);
+			for(int index = 1; index < undefined.size(); index++)
+				str += "; " + undefined.get(index);
+
+			throw new UsageException("There are undefined usages/calls: " + str);
+		}
 	}
 
 	private static String getValue(String expr)
 	{
-		int start = expr.indexOf('\'') + 1;
+		int start = expr.indexOf("'") + 1;
 
-		int end = expr.lastIndexOf('\'');
+		int end = expr.lastIndexOf("'");
 
 		if(start == -1)
 			start = 0;
@@ -105,8 +159,8 @@ public class Scoping
 		if(end == -1)
 			end = expr.length();
 
-		expr.substring(start, end);
+		String str = expr.substring(start, end);
 
-		return expr;
+		return str;
 	}
 }

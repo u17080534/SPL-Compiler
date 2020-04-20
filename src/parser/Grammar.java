@@ -233,9 +233,6 @@ public class Grammar
 	{
 		try
 		{
-			// if(this.lookahead == Token.Tok.TOK_CB)
-			// 	return new code_();
-
 			if(this.lookahead == Token.Tok.TOK_SEMI)
 			{
 				this.readToken();
@@ -252,10 +249,7 @@ public class Grammar
 				}
 			}
 			else if(this.lookahead == Token.Tok.TOK_PROC)
-			{
-				Expression e = PROC_DEFS();
-				return new code_(e);
-			}
+				throw new SyntaxException(this.current, "Semicolon (;) expected after instruction if not last instruction in procedure.");
 
 			return new code_();
 		}
@@ -265,15 +259,34 @@ public class Grammar
 		}
 	}
 
-	// DECL → TYPE NAME CODE'
+	// DECL → TYPE NAME DECL'
 	private Expression DECL() throws SyntaxException
 	{
 		try
 		{
 			Expression e1 = TYPE();
 			Expression e2 = NAME();
-			Expression e3 = CODE_();
+			Expression e3 = DECL_();
 			return new decl(e1, e2, e3);
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	// DECL' → DECL | ϵ
+	private Expression DECL_() throws SyntaxException
+	{
+		try
+		{
+			if(this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL)
+			{
+				Expression e1 = DECL();
+				return new decl_(e1);
+			}
+
+			return new decl_();
 		}
 		catch(Exception ex)
 		{
@@ -369,19 +382,25 @@ public class Grammar
 				Token e1 = this.current;
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
+					this.readToken(); //THIS CHANGES WHETHER YOU HAVE TO NEST PARENTHESIS
 					Expression e2 = BOOL();
-					if(this.lookahead == Token.Tok.TOK_OB)
+					if(this.lookahead == Token.Tok.TOK_CP)
 					{
-						this.readToken();
-						Expression e3 = CODE();
-						if(this.lookahead == Token.Tok.TOK_CB)
+						this.readToken(); //THIS CHANGES WHETHER YOU HAVE TO NEST PARENTHESIS
+						if(this.lookahead == Token.Tok.TOK_OB)
 						{
 							this.readToken();
-							return new cond_loop(new TokenExpression("while", e2.getExpr()), e2, e3);
+							Expression e3 = CODE();
+							if(this.lookahead == Token.Tok.TOK_CB)
+							{
+								this.readToken();
+								return new cond_loop(new TokenExpression("while", e2.getExpr()), e2, e3);
+							}
+							throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 						}
-						throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
+						throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Brace");
 					}
-					throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Brace");
+					throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Parenthesis");
 				}
 				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Parenthesis");
 			}
@@ -618,7 +637,7 @@ public class Grammar
 				this.readToken();
 				Token e1 = this.current;				
 				Expression e2 = BOOL();
-				return new bool(new TokenExpression("bool",e1.getInput()), e2);
+				return new bool(new TokenExpression("bool", e1.getInput()), e2);
 			}
 			else if(this.lookahead == Token.Tok.TOK_AND)
 			{
@@ -628,7 +647,7 @@ public class Grammar
 				{
 					this.readToken();
 					Expression e2 = BOOL_();
-					return new bool(new TokenExpression("bool",e1.getInput()), e2);
+					return new bool(new TokenExpression("bool", e1.getInput()), e2);
 				}
 				throw new SyntaxException(this.current, "Invalid Boolean Syntax: Expected Opening Parenthesis");
 			}

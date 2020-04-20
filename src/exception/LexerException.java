@@ -20,6 +20,6 @@ public class LexerException extends Exception
 		if(!this.location.equals(""))
 			str = this.location + ": " + str;
 		  
-		return str;
+		return "Lexical Error " + str;
 	}
 }

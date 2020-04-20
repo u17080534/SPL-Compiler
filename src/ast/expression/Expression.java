@@ -108,12 +108,15 @@ public abstract class Expression
 
 	public void trim()
 	{
+		for (Expression desc : this.descendents)
+			desc.trim();
+
 		for(int index = 0; index < this.descendents.size(); index++)
 			if(this.descendents.get(index).countDescendents() == 0 && !this.descendents.get(index).isTerminal())
 				this.descendents.remove(index);
 
-		for (Expression desc : this.descendents)
-			desc.trim();
+		// for (Expression desc : this.descendents)
+		// 	desc.trim();
 	}
 
 	public Expression get(int index)
@@ -121,20 +124,27 @@ public abstract class Expression
 		return this.descendents.get(index);
 	}
 
-	@Override public String toString() 
+	@Override 
+	public String toString() 
 	{
-		String str = "";
+		return this.id + " " + this.expr;
+	}
 
-		if(this.level > 0)
-			str += "|";
+	public String print(String ind, boolean last) 
+	{
+		String str = ind;
 
-		for(int index = 0; index++ < this.level;)
-			str += "__";
+		str += "|__";
+		
+		if(last)
+			ind += "  ";
+		else
+			ind += "|  ";
 
-		str += this.id + " " + this.expr + System.getProperty("line.separator");
+		str += this + "\n";
 
 		for (Expression desc : this.descendents)
-			str += desc.toString();
+			str += desc.print(ind, desc == this.descendents.lastElement());
 
 		return str;
 	}

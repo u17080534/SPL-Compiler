@@ -1,61 +1,38 @@
-proc hello
+proc helloworld
 {
-    msg = "hello";
-    num i1;
-    num i2;
-    string msg;
-    msg = "hello";
-    input(i2);
+    string hello;
+    hello = "HELLO";
+    output(hello);
+    num i;
+    num j;
 
-    for(i1 = 0; i1 < i2; i1 = add(i1,1))
-    {
-        output(msg)
-    };
+    input(i);
+    input(j);
 
-    if (T) then
+    while((i < j))
     {
-    	i = add(sub(1, add(1,add(1, j))), mult(j, i))
+        output(i);
+        i = add(j,i)
     }
-    else 
-    {
-    	output(msg)
-    };
-
-    proc loop
-	{
-        num i;
-        i = 0;
-        num j;
-        j = 2;
-
-		while(i < j)
-        {
-            i = add(i,i);
-            output(i)
-        };
-
-        num u
-	}
-
-    loop;
-
-    output(i)
 }
 
-proc tester
+proc goodbyeworld
 {
-    input(u)
+    string bye;
+    bye = "BYE";
+    output(bye)
 }
-
-tester
 
 proc foo
 {
-    input(u)
-}
+    string u;
 
+    proc bar
+    {
+        input(u);
+        output(u)
+    }  
 
-proc bar
-{
-    input(u)
+    bar; 
+    output(u)
 }

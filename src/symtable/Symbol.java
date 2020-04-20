@@ -6,10 +6,12 @@ public class Symbol
 {
 	private Expression expr;
 	private int scope;
+	private String proc;
 	private boolean altered;
 
 	public Symbol(Expression expr)
 	{
+		this.proc = "";
 		this.expr = expr;
 		this.altered = false;
 	}
@@ -38,6 +40,16 @@ public class Symbol
 	public void setScope(int scope)
 	{
 		this.scope = scope;
+	}
+
+	public String getProc()
+	{
+		return this.proc;
+	}
+
+	public void setProc(String proc)
+	{
+		this.proc = proc;
 	}
 
 	public boolean isTerminal()

@@ -14,7 +14,9 @@ CODE 		→ INSTR CODE'
 
 CODE' 		→ ; CODE | ; PROC_DEFS | ϵ
 
-DECL 		→ TYPE NAME CODE'
+DECL 		→ TYPE NAME DECL'
+
+DECL' 		→ DECL | ϵ
 
 COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
 

@@ -30,7 +30,7 @@
 
 	*ASSUMPTIONS*
 		1. Every instruction in a code block, except for the last instruction, must be followed by a semi-colon.
-		2. It is considered optional to place a semicolon between an instruction and a new proc definition, this is because it would make sense to do either option if that instruction were the last instruction in the code block.
+		2. It is considered necessary to place a semicolon between an instruction and a new proc definition, this is because semicolons are needed if it is not last instruction in code block.
 		3. It is considered optional to place a semicolon between a new proc definition and an instruction that follows, this is because it would make sense to do either option if that instruction were the first instruction in the code block.
 		4. Any literal '#' characters in the input will be seen as a newline (newline characters are interpreted normally)
 		5. A tab counts as 5 spaces (when counting the character position in the file)
@@ -41,7 +41,7 @@
 				- Documentation: DFA JFLAP.
 
 		JORDAN MANAS 	- Planning: NFA+DFA Design & Conversions.
-				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation; Unit-Testing Class Implementation..
+				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation; Unit-Testing Class Implementation.
 				- Documentation: Finite Automata.pdf; SPL Regular Expressions.txt; README.md; DESCRIPTION.txt.
 
 		PATRIC EDWARDS	- Planning: NFA+DFA Design & Conversions.

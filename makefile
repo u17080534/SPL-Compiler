@@ -1,4 +1,4 @@
-JFLAGS = -g -d build
+JFLAGS = -g -d build 
 
 JC = javac
 
@@ -26,8 +26,7 @@ spl:
 	src/parser/Parser.java \
 	src/analysis/Scoping.java \
 	src/Cache.java \
-	src/SPL.java \
-	test/UnitTest.java
+	src/SPL.java
 	
 portable: clean spl
 	jar cfm spl build/manifest -C build/ .
@@ -37,3 +36,19 @@ clean:
 
 run:
 	java -jar spl -debug -test
+
+test: spl
+	javac -d build -cp build/junit-platform-console-standalone-1.6.2.jar test/UnitTest.java \
+	src/exception/*.java \
+	src/lexer/Token.java \
+	src/lexer/Lexer.java \
+	src/symtable/Symbol.java \
+	src/symtable/SymbolTable.java \
+	src/ast/AbstractSyntaxTree.java \
+	src/ast/expression/*.java \
+	src/parser/Grammar.java \
+	src/parser/Parser.java \
+	src/analysis/Scoping.java \
+	src/Cache.java \
+	src/SPL.java
+	java -jar build/junit-platform-console-standalone-1.6.2.jar --class-path build --scan-class-path

@@ -53,14 +53,21 @@ public class SPL
     {
         this.cache.output(debug);
 
-        List<Token> tokens = this.tokenize();
+        try
+        {
+            List<Token> tokens = this.tokenize();
 
-        if(tokens != null)
-            if(this.parse(tokens))
-                this.analysis();
+            if(tokens != null)
+                if(this.parse(tokens))
+                    this.analysis();
+        }
+        catch(Exception ex)
+        {
+            System.out.println(ex);
+        }
     }
 
-    public List<Token> tokenize()
+    public List<Token> tokenize() throws LexerException
     {
         List<Token> tokens = null;
 
@@ -71,13 +78,13 @@ public class SPL
         }
         catch(LexerException ex)
         {
-            System.out.println("Lexical Error " + ex);
+            throw ex;
         }
 
         return tokens;
     }
 
-    public boolean parse(List<Token> tokens)
+    public boolean parse(List<Token> tokens) throws SyntaxException
     {
         try
         {
@@ -86,7 +93,7 @@ public class SPL
         }
         catch(SyntaxException ex)
         {
-            System.out.println("Syntax Error: " + ex);
+            throw ex;
         }
 
         if(this.tree != null)
@@ -104,16 +111,17 @@ public class SPL
         return false;
     }
 
-    public void analysis()
+    public void analysis() throws UsageException
     {
         try
         {
             Scoping.check(this.tree, this.table);
-            System.out.println(this.table);
+            this.cache.export(this.table);
+            this.cache.export(this.tree);
         }
         catch(UsageException ex)
         {
-            System.out.println("Usage Exception: " + ex);
+            throw ex;
         }
     }
   
@@ -134,7 +142,11 @@ public class SPL
             for(int index = 0; index < args.length; index++)
             {
                 if(args[index].equals("-test"))
-                    UnitTest.execute(); //Unit Test Exits program
+                {
+                    debug = true;
+                    compilers.add(new SPL("input/test.spl"));
+                    break;
+                }
                 else if(args[index].equals("-debug"))
                     debug = true;
                 else

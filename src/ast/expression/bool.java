@@ -16,7 +16,7 @@ public class bool extends Expression
 
 	public bool(TokenExpression action, Expression e1) 
 	{ 
-		super(action);
+		super(action, e1);
 		this.action = action;
 		this.expr = "BOOL";
 		this.e1 = e1; 
@@ -24,7 +24,7 @@ public class bool extends Expression
 
 	public bool(TokenExpression action, Expression e1, Expression e2) 
 	{ 
-		super(action);
+		super(action, e1, e2);
 		this.action = action;
 		this.expr = "BOOL";
 		this.e1 = e1; 

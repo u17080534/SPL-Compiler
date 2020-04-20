@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SymbolTable
 {
-	Vector<Symbol> symbols;
+	private Vector<Symbol> symbols;
 
 	public SymbolTable()
 	{
@@ -28,6 +28,11 @@ public class SymbolTable
 				terminals.add(sym);
 
 		return terminals;
+	}
+
+	public Vector<Symbol> list()
+	{
+		return this.symbols;
 	}
 
 	@Override

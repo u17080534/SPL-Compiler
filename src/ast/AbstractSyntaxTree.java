@@ -87,8 +87,6 @@ public class AbstractSyntaxTree
 
 	@Override public String toString()
 	{
-		String str = "";
-		str += root.toString();
-		return str;
+		return root.print("", true);
 	}
 }

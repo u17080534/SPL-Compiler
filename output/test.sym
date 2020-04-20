@@ -1,52 +1,161 @@
-0:PROG                   1:PROC_DEFS              2:PROC                   3:proc 'hello'           4:PROG
-5:CODE                   6:INSTR                  7:ASSIGN                 8:VAR                    9:variable 'msg'
-10:ASSIGN_               11:= '"hello"'           12:CODE_                 13:CODE                  14:INSTR
-15:DECL                  16:TYPE                  17:type 'num'            18:NAME                  19:variable 'i1'
-20:CODE_                 21:CODE                  22:INSTR                 23:DECL                  24:TYPE
-25:type 'num'            26:NAME                  27:variable 'i2'         28:CODE_                 29:CODE
-30:INSTR                 31:DECL                  32:TYPE                  33:type 'string'         34:NAME
-35:variable 'msg'        36:CODE_                 37:CODE                  38:INSTR                 39:ASSIGN
-40:VAR                   41:variable 'msg'        42:ASSIGN_               43:= '"hello"'           44:CODE_
-45:CODE                  46:INSTR                 47:IO                    48:io 'input'            49:VAR
-50:variable 'i2'         51:CODE_                 52:CODE                  53:INSTR                 54:COND_LOOP
-55:for 'VAR < VAR'       56:VAR                   57:variable 'i1'         58:VAR                   59:variable 'i1'
-60:VAR                   61:variable 'i2'         62:VAR                   63:variable 'i1'         64:VAR
-65:variable 'i1'         66:CODE                  67:INSTR                 68:IO                    69:io 'output'
-70:VAR                   71:variable 'msg'        72:CODE_                 73:CODE                  74:INSTR
-75:COND_BRANCH           76:BOOL                  77:bool 'T'              78:CODE                  79:INSTR
-80:ASSIGN                81:VAR                   82:variable 'i'          83:ASSIGN_               84:NUMEXPR
-85:CALC                  86:calc 'add'            87:CALC_                 88:NUMEXPR               89:CALC
-90:calc 'sub'            91:CALC_                 92:NUMEXPR               93:number '1'            94:CALC__
-95:NUMEXPR               96:CALC                  97:calc 'add'            98:CALC_                 99:NUMEXPR
-100:number '1'           101:CALC__               102:NUMEXPR              103:CALC                 104:calc 'add'
-105:CALC_                106:NUMEXPR              107:number '1'           108:CALC__               109:NUMEXPR
-110:VAR                  111:variable 'j'         112:CALC__               113:NUMEXPR              114:CALC
-115:calc 'mult'          116:CALC_                117:NUMEXPR              118:VAR                  119:variable 'j'
-120:CALC__               121:NUMEXPR              122:VAR                  123:variable 'i'         124:COND_BRANCH_
-125:CODE                 126:INSTR                127:IO                   128:io 'output'          129:VAR
-130:variable 'msg'       131:CODE_                132:PROC_DEFS            133:PROC                 134:proc 'loop'
-135:PROG                 136:CODE                 137:INSTR                138:DECL                 139:TYPE
-140:type 'num'           141:NAME                 142:variable 'i'         143:CODE_                144:CODE
-145:INSTR                146:ASSIGN               147:VAR                  148:variable 'i'         149:ASSIGN_
-150:NUMEXPR              151:number '0'           152:CODE_                153:CODE                 154:INSTR
-155:DECL                 156:TYPE                 157:type 'num'           158:NAME                 159:variable 'j'
-160:CODE_                161:CODE                 162:INSTR                163:ASSIGN               164:VAR
-165:variable 'j'         166:ASSIGN_              167:NUMEXPR              168:number '2'           169:CODE_
-170:CODE                 171:INSTR                172:COND_LOOP            173:while 'BOOL'         174:BOOL
-175:bool '<'             176:CODE                 177:INSTR                178:ASSIGN               179:VAR
-180:variable 'i'         181:ASSIGN_              182:NUMEXPR              183:CALC                 184:calc 'add'
-185:CALC_                186:NUMEXPR              187:VAR                  188:variable 'i'         189:CALC__
-190:NUMEXPR              191:VAR                  192:variable 'i'         193:CODE_                194:CODE
-195:INSTR                196:IO                   197:io 'output'          198:VAR                  199:variable 'i'
-200:CODE_                201:CODE                 202:INSTR                203:DECL                 204:TYPE
-205:type 'num'           206:NAME                 207:variable 'u'         208:PROC_DEFS_           209:CODE
-210:INSTR                211:CALL                 212:call 'loop'          213:CODE_                214:CODE
-215:INSTR                216:IO                   217:io 'output'          218:VAR                  219:variable 'i'
-220:PROC_DEFS_           221:PROC_DEFS            222:PROC                 223:proc 'tester'        224:PROG
-225:CODE                 226:INSTR                227:IO                   228:io 'input'           229:VAR
-230:variable 'u'         231:PROC_DEFS_           232:CODE                 233:INSTR                234:CALL
-235:call 'tester'        236:CODE_                237:PROC_DEFS            238:PROC                 239:proc 'foo'
-240:PROG                 241:CODE                 242:INSTR                243:IO                   244:io 'input'
-245:VAR                  246:variable 'u'         247:PROC_DEFS_           248:PROC_DEFS            249:PROC
-250:proc 'bar'           251:PROG                 252:CODE                 253:INSTR                254:IO
-255:io 'input'           256:VAR                  257:variable 'u'
+0:PROG
+1:PROC_DEFS
+2:PROC
+3:proc 'P0'
+4:PROG
+5:CODE
+6:INSTR
+7:DECL
+8:TYPE
+9:type 'string'
+10:NAME
+11:variable 'V0'
+12:CODE_
+13:CODE
+14:INSTR
+15:ASSIGN
+16:VAR
+17:variable 'V0'
+18:ASSIGN_
+19:= '"HELLO"'
+20:CODE_
+21:CODE
+22:INSTR
+23:IO
+24:io 'output'
+25:VAR
+26:variable 'V0'
+27:CODE_
+28:CODE
+29:INSTR
+30:DECL
+31:TYPE
+32:type 'num'
+33:NAME
+34:variable 'V1'
+35:CODE_
+36:CODE
+37:INSTR
+38:DECL
+39:TYPE
+40:type 'num'
+41:NAME
+42:variable 'V2'
+43:CODE_
+44:CODE
+45:INSTR
+46:IO
+47:io 'input'
+48:VAR
+49:variable 'V1'
+50:CODE_
+51:CODE
+52:INSTR
+53:IO
+54:io 'input'
+55:VAR
+56:variable 'V2'
+57:CODE_
+58:CODE
+59:INSTR
+60:COND_LOOP
+61:while 'BOOL'
+62:BOOL
+63:bool '<'
+64:VAR
+65:variable 'V1'
+66:VAR
+67:variable 'V2'
+68:CODE
+69:INSTR
+70:IO
+71:io 'output'
+72:VAR
+73:variable 'V1'
+74:CODE_
+75:CODE
+76:INSTR
+77:ASSIGN
+78:VAR
+79:variable 'V1'
+80:ASSIGN_
+81:NUMEXPR
+82:CALC
+83:calc 'add'
+84:CALC_
+85:NUMEXPR
+86:VAR
+87:variable 'V2'
+88:CALC__
+89:NUMEXPR
+90:VAR
+91:variable 'V1'
+92:PROC_DEFS_
+93:PROC_DEFS
+94:PROC
+95:proc 'P1'
+96:PROG
+97:CODE
+98:INSTR
+99:DECL
+100:TYPE
+101:type 'string'
+102:NAME
+103:variable 'V3'
+104:CODE_
+105:CODE
+106:INSTR
+107:ASSIGN
+108:VAR
+109:variable 'V3'
+110:ASSIGN_
+111:= '"BYE"'
+112:CODE_
+113:CODE
+114:INSTR
+115:IO
+116:io 'output'
+117:VAR
+118:variable 'V3'
+119:PROC_DEFS_
+120:PROC_DEFS
+121:PROC
+122:proc 'P2'
+123:PROG
+124:CODE
+125:INSTR
+126:DECL
+127:TYPE
+128:type 'string'
+129:NAME
+130:variable 'V4'
+131:CODE_
+132:PROC_DEFS
+133:PROC
+134:proc 'P3'
+135:PROG
+136:CODE
+137:INSTR
+138:IO
+139:io 'input'
+140:VAR
+141:variable 'V4'
+142:CODE_
+143:CODE
+144:INSTR
+145:IO
+146:io 'output'
+147:VAR
+148:variable 'V4'
+149:PROC_DEFS_
+150:CODE
+151:INSTR
+152:CALL
+153:call 'P3'
+154:CODE_
+155:CODE
+156:INSTR
+157:IO
+158:io 'output'
+159:VAR
+160:variable 'V4'

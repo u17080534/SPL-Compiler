@@ -26,6 +26,10 @@ All details on the implementation of the algorithms for the different parts of t
 	```
 	java -jar spl [-debug] -test
 	```
+	To execute Unit Testing use:
+	```
+	make test
+	```
 4.  Once the program is executing, all constructed data structures will be cached in the ```output``` directory (if ```[-debug]``` is enabled they will also be output in the terminal.)
 	The executable ```BASIC``` code will be produced in the current directory.
 
