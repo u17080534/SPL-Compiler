@@ -78,7 +78,7 @@
 77:INSTR
 78:COND_BRANCH
 79:BOOL
-80:bool 'ifex'
+80:bool 'variable'
 81:VAR
 82:variable 'V3'
 83:CODE

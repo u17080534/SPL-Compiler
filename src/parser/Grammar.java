@@ -564,25 +564,26 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_T)
 			{
 				this.readToken();
-				Token e = this.current;				
+				Token e = this.current;	// T			
 				return new bool(new TokenExpression("bool",e.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_F)
 			{
 				this.readToken();
-				Token e = this.current;				
+				Token e = this.current;	// F		
 				return new bool(new TokenExpression("bool",e.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
 				Expression e2 = VAR();
-				Token e1 = this.current;
-				return new bool(new TokenExpression("bool", e1.getInput()), e2);
+				Token e1 = this.current; // ID
+				// return new bool(new TokenExpression("bool", e1.getInput()), e2);
+				return new bool(new TokenExpression("bool", "variable"), e2);
 			}
 			else if(this.lookahead == Token.Tok.TOK_EQ)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token e1 = this.current; // eq			
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
