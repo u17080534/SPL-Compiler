@@ -35,6 +35,9 @@ public class Scoping
 		Vector<Symbol> usages = new Vector<Symbol>();
 		Vector<String> undefined = new Vector<String>();
 
+		System.out.println(symbols);
+		System.out.println(terminals);
+
 		//ASSIGN PROC NAME TO EVERY SYMBOL
 		String procName = "";
 		Stack<String> procStack = new Stack<String>();

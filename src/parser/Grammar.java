@@ -320,7 +320,7 @@ public class Grammar
 								{
 									this.readToken();
 									Expression e3 = COND_BRANCH_();
-									return new cond_branch(e1,e2,e3);
+									return new cond_branch(e1, e2, e3);
 								}
 								throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 							}
@@ -575,8 +575,8 @@ public class Grammar
 			}
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
-				Token e1 = this.current;
 				Expression e2 = VAR();
+				Token e1 = this.current;
 				return new bool(new TokenExpression("bool", e1.getInput()), e2);
 			}
 			else if(this.lookahead == Token.Tok.TOK_EQ)
@@ -610,7 +610,7 @@ public class Grammar
 				if(this.lookahead == Token.Tok.TOK_LT)
 				{
 					this.readToken();
-					Token e1 = this.current;
+					Token e1 = this.current; //<
 					Expression e3 = VAR();
 					if(this.lookahead == Token.Tok.TOK_CP)
 					{
@@ -622,7 +622,7 @@ public class Grammar
 				else if(this.lookahead == Token.Tok.TOK_GT)
 				{
 					this.readToken();
-					Token e1 = this.current;
+					Token e1 = this.current; //>
 					Expression e3 = VAR();
 					if(this.lookahead == Token.Tok.TOK_CP)
 					{
@@ -845,17 +845,17 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
 				Expression e = VAR();
-				return new assign_(e);
+				return new assign_(new TokenExpression("=", "variable"), e);
 			}
 			else if(this.lookahead == Token.Tok.TOK_N || this.lookahead == Token.Tok.TOK_ADD || this.lookahead == Token.Tok.TOK_SUB || this.lookahead == Token.Tok.TOK_MULT)
 			{
 				Expression e = NUMEXPR();
-				return new assign_(e);
+				return new assign_(new TokenExpression("=", "numexpr"), e);
 			}
 			else if(this.lookahead == Token.Tok.TOK_T || this.lookahead == Token.Tok.TOK_F || this.lookahead == Token.Tok.TOK_EQ || this.lookahead == Token.Tok.TOK_OP || this.lookahead == Token.Tok.TOK_NOT || this.lookahead == Token.Tok.TOK_AND || this.lookahead == Token.Tok.TOK_OR) 
 			{
 				Expression e = BOOL();
-				return new assign_(e);
+				return new assign_(new TokenExpression("=", "bool"), e);
 			}
 		}
 		catch(Exception ex)
@@ -1000,7 +1000,7 @@ public class Grammar
 			{
 				this.readToken();
 				String e = this.current.getInput();
-				return new name(new TokenExpression("variable",e));
+				return new name(new TokenExpression("variable", e));
 			}
 		}
 		catch(Exception ex)

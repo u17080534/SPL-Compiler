@@ -12,9 +12,10 @@ public class assign_ extends Expression
 		this.expr = "ASSIGN_";
 	}  
 
-	public assign_(Expression e) 
+	public assign_(TokenExpression literal, Expression e) 
 	{ 
-		super(e);
+		super(literal, e);
+		this.literal = literal;
 		this.ex = e;  
 		this.expr = "ASSIGN_";
 	}  

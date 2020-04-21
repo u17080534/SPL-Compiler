@@ -9,10 +9,16 @@ proc helloworld
     input(i);
     input(j);
 
-    while((i < j))
+    bool ifex;
+    ifex = T;
+
+    if(ifex) then
     {
-        output(i);
-        i = add(j,i)
+        while((i < j))
+        {
+            output(i);
+            i = add(j,i)
+        }
     }
 }
 

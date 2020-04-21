@@ -24,8 +24,8 @@ public class Parser
 		{
 			tree = this.grammar.build(tokens);
 			
-			// if(tree != null)
-			// 	tree.trim();
+			if(tree != null)
+				tree.trim();
 		}
 		catch(SyntaxException ex)
 		{
