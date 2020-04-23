@@ -3,20 +3,27 @@ import java.util.*;
 import lexer.*;
 import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import static org.junit.Assert.*;
 
 public class UnitTest
 {
     @BeforeClass
-	public static void execute()
+	public static void enter()
 	{
-		System.out.println("\nTESTING ENVIRONMENT...");
+		System.out.println("\nENTERING TESTING ENVIRONMENT...");
 	} 
+
+    @AfterClass
+    public static void exit()
+    {
+        System.out.println("\nEXITING TESTING ENVIRONMENT...");
+    } 
 
     @Test
 	public void testLexer() 
     { 
-		System.out.println("\nLEXER UNIT TESTING...\n");
+		System.out.println("\tLEXER UNIT TESTING...\n");
         
         String[] args = {
             "input/LexerTest1.spl",
@@ -28,7 +35,7 @@ public class UnitTest
             "input/LexerTest7.spl",
             "input/LexerTest8.spl",
             "input/LexerTest9.spl",
-           // "input/LexerTest10.spl",//error
+            "input/LexerTest10.spl",//error
             "input/LexerTest11.spl",
             "input/LexerTest12.spl",
             "input/LexerTest13.spl", //Test that all keywords are recognized
@@ -36,31 +43,28 @@ public class UnitTest
             "input/LexerTest15.spl",
             "input/LexerTest16.spl",
             "input/LexerTest17.spl",
-            "input/LexerTest18.spl",
-
-
-
+            "input/LexerTest18.spl"
         };
 
         String[] results = {
             "Lexical Error [line: 1, col: 1]: '@' is not a recognized character",  //1
-            "Lexical Error [line: 5, col: 22]: \'\"JohnIsAB\' strings have at most 8 characters", //2
-            "Lexical Error [line: 40, col: 10]: \'!\' is not a recognized character", //3
+            "Lexical Error [line: 5, col: 22]: '\"JohnIsAB' strings have at most 8 characters", //2
+            "Lexical Error [line: 40, col: 10]: '!' is not a recognized character", //3
             "", //4
             "", //5
-            "Lexical Error [line: 11, col: 12]: Number literals other than 0 must begin with [1-9]", //6
+            "Lexical Error [line: 11, col: 12]: Numeric literals other than 0 must begin with [1-9]", //6
             "Lexical Error [line: 15, col: 1]: newline character was unexpected in this case", //7
             "", //8
             "", //9
-           // "",//error //10
+            "Lexical Error [line: 1, col: 9]: Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number",//error //10
             "",  //11
-            "Lexical Error [line: 2, col: 6]: Unexpected Input: Integer Tok Rejected" ,//12
+            "Lexical Error [line: 2, col: 6]: Unexpected Input: Numeric Token Rejected" ,//12
             "",//13
             "",//14
             "Lexical Error [line: 2, col: 10]: ';' was unexpected in this case",//15
             "",//16
-            "Lexical Error [line: 2, col: 11]: Unexpected Input: Integer Tok May Not Contain Alphabet Characters",//17
-            "",//18
+            "Lexical Error [line: 2, col: 11]: Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number",//17
+            "" //18
         };
 
         for(int index = 0; index < args.length; index++)
@@ -77,10 +81,11 @@ public class UnitTest
                 result = e.toString();
             }
 
-            System.out.println("\t" + result);
+            if(result != "")
+                System.out.println("\t" + result + "\n");
             assertEquals(result, results[index]);
         }
         
-        System.out.println("\nLEXER UNIT COMPLETE...\n");
+        System.out.println("\tLEXER UNIT TESTING COMPLETE...\n");
     } 
 }

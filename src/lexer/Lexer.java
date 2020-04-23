@@ -329,7 +329,7 @@ public class Lexer
 					break Tokenized;
                 }
 				else
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Identifier Tok Rejected");
+					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Identifier Token Rejected");
 			}
 			else if(state == 24)
 			{
@@ -340,7 +340,7 @@ public class Lexer
                 }
                 else if(charIsLetter(ch))
                 {
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Integer Tok May Not Contain Alphabet Characters");
+					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number");
                 }
                 else if(isAcceptState(24))
                 {
@@ -352,7 +352,7 @@ public class Lexer
 					break Tokenized;
                 }
                 else
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Integer Tok Rejected");
+					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Numeric Token Rejected");
 			}
 			else if(state == 25)
 			{
@@ -362,9 +362,9 @@ public class Lexer
                 	state = 24;
                 }
                 else if(numInRange(ch, 0, 0))
-                	throw new LexerException(tokenPosition(token, state), "Number literals other than 0 must begin with [1-9]");
+                	throw new LexerException(tokenPosition(token, state), "Numeric literals other than 0 must begin with [1-9]");
                 else
-                	throw new LexerException(tokenPosition(token, state), "Unexpected Input: Integer Tok Rejected");
+                	throw new LexerException(tokenPosition(token, state), "Unexpected Input: Numeric Token Rejected");
 			}
 			else if(state == 26)
 			{
@@ -1476,8 +1476,8 @@ public class Lexer
 
 			if(this.readChar == '\n' || this.readChar == '\r')
 			{
-				if(System.getProperty("line.separator").equals("\r\n"))
-					this.readChar = this.buffer.read(); //skip second char
+				// if(System.getProperty("line.separator").equals("\r\n"))
+				this.readChar = this.buffer.read();
 
 				ch = '#';
 				this.col = 0;

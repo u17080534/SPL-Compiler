@@ -11,22 +11,19 @@ All details on the implementation of the algorithms for the different parts of t
 	java version "1.8.0_241"
 	Java(TM) SE Runtime Environment (build 1.8.0_241-b07)
 	```
-2.  Run the makefile as follows:
+2.  Run the makefile as follows to create the spl JAR file:
 	```
 	make
 	```
-3.  To compile a program written in SPL:
+3.  To compile a SPL program:
 	```
-	java -jar spl [-debug] <filepath><filename>.spl
+	java -jar spl [-debug] <file>.spl
 	```
-	Or to compile a given example file, you can use either:
+	or to compile a given example file (```input/test.spl```):
 	```
 	make run
 	```
-	```
-	java -jar spl [-debug] -test
-	```
-	To execute Unit Testing use:
+	to execute Unit Testing use:
 	```
 	make test
 	```

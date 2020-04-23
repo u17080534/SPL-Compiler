@@ -12,6 +12,8 @@ proc helloworld
     bool ifex;
     ifex = T;
 
+    proc quick { num v }
+
     if(ifex) then
     {
         while((i < j))
