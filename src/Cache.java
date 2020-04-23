@@ -1,10 +1,8 @@
 import java.util.*;
 import java.io.*;
-import exception.*;
-import ast.*;
-import symtable.*;
 import lexer.*;
-import parser.*;
+import exception.LexerException;
+import exception.EmptyStreamException;
 
 public class Cache
 {
@@ -48,72 +46,6 @@ public class Cache
                 System.out.println("\tToken List:");
             	System.out.println(tokens);
                 System.out.print("\n");
-            }
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
-
-	public void export(AbstractSyntaxTree tree)
-	{
-		if(tree == null)
-			return;
-
-		String astFile = this.filename + ".ast";
-
-		try
-        {
-            FileWriter fileWriter = new FileWriter(new File("output/" + astFile));
-
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            bufferedWriter.write(tree.getExpressions());
-
-            bufferedWriter.close();
-
-            fileWriter.close();
-
-            if(this.out)
-            {
-                System.out.println("\tAbstract Syntax Tree:");
-            	System.out.println(tree);
-                System.out.print("\n");
-            }
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
-
-	public void export(SymbolTable table)
-	{
-		if(table == null)
-			return;
-
-		String symFile = this.filename + ".sym";
-
-		try
-        {
-            FileWriter fileWriter = new FileWriter(new File("output/" + symFile));
-
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            Vector<Symbol> symbols = table.list();
-            for(int index = 0; index < symbols.size(); index++)
-                bufferedWriter.write(symbols.get(index) + "\n");
-
-            bufferedWriter.close();
-
-            fileWriter.close();
-
-            if(this.out)
-            {
-                System.out.println("\tSymbol Table:");
-                System.out.println(table);
-            	System.out.print("\n");
             }
         } 
         catch (Exception e)

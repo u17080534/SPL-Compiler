@@ -1,11 +1,8 @@
 import java.util.*;
 import java.io.*;
-import exception.*;
 import lexer.*;
-import parser.*;
-import ast.*;
-import symtable.*;
-import analysis.*;
+import exception.LexerException;
+import exception.EmptyStreamException;
 
 public class SPL 
 { 
@@ -13,9 +10,6 @@ public class SPL
     private String filename;
     private Cache cache;
     private Lexer lexer;
-    private Parser parser;
-    private AbstractSyntaxTree tree;
-    private SymbolTable table;
 
     //!Compiler uses the passed in filename - expected to be within current directory
     public SPL(String file) throws Exception
@@ -44,9 +38,6 @@ public class SPL
 
         this.cache = new Cache(this.filename);
         this.lexer = new Lexer(buffer);
-        this.parser = new Parser();
-        this.table = new SymbolTable();
-        this.tree = null;
     } 
 
     public void compile(boolean debug)
@@ -56,10 +47,6 @@ public class SPL
         try
         {
             List<Token> tokens = this.tokenize();
-
-            if(tokens != null)
-                if(this.parse(tokens))
-                    this.analysis();
         }
         catch(Exception ex)
         {
@@ -82,47 +69,6 @@ public class SPL
         }
 
         return tokens;
-    }
-
-    public boolean parse(List<Token> tokens) throws SyntaxException
-    {
-        try
-        {
-            this.tree = this.parser.parse(tokens);
-            this.cache.export(this.tree);
-        }
-        catch(SyntaxException ex)
-        {
-            throw ex;
-        }
-
-        if(this.tree != null)
-        {
-            Vector<Symbol> symbols = this.tree.getSymbols();
-
-            for(Symbol sym : symbols)
-                this.table.add(sym);
-
-            this.cache.export(this.table);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public void analysis() throws UsageException
-    {
-        try
-        {
-            Scoping.check(this.tree, this.table);
-            this.cache.export(this.table);
-            this.cache.export(this.tree);
-        }
-        catch(UsageException ex)
-        {
-            throw ex;
-        }
     }
   
     @Override 

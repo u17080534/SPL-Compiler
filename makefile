@@ -10,16 +10,10 @@ default: portable
 
 spl:
 	$(JC) $(JFLAGS) \
-	src/exception/*.java \
+	src/exception/LexerException.java \
+	src/exception/EmptyStreamException.java \
 	src/lexer/Token.java \
 	src/lexer/Lexer.java \
-	src/symtable/Symbol.java \
-	src/symtable/SymbolTable.java \
-	src/ast/AbstractSyntaxTree.java \
-	src/ast/expression/*.java \
-	src/parser/Grammar.java \
-	src/parser/Parser.java \
-	src/analysis/Scoping.java \
 	src/Cache.java \
 	src/SPL.java
 	
@@ -37,13 +31,6 @@ test:
 	src/exception/*.java \
 	src/lexer/Token.java \
 	src/lexer/Lexer.java \
-	src/symtable/Symbol.java \
-	src/symtable/SymbolTable.java \
-	src/ast/AbstractSyntaxTree.java \
-	src/ast/expression/*.java \
-	src/parser/Grammar.java \
-	src/parser/Parser.java \
-	src/analysis/Scoping.java \
 	src/Cache.java \
 	src/SPL.java
 	java -jar build/junit-platform-console-standalone-1.6.2.jar --class-path build --scan-class-path
