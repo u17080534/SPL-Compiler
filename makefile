@@ -2,9 +2,10 @@ JFLAGS = -g -d build
 
 JC = javac
 
-# Change to rm for linux and del for windows
-# RM = del 
+# Linux
 RM = rm 
+# Windows
+# RM = del 
 
 default: portable
 
@@ -20,15 +21,16 @@ spl:
 portable: spl
 	jar cfm spl build/manifest -C build/ .
 
+run: portable
+	java -jar spl -debug -test
+
 clean:
 	$(RM) spl
 
-run:
-	java -jar spl -debug -test
-
-test:
+test: clean
 	javac -d build -cp build/junit-platform-console-standalone-1.6.2.jar test/UnitTest.java \
-	src/exception/*.java \
+	src/exception/LexerException.java \
+	src/exception/EmptyStreamException.java \
 	src/lexer/Token.java \
 	src/lexer/Lexer.java \
 	src/Cache.java \

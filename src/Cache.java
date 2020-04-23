@@ -11,6 +11,7 @@ public class Cache
 
 	public Cache(String filename)
 	{
+        (new File("output")).mkdir();
 		this.filename = filename;
 		this.out = true;
 	}
