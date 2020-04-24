@@ -12,8 +12,8 @@ public class code extends Expression
 		this.code_Ex = e2; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.instrEx.eval() + this.code_Ex.eval();   
+		return this.instrEx.trans() + this.code_Ex.trans();   
 	} 
 }

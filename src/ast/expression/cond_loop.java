@@ -27,7 +27,7 @@ public class cond_loop extends Expression
 		this.expr = "COND_LOOP";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	} 

@@ -16,8 +16,8 @@ public class instr extends Expression
 		this.ex = e; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.ex.eval();   
+		return this.ex.trans();   
 	}
 }

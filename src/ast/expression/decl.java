@@ -13,8 +13,8 @@ public class decl extends Expression
 		this.code_Ex = e2; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.typeEx.eval() + this.nameEx.eval() + this.code_Ex.eval();   
+		return this.typeEx.trans() + this.nameEx.trans() + this.code_Ex.trans();   
 	} 
 }

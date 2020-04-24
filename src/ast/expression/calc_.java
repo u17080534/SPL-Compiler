@@ -12,8 +12,8 @@ public class calc_ extends Expression
 		this.expr = "CALC_";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.numexprEx.eval() + this.calc__Ex.eval();   
+		return this.numexprEx.trans() + this.calc__Ex.trans();   
 	} 
 }

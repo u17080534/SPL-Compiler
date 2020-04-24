@@ -11,7 +11,7 @@ public class name extends Expression
 		this.expr = "NAME";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	}

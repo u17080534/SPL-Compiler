@@ -13,7 +13,7 @@ public class type extends Expression
 		this.expr = "TYPE";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";
 	}

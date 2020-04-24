@@ -13,8 +13,8 @@ public class proc extends Expression
 		this.expr = "PROC";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.id + this.progEx.eval();   
+		return this.id + this.progEx.trans();   
 	} 
 }

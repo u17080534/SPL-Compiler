@@ -20,7 +20,7 @@ public class assign_ extends Expression
 		this.expr = "ASSIGN_";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	}

@@ -12,8 +12,8 @@ public class proc_defs extends Expression
 		this.proc_defs_Ex = e2; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.procEx.eval() + this.proc_defs_Ex.eval();   
+		return this.procEx.trans() + this.proc_defs_Ex.trans();   
 	} 
 }

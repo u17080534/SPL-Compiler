@@ -17,7 +17,7 @@ public class proc_defs_ extends Expression
 		this.expr = "PROC_DEFS_";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";
 	} 

@@ -12,8 +12,8 @@ public class assign extends Expression
 		this.assign_Ex = e2; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.varEx.eval() + this.assign_Ex.eval();   
+		return this.varEx.trans() + this.assign_Ex.trans();   
 	}
 }

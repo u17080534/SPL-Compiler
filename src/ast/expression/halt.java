@@ -8,7 +8,7 @@ public class halt extends Expression
 		this.expr = "HALT";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	}

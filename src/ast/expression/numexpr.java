@@ -19,7 +19,7 @@ public class numexpr extends Expression
 		this.ex = e;  
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	}

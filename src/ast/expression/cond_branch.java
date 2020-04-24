@@ -13,8 +13,8 @@ public class cond_branch extends Expression
 		this.cond_branch_Ex = e3; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.boolEx.eval() + this.codeEx.eval() + this.cond_branch_Ex.eval();   
+		return this.boolEx.trans() + this.codeEx.trans() + this.cond_branch_Ex.trans();   
 	} 
 }

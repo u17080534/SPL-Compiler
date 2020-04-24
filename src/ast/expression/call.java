@@ -11,7 +11,7 @@ public class call extends Expression
 		this.expr = "CALL";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	}

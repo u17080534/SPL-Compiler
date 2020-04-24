@@ -14,7 +14,7 @@ public class calc extends Expression
 		this.expr = "CALC";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	} 

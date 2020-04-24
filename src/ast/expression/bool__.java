@@ -11,8 +11,8 @@ public class bool__ extends Expression
 		this.expr = "BOOL__";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.boolEx.eval();   
+		return this.boolEx.trans();   
 	} 
 }

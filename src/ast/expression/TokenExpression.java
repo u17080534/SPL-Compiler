@@ -14,7 +14,7 @@ public class TokenExpression extends Expression
 		this.expr = this.type + " '" + this.value + "'";
 	}
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";
 	}

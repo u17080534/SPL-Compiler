@@ -28,7 +28,7 @@ public abstract class Expression
 	}
 
 	//!Must Evaluate to BASIC
-	public abstract String eval(); 
+	public abstract String trans(); 
 
 	public void id()
 	{
@@ -114,9 +114,6 @@ public abstract class Expression
 		for(int index = 0; index < this.descendents.size(); index++)
 			if(this.descendents.get(index).countDescendents() == 0 && !this.descendents.get(index).isTerminal())
 				this.descendents.remove(index);
-
-		// for (Expression desc : this.descendents)
-		// 	desc.trim();
 	}
 
 	public Expression get(int index)

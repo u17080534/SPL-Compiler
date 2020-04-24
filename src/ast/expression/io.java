@@ -14,8 +14,8 @@ public class io extends Expression
 		this.expr = "IO";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.action + this.varEx.eval();   
+		return this.action + this.varEx.trans();   
 	} 
 }

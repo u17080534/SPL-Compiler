@@ -17,8 +17,8 @@ public class code_ extends Expression
 		this.expr = "CODE_";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.codeEx.eval();   
+		return this.codeEx.trans();   
 	} 
 }

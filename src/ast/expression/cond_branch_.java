@@ -17,9 +17,9 @@ public class cond_branch_ extends Expression
 		this.expr = "COND_BRANCH_";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
-		// return (this.codeEx == NULL) ? "" : this.codeEx.eval();   
+		// return (this.codeEx == NULL) ? "" : this.codeEx.trans();   
 		return "";
 	} 
 }

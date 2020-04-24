@@ -31,7 +31,7 @@ public class bool extends Expression
 		this.e2 = e2; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";   
 	} 

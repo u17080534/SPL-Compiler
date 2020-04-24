@@ -17,7 +17,7 @@ public class prog_ extends Expression
 		this.expr = "PROG_";
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";
 	} 

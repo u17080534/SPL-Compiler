@@ -3,8 +3,8 @@ JFLAGS = -g -d build
 JC = javac
 
 # Change to rm for linux and del for windows
-# RM = del 
-RM = rm 
+RM = del 
+# RM = rm 
 
 default: portable
 

@@ -21,8 +21,8 @@ public class prog extends Expression
 			desc.scope(this.symbol.getScope());
 	}
 
-	public String eval() 
+	public String trans() 
 	{       
-		return this.codeEx.eval() + this.prog_Ex.eval();   
+		return this.codeEx.trans() + this.prog_Ex.trans();   
 	} 
 } 

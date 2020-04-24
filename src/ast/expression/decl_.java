@@ -17,7 +17,7 @@ public class decl_ extends Expression
 		this.declEx = e1; 
 	}  
 
-	public String eval() 
+	public String trans() 
 	{       
 		return "";
 	} 
