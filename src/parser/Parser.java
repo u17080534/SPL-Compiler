@@ -2,7 +2,7 @@ package parser;
 
 import java.util.*;
 import exception.*;
-import ast.*;
+import syntax.*;
 import lexer.*;
 import symtable.*;
 

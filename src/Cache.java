@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 import exception.*;
-import ast.*;
+import syntax.*;
 import symtable.*;
 import lexer.*;
 import parser.*;

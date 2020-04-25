@@ -3,8 +3,8 @@ package parser;
 import java.util.*;
 import exception.*;
 import lexer.*;
-import ast.*;
-import ast.expression.*;
+import syntax.*;
+import syntax.expression.*;
 
 public class Grammar
 {
@@ -181,6 +181,7 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_PROC)
 			{
 				this.readToken();
+				Token tok = this.current;
 				if(this.lookahead == Token.Tok.TOK_ID)
 				{
 					this.readToken();
@@ -195,7 +196,7 @@ public class Grammar
 						if(this.lookahead == Token.Tok.TOK_CB)
 						{
 							this.readToken();
-							return new proc(new TokenExpression("proc", e1), e2);
+							return new proc(new TerminalExpression(tok, e1), e2);
 						}
 
 						throw new SyntaxException(this.current, "Procedural Error: Expected Closing Brace.\n\tHint: You may be missing a semicolon (;) between instructions.");
@@ -280,10 +281,14 @@ public class Grammar
 	{
 		try
 		{
-			if(this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL)
+			if(this.lookahead == Token.Tok.TOK_SEMI)
 			{
-				Expression e1 = DECL();
-				return new decl_(e1);
+				if(this.look(1) == Token.Tok.TOK_NUM || this.look(1) == Token.Tok.TOK_STRING || this.look(1) == Token.Tok.TOK_BOOL)
+				{
+					this.readToken();
+					Expression e1 = DECL();
+					return new decl_(e1);
+				}
 			}
 
 			return new decl_();
@@ -371,7 +376,7 @@ public class Grammar
 		}
 	}
 
-	// COND_LOOP → while ( BOOL ) { CODE } | for ( VAR = 0; VAR < VAR ; VAR = add ( VAR , 1 ) ) { CODE }
+	// COND_LOOP → while ( BOOL ) { CODE } | for ( VARIABLE = 0; VARIABLE < VARIABLE ; VARIABLE = add ( VARIABLE , 1 ) ) { CODE }
 	private Expression COND_LOOP() throws SyntaxException
 	{
 		try
@@ -379,7 +384,7 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_WHILE)
 			{
 				this.readToken();
-				Token e1 = this.current;
+				Token tok = this.current;
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken(); //THIS CHANGES WHETHER YOU HAVE TO NEST PARENTHESIS
@@ -394,7 +399,7 @@ public class Grammar
 							if(this.lookahead == Token.Tok.TOK_CB)
 							{
 								this.readToken();
-								return new cond_loop(new TokenExpression("while", e2.getExpr()), e2, e3);
+								return new cond_loop(new TerminalExpression(tok, e2.getExpr()), e2, e3);
 							}
 							throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 						}
@@ -407,11 +412,11 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_FOR)
 			{
 				this.readToken();
-				Token e1 = this.current;
+				Token tok = this.current;
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
-					Expression e2 = VAR();
+					Expression e2 = VARIABLE();
 					if(this.lookahead == Token.Tok.TOK_ASSN)
 					{
 						this.readToken();
@@ -423,15 +428,15 @@ public class Grammar
 								if(this.lookahead == Token.Tok.TOK_SEMI)
 								{
 									this.readToken();
-									Expression e3 = VAR();
+									Expression e3 = VARIABLE();
 									if(this.lookahead == Token.Tok.TOK_LT)
 									{
 										this.readToken();
-										Expression e4 = VAR();
+										Expression e4 = VARIABLE();
 										if(this.lookahead == Token.Tok.TOK_SEMI)
 										{
 											this.readToken();
-											Expression e5 = VAR();
+											Expression e5 = VARIABLE();
 											if(this.lookahead == Token.Tok.TOK_ASSN)
 											{
 												this.readToken();
@@ -441,7 +446,7 @@ public class Grammar
 													if(this.lookahead == Token.Tok.TOK_OP)
 													{
 														this.readToken();
-														Expression e6 = VAR();
+														Expression e6 = VARIABLE();
 														if(this.lookahead == Token.Tok.TOK_COMM)
 														{
 															this.readToken();
@@ -463,7 +468,7 @@ public class Grammar
 																				if(this.lookahead == Token.Tok.TOK_CB)
 																				{
 																					this.readToken();
-																					return new cond_loop(new TokenExpression("for", e3.getExpr() + " < " + e4.getExpr()), e2, e3, e4, e5, e6, e7);
+																					return new cond_loop(new TerminalExpression(tok, e3.getExpr() + " < " + e4.getExpr()), e2, e3, e4, e5, e6, e7);
 																				}
 																				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 																			}
@@ -508,7 +513,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid loop syntax.");
 	}
 
-	// IO → input ( VAR ) | output ( VAR )
+	// IO → input ( VARIABLE ) | output ( VARIABLE )
 	private Expression IO() throws SyntaxException
 	{
 		try
@@ -516,15 +521,15 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_INPUT)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
-					Expression e2 = VAR();
+					Expression e2 = VARIABLE();
 					if(this.lookahead == Token.Tok.TOK_CP)
 					{
 						this.readToken();
-						return new io(new TokenExpression("io", e1.getInput()), e2);
+						return new io(new TerminalExpression(tok, tok.getInput()), e2);
 					}
 					throw new SyntaxException(this.current, "Invalid I/O Syntax. Expected Closing Parenthesis");
 				}
@@ -533,15 +538,15 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_OUTPUT)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
-					Expression e2 = VAR();
+					Expression e2 = VARIABLE();
 					if(this.lookahead == Token.Tok.TOK_CP)
 					{
 						this.readToken();
-						return new io(new TokenExpression("io", e1.getInput()), e2);
+						return new io(new TerminalExpression(tok, tok.getInput()), e2);
 					}
 					throw new SyntaxException(this.current, "Invalid I/O Syntax. Expected Closing Parenthesis");
 				}
@@ -556,7 +561,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid I/O operator given. Expected Token (input/output)");
 	}
 
-	// BOOL → T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
+	// BOOL → T | F | VARIABLE | eq ( VARIABLE , VARIABLE ) | ( VARIABLE < VARIABLE ) | ( VARIABLE > VARIABLE ) | not BOOL | and ( BOOL' | or ( BOOL'
 	private Expression BOOL() throws SyntaxException
 	{
 		try
@@ -564,38 +569,38 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_T)
 			{
 				this.readToken();
-				Token e = this.current;	// T			
-				return new bool(new TokenExpression("bool",e.getInput()));
+				Token tok = this.current;	// T			
+				return new bool(new TerminalExpression(tok, tok.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_F)
 			{
 				this.readToken();
-				Token e = this.current;	// F		
-				return new bool(new TokenExpression("bool",e.getInput()));
+				Token tok = this.current;	// F		
+				return new bool(new TerminalExpression(tok, tok.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
-				Expression e2 = VAR();
-				Token e1 = this.current; // ID
-				// return new bool(new TokenExpression("bool", e1.getInput()), e2);
-				return new bool(new TokenExpression("bool", "variable"), e2);
+				Expression e2 = VARIABLE();
+				Token tok = new Token(this.current, Token.Tok.TOK_VAR); // ID
+				// return new bool(new TerminalExpression("bool", e1.getInput()), e2);
+				return new bool(new TerminalExpression(tok, tok.getInput()), e2);
 			}
 			else if(this.lookahead == Token.Tok.TOK_EQ)
 			{
 				this.readToken();
-				Token e1 = this.current; // eq			
+				Token tok = this.current; // eq			
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
-					Expression e2 = VAR();
+					Expression e2 = VARIABLE();
 					if(this.lookahead == Token.Tok.TOK_COMM)
 					{
 						this.readToken();
-						Expression e3 = VAR();
+						Expression e3 = VARIABLE();
 						if(this.lookahead == Token.Tok.TOK_CP)
 						{
 							this.readToken();
-							return new bool(new TokenExpression("bool",e1.getInput()), e2, e3);
+							return new bool(new TerminalExpression(tok, tok.getInput()), e2, e3);
 						}
 						throw new SyntaxException(this.current, "Invalid I/O Syntax. Expected Closing Parenthesis");
 					}
@@ -606,29 +611,29 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_OP)
 			{
 				this.readToken();
-				Expression e2 = VAR();
+				Expression e2 = VARIABLE();
 
 				if(this.lookahead == Token.Tok.TOK_LT)
 				{
 					this.readToken();
-					Token e1 = this.current; //<
-					Expression e3 = VAR();
+					Token tok = this.current; //<
+					Expression e3 = VARIABLE();
 					if(this.lookahead == Token.Tok.TOK_CP)
 					{
 						this.readToken();
-						return new bool(new TokenExpression("bool", e1.getInput()), e2, e3);
+						return new bool(new TerminalExpression(tok, tok.getInput()), e2, e3);
 					}
 					throw new SyntaxException(this.current, "Invalid I/O Syntax. Expected Closing Parenthesis");
 				}
 				else if(this.lookahead == Token.Tok.TOK_GT)
 				{
 					this.readToken();
-					Token e1 = this.current; //>
-					Expression e3 = VAR();
+					Token tok = this.current; //>
+					Expression e3 = VARIABLE();
 					if(this.lookahead == Token.Tok.TOK_CP)
 					{
 						this.readToken();
-						return new bool(new TokenExpression("bool", e1.getInput()), e2, e3);
+						return new bool(new TerminalExpression(tok, tok.getInput()), e2, e3);
 					}
 					throw new SyntaxException(this.current, "Invalid I/O Syntax. Expected Closing Parenthesis");
 				}
@@ -636,31 +641,31 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_NOT)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				Expression e2 = BOOL();
-				return new bool(new TokenExpression("bool", e1.getInput()), e2);
+				return new bool(new TerminalExpression(tok, tok.getInput()), e2);
 			}
 			else if(this.lookahead == Token.Tok.TOK_AND)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
 					Expression e2 = BOOL_();
-					return new bool(new TokenExpression("bool", e1.getInput()), e2);
+					return new bool(new TerminalExpression(tok, tok.getInput()), e2);
 				}
 				throw new SyntaxException(this.current, "Invalid Boolean Syntax: Expected Opening Parenthesis");
 			}
 			else if(this.lookahead == Token.Tok.TOK_OR)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
 					Expression e2 = BOOL_();
-					return new bool(new TokenExpression("bool",e1.getInput()), e2);
+					return new bool(new TerminalExpression(tok, tok.getInput()), e2);
 				}
 				throw new SyntaxException(this.current, "Invalid Boolean Syntax: Expected Opening Parenthesis");
 			}
@@ -723,12 +728,12 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_ADD)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
 					Expression e2 = CALC_();
-					return new calc(new TokenExpression("calc", e1.getInput()), e2);
+					return new calc(new TerminalExpression(tok, tok.getInput()), e2);
 				}
 
 				throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Expected Opening Parenthesis");
@@ -736,12 +741,12 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_SUB)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
 					Expression e2 = CALC_();
-					return new calc(new TokenExpression("calc", e1.getInput()), e2);
+					return new calc(new TerminalExpression(tok, tok.getInput()), e2);
 				}
 
 				throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Expected Opening Parenthesis");
@@ -749,12 +754,12 @@ public class Grammar
 			else if(this.lookahead == Token.Tok.TOK_MULT)
 			{
 				this.readToken();
-				Token e1 = this.current;				
+				Token tok = this.current;				
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
 					Expression e2 = CALC_();
-					return new calc(new TokenExpression("calc", e1.getInput()), e2);
+					return new calc(new TerminalExpression(tok, tok.getInput()), e2);
 				}
 
 				throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Expected Opening Parenthesis");
@@ -811,12 +816,12 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Expected Closing Parenthesis");
 	}
 
-	// ASSIGN → VAR = ASSIGN'
+	// ASSIGN → VARIABLE = ASSIGN'
 	private Expression ASSIGN() throws SyntaxException
 	{
 		try
 		{
-			Expression e1 = VAR();
+			Expression e1 = VARIABLE();
 			if(this.lookahead == Token.Tok.TOK_ASSN)
 			{
 				this.readToken();
@@ -832,7 +837,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid Assignment: Unknown Operator, Expected Token (=)");
 	}
 
-	// ASSIGN' → stringLiteral | VAR | NUMEXPR | BOOL
+	// ASSIGN' → stringLiteral | VARIABLE | NUMEXPR | BOOL
 	private Expression ASSIGN_() throws SyntaxException
 	{
 		try
@@ -840,23 +845,26 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_S)
 			{
 				this.readToken();
-				String e = this.current.getInput();
-				return new assign_(new TokenExpression("=", e));
+				Token tok = new Token(this.current, Token.Tok.TOK_ASSN);
+				return new assign_(new TerminalExpression(tok, tok.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
-				Expression e = VAR();
-				return new assign_(new TokenExpression("=", "variable"), e);
+				Expression e = VARIABLE();
+				Token tok = new Token(this.current, Token.Tok.TOK_ASSN);
+				return new assign_(new TerminalExpression(tok, "variable"), e);
 			}
 			else if(this.lookahead == Token.Tok.TOK_N || this.lookahead == Token.Tok.TOK_ADD || this.lookahead == Token.Tok.TOK_SUB || this.lookahead == Token.Tok.TOK_MULT)
 			{
 				Expression e = NUMEXPR();
-				return new assign_(new TokenExpression("=", "numexpr"), e);
+				Token tok = new Token(this.current, Token.Tok.TOK_ASSN);
+				return new assign_(new TerminalExpression(tok, "numexpr"), e);
 			}
 			else if(this.lookahead == Token.Tok.TOK_T || this.lookahead == Token.Tok.TOK_F || this.lookahead == Token.Tok.TOK_EQ || this.lookahead == Token.Tok.TOK_OP || this.lookahead == Token.Tok.TOK_NOT || this.lookahead == Token.Tok.TOK_AND || this.lookahead == Token.Tok.TOK_OR) 
 			{
 				Expression e = BOOL();
-				return new assign_(new TokenExpression("=", "bool"), e);
+				Token tok = new Token(this.current, Token.Tok.TOK_ASSN);
+				return new assign_(new TerminalExpression(tok, "bool"), e);
 			}
 		}
 		catch(Exception ex)
@@ -910,7 +918,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Intruction Syntax Error: Instruction expected following semicolon. (;)");
 	}
 
-	// NUMEXPR → integerLiteral | VAR | CALC
+	// NUMEXPR → integerLiteral | VARIABLE | CALC
 	private Expression NUMEXPR() throws SyntaxException
 	{
 		try
@@ -918,12 +926,12 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_N)
 			{
 				this.readToken();
-				String e = this.current.getInput();
-				return new numexpr(new TokenExpression("number", e));
+				Token e = this.current;
+				return new numexpr(new TerminalExpression(e, e.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
-				Expression e = VAR();
+				Expression e = VARIABLE();
 				return new numexpr(e);
 			}
 			else if(this.lookahead == Token.Tok.TOK_ADD || this.lookahead == Token.Tok.TOK_SUB || this.lookahead == Token.Tok.TOK_MULT)
@@ -949,19 +957,19 @@ public class Grammar
 			{
 				this.readToken();
 				Token e = this.current;				
-				return new type(new TokenExpression("type", e.getInput()));
+				return new type(new TerminalExpression(e, e.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_STRING)
 			{
 				this.readToken();
 				Token e = this.current;				
-				return new type(new TokenExpression("type", e.getInput()));
+				return new type(new TerminalExpression(e, e.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_BOOL)
 			{
 				this.readToken();
 				Token e = this.current;				
-				return new type(new TokenExpression("type", e.getInput()));
+				return new type(new TerminalExpression(e, e.getInput()));
 			}
 		}
 		catch(Exception ex)
@@ -980,8 +988,8 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_ID)
 			{
 				this.readToken();
-				String e = this.current.getInput();
-				return new call(new TokenExpression("call", e));
+				Token e = new Token(this.current, Token.Tok.TOK_CALL);
+				return new call(new TerminalExpression(e, e.getInput()));
 			}
 		}
 		catch(Exception ex)
@@ -1000,8 +1008,8 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_ID)
 			{
 				this.readToken();
-				String e = this.current.getInput();
-				return new name(new TokenExpression("variable", e));
+				Token e = new Token(this.current, Token.Tok.TOK_VAR);
+				return new name(new TerminalExpression(e, e.getInput()));
 			}
 		}
 		catch(Exception ex)
@@ -1012,16 +1020,16 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid Identifier Used.");
 	}
 
-	// VAR → userDefinedIdentifier
-	private Expression VAR() throws SyntaxException
+	// VARIABLE → userDefinedIdentifier
+	private Expression VARIABLE() throws SyntaxException
 	{
 		try
 		{
 			if(this.lookahead == Token.Tok.TOK_ID)
 			{
 				this.readToken();
-				String e = this.current.getInput();
-				return new var_(new TokenExpression("variable", e));
+				Token e = new Token(this.current, Token.Tok.TOK_VAR);
+				return new variable(new TerminalExpression(e, e.getInput()));
 			}
 		}
 		catch(Exception ex)

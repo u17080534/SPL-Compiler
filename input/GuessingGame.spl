@@ -1,0 +1,25 @@
+string WRONG;
+WRONG = "WRONG";
+string CORRECT;
+CORRECT = "CORRECT";
+bool EQ;
+
+while(not EQ)
+{
+	num answer;
+	num other;
+	other = 7;
+
+	input (answer);
+
+	EQ = eq(answer, other);
+
+	if(EQ) then
+	{
+		output (CORRECT)
+	}
+	else
+	{
+		output (WRONG)
+	}
+}

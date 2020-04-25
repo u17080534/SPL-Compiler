@@ -10,6 +10,14 @@ public class Token
 	private int line = 0;
 	private int col = 0;
 
+	public Token(Token input, Tok token)
+	{
+		this.input = input.getInput();
+		this.line = input.line;
+		this.col = input.col;
+		this.token = token;
+	}
+
 	public Token(String input, Tok token)
 	{
 		this.input = input;
@@ -20,6 +28,11 @@ public class Token
 	{
 		this.line = line;
 		this.col = col;
+	}
+
+	public String getLocation()
+	{
+		return "[" + this.line + "," + this.col + "]";
 	}
 
 	public String getInput()
@@ -35,7 +48,7 @@ public class Token
 	@Override 
 	public String toString() 
 	{ 
-		return this.input + " - " + this.token + "[" + this.line + "," + this.col + "]"; 
+		return this.input + " - " + this.token + this.getLocation(); 
 	} 
 
 	public enum Tok
@@ -60,8 +73,8 @@ public class Token
 		TOK_BOOL("tok_bool"),
 		TOK_STRING("tok_string"),
 		TOK_PROC("tok_proc"),
-		TOK_GT("tok_greater"),
-		TOK_LT("tok_less"),
+		TOK_GT("tok_greater"), //>
+		TOK_LT("tok_less"),	//<
 		TOK_OP("tok_open_paren"),
 		TOK_CP("tok_close_paren"),
 		TOK_OB("tok_open_brace"),
@@ -73,7 +86,9 @@ public class Token
 		TOK_F("tok_false"),
 		TOK_S("tok_string_literal"),//literal
 		TOK_N("tok_number_literal"),//literal
-		TOK_ID("tok_identifier");
+		TOK_ID("tok_identifier"),
+		TOK_CALL("tok_call"),//only found in parser
+		TOK_VAR("tok_var");//only found in parser
 
 		private String str; 
 

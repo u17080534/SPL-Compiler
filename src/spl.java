@@ -3,7 +3,7 @@ import java.io.*;
 import exception.*;
 import lexer.*;
 import parser.*;
-import ast.*;
+import syntax.*;
 import symtable.*;
 import analysis.*;
 
@@ -35,7 +35,7 @@ public class SPL
 
         try
         {
-            buffer = new BufferedReader(new FileReader(new File(file)));
+            buffer = new BufferedReader(new FileReader(new java.io.File(file)));
         }
         catch(FileNotFoundException ex)
         {
@@ -60,6 +60,8 @@ public class SPL
             if(tokens != null)
                 if(this.parse(tokens))
                     this.analysis();
+
+            this.tree.generation(this.filename);
         }
         catch(Exception ex)
         {

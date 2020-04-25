@@ -1,10 +1,17 @@
+
+proc bef
+{
+    num i;
+    num j
+}
+
 proc helloworld
 {
+    num i;
+    num j;
     string hello;
     hello = "HELLO";
     output(hello);
-    num i;
-    num j;
 
     input(i);
     input(j);

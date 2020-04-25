@@ -13,7 +13,7 @@ public class UsageException extends Exception
 
     public UsageException(Symbol sym, String message)
     {
-        super(message + " Symbol=[" + sym + "]");
+        super(message + " Symbol=[" + sym + "]" + sym.getLocation());
     	this.sym = sym;
     }
 

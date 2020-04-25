@@ -1,7 +1,7 @@
 package analysis;
 
 import java.util.*;
-import ast.*;
+import syntax.*;
 import symtable.*;
 import exception.UsageException;
 
@@ -64,7 +64,7 @@ public class Scoping
 		{
 			if(terminals.get(index).getExpression().indexOf("variable") == 0)
 			{
-				if(index > 1 && terminals.get(index - 1).getExpression().indexOf("type") == 0)
+				if(index > 0 && terminals.get(index - 1).getExpression().indexOf("type") == 0)
 					declarations.add(terminals.get(index));
 				else
 					usages.add(terminals.get(index));
@@ -78,8 +78,18 @@ public class Scoping
 		//CHECK FOR REDEFINITIONS
 		for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 			for(int index_decl_ = 0; index_decl_ < declarations.size(); index_decl_++)
+				//Names Match
 				if(index_decl != index_decl_ && getValue(declarations.get(index_decl).getExpression()).equals(getValue(declarations.get(index_decl_).getExpression())))
-					throw new UsageException(declarations.get(Math.max(index_decl, index_decl_)), "Identifier is used more than once");
+				{
+					//Different code segment, so treat as different var
+					if(declarations.get(index_decl).getScope() < declarations.get(index_decl_).getScope())
+						throw new UsageException(declarations.get(Math.max(index_decl, index_decl_)), "Identifier is already defined outside of this scope");
+
+					if(declarations.get(index_decl).getScope() == declarations.get(index_decl_).getScope() && declarations.get(index_decl).getProc() == declarations.get(index_decl_).getProc())
+						throw new UsageException(declarations.get(Math.max(index_decl, index_decl_)), "Identifier is used more than once within same scope");
+					// else
+						// declarations.get(index_decl_).setExpression(declarations.get(index_decl_).getExpression().substring(0,declarations.get(index_decl_).getExpression().length()) + index_decl_ +"'");
+				}
 
 		//MARK ALL USAGES WITHOUT A VALID DEFINITION
 		for(int index_use = 0; index_use < usages.size(); index_use++)

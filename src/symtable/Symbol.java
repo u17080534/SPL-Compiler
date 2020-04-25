@@ -1,17 +1,19 @@
 package symtable;
 
-import ast.expression.*;
+import syntax.expression.*;
 
 public class Symbol
 {
 	private Expression expr;
 	private int scope;
 	private String proc;
+	private String type;
 	private boolean altered;
 
 	public Symbol(Expression expr)
 	{
 		this.proc = "";
+		this.type = "";
 		this.expr = expr;
 		this.altered = false;
 	}
@@ -50,6 +52,21 @@ public class Symbol
 	public void setProc(String proc)
 	{
 		this.proc = proc;
+	}
+
+	public String getType()
+	{
+		return this.type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public String getLocation()
+	{
+		return this.expr.getLocation();
 	}
 
 	public boolean isTerminal()
