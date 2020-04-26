@@ -18,10 +18,17 @@ public class io extends Expression
 
 	public Line trans(File absFile)
 	{       
-		Line line = new Line(this.action.trans(absFile) + " " + this.varEx.trans(absFile)); 
+		System.out.println(this.expr);
 		
-		absFile.add(line);
+		String str = this.action.trans(absFile).toString();
 
+		if(str.equals("output"))
+			str = "PRINT";
+		else if(str.equals("input"))
+			str = "INPUT";
+
+		Line line = new Line(str + " " + this.varEx.trans(absFile)); 
+		
 		return line;  
 	} 
 }

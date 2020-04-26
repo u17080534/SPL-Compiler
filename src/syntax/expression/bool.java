@@ -16,61 +16,101 @@ public class bool extends Expression
 		this.expr = "BOOL";
 	}
 
+	public bool(Expression e1) 
+	{ 
+		super(e1);
+		this.e1 = e1; 
+		this.expr = "BOOL";
+	}
+
 	public bool(TerminalExpression action, Expression e1) 
 	{ 
 		super(action, e1);
 		this.action = action;
-		this.expr = "BOOL";
 		this.e1 = e1; 
+		this.expr = "BOOL";
 	}
 
 	public bool(TerminalExpression action, Expression e1, Expression e2) 
 	{ 
 		super(action, e1, e2);
 		this.action = action;
-		this.expr = "BOOL";
 		this.e1 = e1; 
 		this.e2 = e2; 
+		this.expr = "BOOL";
 	}  
 
 	public Line trans(File absFile)
 	{       
+		System.out.println(this.expr);
+
 		Line line = null;
 
-		if(this.e1 != null)
-		{
-			String distinct = this.action.trans(absFile).toString();
+		String temp = "TMPB" + this.getID();
 
-			if(this.e2 != null) // EQ / > / < 
+		if(this.action == null)
+		{
+			absFile.add(new Line(temp + " = " + this.e1.trans(absFile).toString()));
+			return new Line(temp);
+		}
+
+		String distinct = this.action.trans(absFile).toString();
+
+		if(this.e1 == null) // T / F
+		{
+			if(distinct.equals("T"))
+				return new Line("1");
+			else if(distinct.equals("F"))
+				return new Line("0");
+		}
+		else
+		{
+			if(this.e2 == null) // ID / NOT 
+			{
+				if(distinct.equals("not"))
+				{
+					absFile.add(new Line(temp + " = NOT " + this.e1.trans(absFile).toString()));
+					return new Line(temp);
+				}
+				else
+					System.out.println("ISSUE " + distinct);
+			}
+			else // EQ / > / < / AND / OR 
 			{
 				if(distinct.equals("eq"))
-					line = new Line(this.e1.trans(absFile).toString() + this.e2.trans(absFile).toString());
+				{
+					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
+					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
+					absFile.add(new Line(temp + " = " + temp + "1 = " + temp + "2"));
+					return new Line(temp);
+				}
 				else if(distinct.equals(">"))
-					line = new Line(this.e1.trans(absFile).toString() + this.e2.trans(absFile).toString());
+				{
+					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
+					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
+					absFile.add(new Line(temp + " = " + temp + "1 > " + temp + "2"));
+					return new Line(temp);				
+				}
 				else if(distinct.equals("<"))
-					line = new Line(this.e1.trans(absFile).toString() + this.e2.trans(absFile).toString());
-				
-			}
-			else // ID / NOT / AND / OR
-			{
-				if(distinct.equals("variable"))
-					line = new Line(this.e1.trans(absFile).toString()); 
-				else if(distinct.equals("not"))
-					line = new Line(this.e1.trans(absFile).toString());
+				{
+					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
+					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
+					absFile.add(new Line(temp + " = " + temp + "1 < " + temp + "2"));
+					return new Line(temp);
+				}
 				else if(distinct.equals("and"))
-					line = new Line(this.e1.trans(absFile).toString());
+				{
+					return new Line(temp);
+				}
 				else if(distinct.equals("or"))
-					line = new Line(this.e1.trans(absFile).toString());
-				
+				{
+					return new Line(temp);
+				}
+				else
+					System.out.println("ISSUE " + distinct);
 			}
 		}
-		else // T / F 
-		{
-			line = new Line(this.action.trans(absFile).toString());
-		}
 
-		absFile.add(line);
-
-		return line;
+		return null;
 	}
 }

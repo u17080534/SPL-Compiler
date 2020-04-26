@@ -18,6 +18,14 @@ public class calc extends Expression
 
 	public Line trans(File absFile)
 	{       
-		return new Line("");   
+		System.out.println(this.expr);
+
+		Line l1 = this.action.trans(absFile);
+		
+		Line l2 = this.calc_Ex.trans(absFile);
+
+		String str = "";
+
+		return new Line(l1.toString() + l2.toString());
 	} 
 }

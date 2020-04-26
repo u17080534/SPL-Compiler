@@ -6,6 +6,7 @@ import parser.*;
 import syntax.*;
 import symtable.*;
 import analysis.*;
+import syntax.code.File;
 
 public class SPL 
 { 
@@ -61,7 +62,9 @@ public class SPL
                 if(this.parse(tokens))
                     this.analysis();
 
-            this.tree.generation(this.filename);
+            File genFile = File.complete_file(this.tree.generation(this.filename));
+
+            this.cache.export(genFile);
         }
         catch(Exception ex)
         {

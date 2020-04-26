@@ -4,7 +4,7 @@ import syntax.code.*;
 
 public class prog_ extends Expression 
 {   
-	private Expression proc_defsEx, code_Ex;   
+	private Expression ex;   
 
 	public prog_()
 	{
@@ -15,18 +15,15 @@ public class prog_ extends Expression
 	public prog_(Expression e1)
 	{ 
 		super(e1);
-		this.code_Ex = this.proc_defsEx = e1; 
+		this.ex = e1; 
 		this.expr = "PROG_";
 	}  
 
 	public Line trans(File absFile)
 	{       
-		if(this.code_Ex == null)
-			if(this.proc_defsEx == null)
-				return null;
-			else
-				return this.proc_defsEx.trans(absFile);         
+		if(this.ex == null)
+			return null;      
 
-		return this.code_Ex.trans(absFile);         
+		return this.ex.trans(absFile);         
 	} 
 } 

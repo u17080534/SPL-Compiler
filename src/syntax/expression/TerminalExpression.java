@@ -3,6 +3,7 @@ package syntax.expression;
 import syntax.code.*;
 import lexer.Token;
 import lexer.Token.Tok;
+import analysis.Scoping;
 
 public class TerminalExpression extends Expression 
 {   
@@ -95,6 +96,13 @@ public class TerminalExpression extends Expression
 		}
 
 		this.expr = this.alias + " '" + this.value + "'";
+	}
+
+	@Override
+	public void setExpr(String expr)
+	{
+		this.expr = expr;
+		this.value = Scoping.getValue(expr);
 	}
 
 	public String getLocation()

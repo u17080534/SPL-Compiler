@@ -11,14 +11,24 @@ public class Line
 		this.line = line;
 	}
 
+	public void setLine(String line)
+	{
+		this.line = line;
+	}
+
 	public void setNumber(int number)
 	{
 		this.number = number;
 	}
 
+	public int getNumber()
+	{
+		return this.number;
+	}
+
 	@Override
 	public String toString()
 	{
-		return this.number + " " + this.line;
+		return this.line;
 	}
 }

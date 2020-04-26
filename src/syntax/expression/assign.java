@@ -16,8 +16,14 @@ public class assign extends Expression
 
 	public Line trans(File absFile)
 	{       
-		Line line = new Line(this.varEx.trans(absFile).toString() + this.assign_Ex.trans(absFile).toString());
-		absFile.add(line);
-		return line;
+		System.out.println(this.expr);
+		
+		Line l1 = this.varEx.trans(absFile);
+		
+		Line l2 = this.assign_Ex.trans(absFile);
+
+		String str = l1.toString() + " = " + l2.toString();
+
+		return new Line(str);
 	}
 }

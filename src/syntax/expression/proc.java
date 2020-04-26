@@ -17,6 +17,17 @@ public class proc extends Expression
 
 	public Line trans(File absFile)
 	{       
-		return new Line("");      
+		System.out.println(this.expr);
+
+		Line l1 = this.proced.trans(absFile);
+		
+		boolean lbl = absFile.label(l1.toString());
+
+		Line l2 = this.progEx.trans(absFile);
+
+		if(l1 != null)
+			absFile.add(new Line("RETURN"));
+
+		return null; 
 	} 
 }

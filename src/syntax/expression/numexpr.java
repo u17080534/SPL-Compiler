@@ -18,12 +18,18 @@ public class numexpr extends Expression
 	public numexpr(Expression e) 
 	{ 
 		super(e);
+		this.number = null;
 		this.ex = e;  
 		this.expr = "NUMEXPR";
 	}  
 
 	public Line trans(File absFile)
 	{       
-		return new Line("");      
+		System.out.println(this.expr);
+		
+		if(this.number != null)    
+			return this.number.trans(absFile);
+		
+		return this.ex.trans(absFile);
 	}
 }

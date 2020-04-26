@@ -20,7 +20,10 @@ public class decl_ extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
-		return new Line("");   
+	{   
+		if(this.expr == null)
+			return null;
+
+		return this.declEx.trans(absFile);   
 	} 
 }

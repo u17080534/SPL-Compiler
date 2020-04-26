@@ -25,8 +25,12 @@ public class prog extends Expression
 
 	public Line trans(File absFile)
 	{       
-		this.codeEx.trans(absFile);
+		System.out.println(this.expr);
+
+		Line l1 = this.codeEx.trans(absFile);
+
 		this.prog_Ex.trans(absFile);   
-		return null;
+
+		return l1;
 	} 
 } 

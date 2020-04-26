@@ -21,9 +21,11 @@ public class instr extends Expression
 
 	public Line trans(File absFile)
 	{      
-		if(this.ex != null) 
-			this.ex.trans(absFile);
+		System.out.println(this.expr);
 		
-		return null;
+		if(this.ex == null) 
+			return null;
+		
+		return this.ex.trans(absFile);
 	}
 }

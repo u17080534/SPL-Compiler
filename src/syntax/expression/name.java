@@ -15,6 +15,7 @@ public class name extends Expression
 
 	public Line trans(File absFile)
 	{       
+		System.out.println(this.expr);
 		String name = this.variable.trans(absFile).toString();
 
 		//String variables append $

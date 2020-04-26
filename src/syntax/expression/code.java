@@ -16,13 +16,14 @@ public class code extends Expression
 
 	public Line trans(File absFile)
 	{       
-		Line line;
+		System.out.println(this.expr);
 
-		if(this.code_Ex.trans(absFile) == null)
-			line = this.instrEx.trans(absFile);   
-		else
-			line = new Line(this.instrEx.trans(absFile).toString() + this.code_Ex.trans(absFile).toString());   
+		Line l1 = this.instrEx.trans(absFile);
+		
+		absFile.add(l1);
 
-		return line;
+		Line l2 = this.code_Ex.trans(absFile);
+		
+		return l1;
 	} 
 }

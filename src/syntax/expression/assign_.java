@@ -25,13 +25,18 @@ public class assign_ extends Expression
 
 	public Line trans(File absFile)
 	{       
-		Line line;
+		Line l1 = this.literal.trans(absFile);
+
+		String str = l1.toString();
 
 		if(this.ex != null)
-			line = new Line(this.ex.trans(absFile).toString());  
-		else
-			line = new Line(this.ex.trans(absFile).toString());  
+		{
+			Line l2 = this.ex.trans(absFile);
 
-		return line;
+			if(l2 != null)
+				str = l2.toString();
+		}
+
+		return new Line(str);
 	}
 }

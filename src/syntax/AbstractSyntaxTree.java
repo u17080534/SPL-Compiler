@@ -35,13 +35,13 @@ public class AbstractSyntaxTree
 		//Find all variable usages, check if declared in a <= scope and assign Vn, otherwise assign U
 	}
 
-	public void generation(String name)
+	public File generation(String name)
 	{
 		File genFile = new File(name);
 
 		this.root.trans(genFile);
 
-		System.out.println(genFile);
+		return genFile;
 	}
 
 	public Vector<Symbol> getSymbols()

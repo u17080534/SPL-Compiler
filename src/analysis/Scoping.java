@@ -157,7 +157,7 @@ public class Scoping
 		}
 	}
 
-	private static String getValue(String expr)
+	public static String getValue(String expr)
 	{
 		int start = expr.indexOf("'") + 1;
 

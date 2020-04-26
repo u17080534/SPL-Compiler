@@ -16,6 +16,7 @@ public class variable extends Expression
 
 	public Line trans(File absFile)
 	{       
-		return new Line("");
+		System.out.println(this.expr);
+		return this.variable.trans(absFile);
 	}
 }

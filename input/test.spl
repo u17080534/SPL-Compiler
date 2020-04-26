@@ -1,53 +1,26 @@
+string WRONG;
+WRONG = "WRONG";
+string CORRECT;
+CORRECT = "CORRECT";
+bool EQ;
+EQ = F;
 
-proc bef
+while(not EQ)
 {
-    num i;
-    num j
-}
+    num answer;
+    num other;
+    other = 7;
 
-proc helloworld
-{
-    num i;
-    num j;
-    string hello;
-    hello = "HELLO";
-    output(hello);
+    input (answer);
 
-    input(i);
-    input(j);
+    EQ = eq(answer, other);
 
-    bool ifex;
-    ifex = T;
-
-    proc quick { num v }
-
-    if(ifex) then
+    if(EQ) then
     {
-        while((i < j))
-        {
-            output(i);
-            i = add(j,i)
-        }
+        output (CORRECT)
     }
-}
-
-proc goodbyeworld
-{
-    string bye;
-    bye = "BYE";
-    output(bye)
-}
-
-proc foo
-{
-    string u;
-
-    proc bar
+    else
     {
-        input(u);
-        output(u)
-    }  
-
-    bar; 
-    output(u)
+        output (WRONG)
+    }
 }

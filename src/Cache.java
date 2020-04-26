@@ -31,7 +31,7 @@ public class Cache
 
 		try
         {
-            FileWriter fileWriter = new FileWriter(new File("output/" + tokenFile));
+            FileWriter fileWriter = new FileWriter(new java.io.File("output/" + tokenFile));
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
@@ -65,7 +65,7 @@ public class Cache
 
 		try
         {
-            FileWriter fileWriter = new FileWriter(new File("output/" + astFile));
+            FileWriter fileWriter = new FileWriter(new java.io.File("output/" + astFile));
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
@@ -97,7 +97,7 @@ public class Cache
 
 		try
         {
-            FileWriter fileWriter = new FileWriter(new File("output/" + symFile));
+            FileWriter fileWriter = new FileWriter(new java.io.File("output/" + symFile));
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
@@ -121,4 +121,29 @@ public class Cache
             e.printStackTrace();
         }
 	}
+
+    public void export(syntax.code.File file)
+    {
+        if(file == null)
+            return;
+
+        String basicFile = this.filename + ".bas";
+
+        try
+        {
+            FileWriter fileWriter = new FileWriter(new java.io.File(basicFile));
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            bufferedWriter.write(file.toString());
+                
+            bufferedWriter.close();
+
+            fileWriter.close();
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 } 

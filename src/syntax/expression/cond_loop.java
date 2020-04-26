@@ -31,6 +31,65 @@ public class cond_loop extends Expression
 
 	public Line trans(File absFile)
 	{       
-		return new Line("");   
+		System.out.println(this.expr);
+
+		Line codeTrans = null;
+
+		String ty = this.type.trans(absFile).toString();
+
+		if(ty.equals("while")) //while
+		{
+			/*
+			%LOOP_START% 	TMPW = <BOOL>
+			N   			TMPW = NOT TMPW
+			N   			IF TMPW THEN GOTO %LOOP_END+1%
+			N               <CODE>
+			%LOOP_END%      GOTO %LOOP_START%
+			*/
+
+			String temp = "TMPW" + this.getID();
+
+			String lblStart = "LOOP_START" + this.getID();
+
+			String lblEnd = "LOOP_END" + this.getID();
+
+			absFile.label(lblStart);
+
+			absFile.add(new Line(temp + " = " + this.condEx1.trans(absFile).toString()));
+
+			absFile.add(new Line(temp + " = NOT " + temp));
+
+			absFile.add(new Line("IF " + temp + " THEN GOTO %" + lblEnd + "+1%"));
+
+			codeTrans = this.condEx2.trans(absFile);
+
+			absFile.label(lblEnd);
+
+			absFile.add(new Line("GOTO %" + lblStart + "%"));
+		}
+		else if(ty.equals("for")) //for
+		{
+			//VARIABLE SET TO 0
+			// this.condEx1
+			//VARIABLE <
+			// this.condEx2
+			// < VARIABLE
+			// this.condEx3
+			//variable = add
+			// this.condEx4
+			//variable added to
+			// this.condEx5
+			//CODE
+			// this.condEx6
+
+			/*
+			N IF BOOL THEN GOTO %END_IF%
+			N // else
+			N RETURN
+			%END_IF% // if EQ
+			*/
+		}
+
+		return null;
 	} 
 }

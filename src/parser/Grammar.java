@@ -368,7 +368,8 @@ public class Grammar
 				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Brace");
 			}
 
-			return new cond_branch_();
+			// return new cond_branch_();
+			return null;
 		}
 		catch(Exception ex)
 		{
@@ -399,7 +400,7 @@ public class Grammar
 							if(this.lookahead == Token.Tok.TOK_CB)
 							{
 								this.readToken();
-								return new cond_loop(new TerminalExpression(tok, e2.getExpr()), e2, e3);
+								return new cond_loop(new TerminalExpression(tok, tok.getInput()), e2, e3);
 							}
 							throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 						}
@@ -468,7 +469,7 @@ public class Grammar
 																				if(this.lookahead == Token.Tok.TOK_CB)
 																				{
 																					this.readToken();
-																					return new cond_loop(new TerminalExpression(tok, e3.getExpr() + " < " + e4.getExpr()), e2, e3, e4, e5, e6, e7);
+																					return new cond_loop(new TerminalExpression(tok, tok.getInput()), e2, e3, e4, e5, e6, e7);
 																				}
 																				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 																			}
@@ -582,8 +583,8 @@ public class Grammar
 			{
 				Expression e2 = VARIABLE();
 				Token tok = new Token(this.current, Token.Tok.TOK_VAR); // ID
-				// return new bool(new TerminalExpression("bool", e1.getInput()), e2);
-				return new bool(new TerminalExpression(tok, tok.getInput()), e2);
+				return new bool(e2);
+				// return new bool(new TerminalExpression(tok, tok.getInput()), e2);
 			}
 			else if(this.lookahead == Token.Tok.TOK_EQ)
 			{

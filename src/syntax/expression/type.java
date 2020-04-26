@@ -17,6 +17,6 @@ public class type extends Expression
 
 	public Line trans(File absFile)
 	{       
-		return new Line("");      
+		return this.typex.trans(absFile);      
 	}
 }
