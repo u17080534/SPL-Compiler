@@ -8,6 +8,7 @@ public class File
 	private String name;
 	private Vector<Line> lines;
 	private Map<String, Integer> labels;
+	private int point = -1;
 
 	public File(String name)
 	{
@@ -27,40 +28,73 @@ public class File
 	{
 		for(int index = 0; index < this.lines.size(); index++)
 		{
-			String line = this.lines.get(index).toString();
-
-			int pIndex1 = line.indexOf("%");
-			int pIndex2 = line.lastIndexOf("%");
-
-			if(pIndex1 >= 0 && pIndex2 >= 0)
+			if(this.lines.get(index) != null)
 			{
-				String label = line.substring(pIndex1 + 1, pIndex2);
+				String line = this.lines.get(index).toString();
 
-				int diff = 0;
+				int pIndex1 = line.indexOf("%");
+				int pIndex2 = line.lastIndexOf("%");
 
-				int dIndex = label.indexOf("+");
-
-				if(dIndex >= 0)
+				if(pIndex1 >= 0 && pIndex2 >= 0)
 				{
-					diff = Integer.parseInt(label.substring(dIndex + 1, label.length()));
-					label = label.substring(0, dIndex);
+					String label = line.substring(pIndex1 + 1, pIndex2);
+
+					int diff = 0;
+
+					int dIndex = label.indexOf("+");
+
+					if(dIndex >= 0)
+					{
+						diff = Integer.parseInt(label.substring(dIndex + 1, label.length()));
+						label = label.substring(0, dIndex);
+					}
+
+					if(this.labels.get(label) == null)
+						System.out.println("LABEL "+label);
+
+					int lineRef = this.labels.get(label) + diff;
+
+					line = line.substring(0, pIndex1) + lineRef;
+
+					this.lines.get(index).setLine(line);
 				}
 
-				int lineRef = this.labels.get(label) + diff;
-
-				line = line.substring(0, pIndex1) + lineRef;
-
-				this.lines.get(index).setLine(line);
+				this.lines.get(index).setNumber(index);
 			}
-
-			this.lines.get(index).setNumber(index);
 		}
 	}
 
 	public void add(Line line)
 	{
 		if(line != null)
-			this.lines.add(line);
+		{
+			if(this.point != -1)
+			{
+				this.lines.add(this.point, line);
+
+				for(HashMap.Entry<String, Integer> label : this.labels.entrySet())
+					if(label.getValue() > this.point)
+						label.setValue(label.getValue() + 1);
+
+				this.point++;
+			}
+			else
+				this.lines.add(line);
+		}
+	}
+
+	public int point()
+	{
+		int tmp = this.point;
+		this.point = -1;
+		return tmp;
+	}
+
+	public int point(int index)
+	{
+		int tmp = this.point;
+		this.point = index;
+		return tmp;
 	}
 
 	public boolean label(String label)
@@ -68,7 +102,12 @@ public class File
 		if(this.labels.containsKey(label))
 			return false;
 		
-		this.labels.put(label, new Integer(this.lines.size()));
+		int lblIndex = this.lines.size();
+
+		if(this.point != -1)
+			lblIndex = this.point;
+
+		this.labels.put(label, new Integer(lblIndex));
 		return true;
 	}
 
@@ -76,9 +115,27 @@ public class File
 	{
 		if(this.labels.containsKey(label))
 			return false;
+
+		int lblIndex = this.lines.size();
+
+		if(this.point != -1)
+			lblIndex = this.point;
 		
-		this.labels.put(label, new Integer(this.lines.size() - diff));
+		this.labels.put(label, new Integer(lblIndex - diff));
 		return true;
+	}
+
+	public boolean hasLabel(String label)
+	{
+		return this.labels.containsKey(label);
+	}
+
+	public int getLabel(String label)
+	{
+		if(!this.labels.containsKey(label))
+			return 0;
+
+		return this.labels.get(label);
 	}
 
 	@Override
@@ -95,6 +152,15 @@ public class File
 	public static File complete_file(File file)
 	{
 		File refined = new File(file);
+
+		if(file.hasLabel("PROC_DEFS"))
+		{
+			refined.point(0);
+
+			refined.add(new Line("GOTO %PROC_DEFS%"));
+
+			refined.point();
+		}
 
 		refined.add(new Line("END"));
 

@@ -20,7 +20,7 @@ public class proc_defs_ extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
+	{System.out.println(this.expr);       
 		if(this.proc_defsEx == null)
 			return null;
 

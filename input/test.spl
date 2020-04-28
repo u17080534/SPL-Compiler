@@ -5,17 +5,19 @@ CORRECT = "CORRECT";
 bool EQ;
 EQ = F;
 
-while(not EQ)
+proc Guess
 {
-    num answer;
-    num other;
-    other = 7;
+    while(not EQ)
+    {
+        num answer;
+        num other;
+        other = 7;
 
-    input (answer);
+        input (answer);
 
-    EQ = eq(answer, other);
+        EQ = eq(answer, other);
 
-    if(EQ) then
+        if(EQ) then
     {
         output (CORRECT)
     }
@@ -23,4 +25,7 @@ while(not EQ)
     {
         output (WRONG)
     }
+    }
 }
+
+Guess

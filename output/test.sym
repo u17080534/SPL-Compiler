@@ -49,76 +49,89 @@
 48:BOOL
 49:bool 'F'
 50:CODE_
-51:CODE
-52:INSTR
-53:COND_LOOP
-54:loop 'while'
-55:BOOL
-56:bool 'not'
-57:BOOL
-58:VARIABLE
-59:variable 'V2'
-60:CODE
-61:INSTR
-62:DECL
-63:TYPE
-64:type 'num'
-65:NAME
-66:variable 'V3'
-67:DECL_
-68:DECL
-69:TYPE
-70:type 'num'
-71:NAME
-72:variable 'V4'
-73:CODE_
-74:CODE
-75:INSTR
-76:ASSIGN
-77:VARIABLE
-78:variable 'V4'
-79:ASSIGN_
-80:assign 'numexpr'
-81:NUMEXPR
-82:tok_number_literal '7'
-83:CODE_
-84:CODE
-85:INSTR
-86:IO
-87:io 'input'
-88:VARIABLE
-89:variable 'V3'
-90:CODE_
-91:CODE
-92:INSTR
-93:ASSIGN
-94:VARIABLE
-95:variable 'V2'
-96:ASSIGN_
-97:assign 'bool'
-98:BOOL
-99:bool 'eq'
-100:VARIABLE
-101:variable 'V3'
-102:VARIABLE
-103:variable 'V4'
-104:CODE_
-105:CODE
-106:INSTR
-107:COND_BRANCH
-108:BOOL
-109:VARIABLE
-110:variable 'V2'
-111:CODE
-112:INSTR
-113:IO
-114:io 'output'
+51:PROC_DEFS
+52:PROC
+53:proc 'P0'
+54:PROG
+55:CODE
+56:INSTR
+57:COND_LOOP
+58:loop 'while'
+59:BOOL
+60:bool 'not'
+61:BOOL
+62:VARIABLE
+63:variable 'V2'
+64:PROG
+65:CODE
+66:INSTR
+67:DECL
+68:TYPE
+69:type 'num'
+70:NAME
+71:variable 'V3'
+72:DECL_
+73:DECL
+74:TYPE
+75:type 'num'
+76:NAME
+77:variable 'V4'
+78:CODE_
+79:CODE
+80:INSTR
+81:ASSIGN
+82:VARIABLE
+83:variable 'V4'
+84:ASSIGN_
+85:assign 'numexpr'
+86:NUMEXPR
+87:tok_number_literal '7'
+88:CODE_
+89:CODE
+90:INSTR
+91:IO
+92:io 'input'
+93:VARIABLE
+94:variable 'V3'
+95:CODE_
+96:CODE
+97:INSTR
+98:ASSIGN
+99:VARIABLE
+100:variable 'V2'
+101:ASSIGN_
+102:assign 'bool'
+103:BOOL
+104:bool 'eq'
+105:VARIABLE
+106:variable 'V3'
+107:VARIABLE
+108:variable 'V4'
+109:CODE_
+110:CODE
+111:INSTR
+112:COND_BRANCH
+113:tok_if 'if'
+114:BOOL
 115:VARIABLE
-116:variable 'V1'
-117:COND_BRANCH_
+116:variable 'V2'
+117:PROG
 118:CODE
 119:INSTR
 120:IO
 121:io 'output'
 122:VARIABLE
-123:variable 'V0'
+123:variable 'V1'
+124:COND_BRANCH_
+125:PROG
+126:CODE
+127:INSTR
+128:IO
+129:io 'output'
+130:VARIABLE
+131:variable 'V0'
+132:PROC_DEFS_
+133:CODE
+134:INSTR
+135:CALL
+136:call 'P0'

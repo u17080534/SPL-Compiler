@@ -48,7 +48,7 @@ public class SymbolTable
 					str += "\n";
 				else
 				{
-					int no_spaces = 25 - this.symbols.get(index).toString().length();
+					int no_spaces = 30 - this.symbols.get(index).toString().length();
 					if(no_spaces < 0) no_spaces = 0;
 					for(int s = 0; s < no_spaces; s++)
 						str += " ";

@@ -16,17 +16,19 @@ public class proc extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
-		System.out.println(this.expr);
-
-		Line l1 = this.proced.trans(absFile);
+	{System.out.println(this.expr);       
+		//Label the start of the proc
+		absFile.point(0);
 		
-		boolean lbl = absFile.label(l1.toString());
+		absFile.label(this.proced.trans(absFile).toString());
 
-		Line l2 = this.progEx.trans(absFile);
+		this.progEx.trans(absFile);
 
-		if(l1 != null)
-			absFile.add(new Line("RETURN"));
+		absFile.add(new Line("RETURN"));
+
+		absFile.label("PROC_DEFS");
+
+		absFile.point();
 
 		return null; 
 	} 

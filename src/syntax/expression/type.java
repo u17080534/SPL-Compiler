@@ -16,7 +16,7 @@ public class type extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
+	{System.out.println(this.expr);       
 		return this.typex.trans(absFile);      
 	}
 }

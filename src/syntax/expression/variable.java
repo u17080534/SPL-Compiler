@@ -14,9 +14,19 @@ public class variable extends Expression
 		this.expr = "VARIABLE";
 	}  
 
+	public String getLabel()
+	{
+		return this.variable.getLabel();
+	}
+
 	public Line trans(File absFile)
-	{       
-		System.out.println(this.expr);
-		return this.variable.trans(absFile);
+	{System.out.println(this.expr);       	
+		String name = this.variable.trans(absFile).toString();
+
+		//String variables append $
+		if(this.variable.getType().equals("string"))
+			name += "$";
+
+		return new Line(name);   
 	}
 }

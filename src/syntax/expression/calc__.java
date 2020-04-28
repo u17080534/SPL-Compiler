@@ -14,7 +14,7 @@ public class calc__ extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
+	{System.out.println(this.expr);       
 		return new Line("");   
 	}
 }

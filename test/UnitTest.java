@@ -11,7 +11,8 @@ public class UnitTest
     @BeforeClass
 	public static void enter()
 	{
-		System.out.println("\nENTERING TESTING ENVIRONMENT...");
+        System.out.println("\nENTERING TESTING ENVIRONMENT...");
+		System.out.println("\tNOTE: All the errors thrown within JUnit Testing are intended.");
 	} 
 
     @AfterClass

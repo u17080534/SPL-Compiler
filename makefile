@@ -1,16 +1,25 @@
-JFLAGS = -g -d build 
-
 JC = javac
 
-# Linux
-# RM = rm 
-# Windows
-RM = del 
+BUILDFLAGS = -g -d build
+
+TESTFLAGS = -d build
+
+# RM = rm # Linux
+RM = del # Windows
 
 default: portable
 
+run: portable
+	java -jar spl -debug -test
+
+test: unit-test
+	java -jar test/junit-platform-console-standalone-1.6.2.jar --class-path build --scan-class-path
+
+portable: spl
+	jar cfm spl build/manifest -C build/ .
+
 spl:
-	$(JC) $(JFLAGS) \
+	$(JC) $(BUILDFLAGS) \
 	src/exception/*.java \
 	src/lexer/Token.java \
 	src/lexer/Lexer.java \
@@ -26,17 +35,9 @@ spl:
 	src/Cache.java \
 	src/SPL.java
 	
-portable: spl
-	jar cfm spl build/manifest -C build/ .
-
-run: portable
-	java -jar spl -debug -test
-
-clean:
-	$(RM) spl
-
-test: spl
-	javac -d build -cp build/junit-platform-console-standalone-1.6.2.jar test/UnitTest.java \
+unit-test:
+	$(JC) $(BUILDFLAGS) -cp test/junit-platform-console-standalone-1.6.2.jar \
+	test/UnitTest.java \
 	src/exception/*.java \
 	src/lexer/Token.java \
 	src/lexer/Lexer.java \
@@ -51,4 +52,6 @@ test: spl
 	src/syntax/code/Line.java \
 	src/Cache.java \
 	src/SPL.java
-	java -jar build/junit-platform-console-standalone-1.6.2.jar --class-path build --scan-class-path
+
+clean:
+	$(RM) spl

@@ -10,6 +10,7 @@ public class TerminalExpression extends Expression
 	private Token token;   
 	private String value;  
 	private String alias; 
+	private String label;
 
 	public TerminalExpression(Token token, String value)
 	{
@@ -96,6 +97,8 @@ public class TerminalExpression extends Expression
 		}
 
 		this.expr = this.alias + " '" + this.value + "'";
+
+		this.label = this.value; //original label in code, for getting user input
 	}
 
 	@Override
@@ -110,6 +113,11 @@ public class TerminalExpression extends Expression
 		return this.token.getLocation();
 	}
 
+	public String getLabel()
+	{
+		return this.label;
+	}
+
 	@Override
 	public boolean isTerminal()
 	{
@@ -117,7 +125,7 @@ public class TerminalExpression extends Expression
 	} 
 
 	public Line trans(File absFile)
-	{       
+	{System.out.println(this.expr);       
 		return new Line(this.value);
 	}
 } 

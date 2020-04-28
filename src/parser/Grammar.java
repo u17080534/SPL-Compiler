@@ -299,7 +299,7 @@ public class Grammar
 		}
 	}
 
-	// COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
+	// COND_BRANCH → if ( BOOL ) then { PROG } COND_BRANCH'
 	private Expression COND_BRANCH() throws SyntaxException
 	{
 		try
@@ -307,6 +307,7 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_IF)
 			{
 				this.readToken();
+				Token tok = this.current;
 				if(this.lookahead == Token.Tok.TOK_OP)
 				{
 					this.readToken();
@@ -320,12 +321,12 @@ public class Grammar
 							if(this.lookahead == Token.Tok.TOK_OB)
 							{
 								this.readToken();
-								Expression e2 = CODE();
+								Expression e2 = PROG();
 								if(this.lookahead == Token.Tok.TOK_CB)
 								{
 									this.readToken();
 									Expression e3 = COND_BRANCH_();
-									return new cond_branch(e1, e2, e3);
+									return new cond_branch(new TerminalExpression(tok, tok.getInput()), e1, e2, e3);
 								}
 								throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 							}
@@ -346,7 +347,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Token (if)");
 	}
 
-	// COND_BRANCH'→ else { CODE } | ϵ
+	// COND_BRANCH'→ else { PROG } | ϵ
 	private Expression COND_BRANCH_() throws SyntaxException
 	{
 		try
@@ -357,7 +358,7 @@ public class Grammar
 				if(this.lookahead == Token.Tok.TOK_OB)
 				{
 					this.readToken();
-					Expression e = CODE();
+					Expression e = PROG();
 					if(this.lookahead == Token.Tok.TOK_CB)
 					{
 						this.readToken();
@@ -377,7 +378,7 @@ public class Grammar
 		}
 	}
 
-	// COND_LOOP → while ( BOOL ) { CODE } | for ( VARIABLE = 0; VARIABLE < VARIABLE ; VARIABLE = add ( VARIABLE , 1 ) ) { CODE }
+	// COND_LOOP → while ( BOOL ) { PROG } | for ( VARIABLE = 0; VARIABLE < VARIABLE ; VARIABLE = add ( VARIABLE , 1 ) ) { PROG }
 	private Expression COND_LOOP() throws SyntaxException
 	{
 		try
@@ -396,7 +397,7 @@ public class Grammar
 						if(this.lookahead == Token.Tok.TOK_OB)
 						{
 							this.readToken();
-							Expression e3 = CODE();
+							Expression e3 = PROG();
 							if(this.lookahead == Token.Tok.TOK_CB)
 							{
 								this.readToken();
@@ -465,7 +466,7 @@ public class Grammar
 																			if(this.lookahead == Token.Tok.TOK_OB)
 																			{
 																				this.readToken();
-																				Expression e7 = CODE();
+																				Expression e7 = PROG();
 																				if(this.lookahead == Token.Tok.TOK_CB)
 																				{
 																					this.readToken();

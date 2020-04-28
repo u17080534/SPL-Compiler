@@ -17,18 +17,19 @@ public class io extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
-		System.out.println(this.expr);
-		
-		String str = this.action.trans(absFile).toString();
+	{System.out.println(this.expr);       
+		String act = this.action.trans(absFile).toString();
 
-		if(str.equals("output"))
-			str = "PRINT";
-		else if(str.equals("input"))
-			str = "INPUT";
+		if(act.equals("output"))
+			return new Line("PRINT " + this.varEx.trans(absFile));
 
-		Line line = new Line(str + " " + this.varEx.trans(absFile)); 
+		if(act.equals("input"))
+		{
+			String label = this.varEx.getLabel();
+			absFile.add(new Line("INPUT " + label));
+			return new Line(this.varEx.trans(absFile) + " = " + label);
+		} 
 		
-		return line;  
+		return null;
 	} 
 }

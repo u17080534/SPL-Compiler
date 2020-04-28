@@ -4,21 +4,21 @@ import syntax.code.*;
 
 public class cond_branch extends Expression 
 {   
+	private TerminalExpression terminal;
 	private Expression boolEx, codeEx, cond_branch_Ex;   
 
-	public cond_branch(Expression e1, Expression e2, Expression e3) 
+	public cond_branch(TerminalExpression e1, Expression e2, Expression e3, Expression e4) 
 	{ 
-		super(e1, e2, e3);
+		super(e1, e2, e3, e4);
+		this.terminal = e1;
+		this.boolEx = e2; 
+		this.codeEx = e3; 
+		this.cond_branch_Ex = e4; 
 		this.expr = "COND_BRANCH";
-		this.boolEx = e1; 
-		this.codeEx = e2; 
-		this.cond_branch_Ex = e3; 
 	}  
 
 	public Line trans(File absFile)
-	{       
-		System.out.println(this.expr);
-
+	{System.out.println(this.expr);       
 		/*
 		IF:
 			N   		 	TMPI = <BOOL>

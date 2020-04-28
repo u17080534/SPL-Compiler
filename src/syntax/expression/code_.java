@@ -20,7 +20,7 @@ public class code_ extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
+	{System.out.println(this.expr);       
 		if(this.codeEx == null)
 			return null;
 

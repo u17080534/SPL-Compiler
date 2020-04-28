@@ -24,9 +24,7 @@ public class numexpr extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
-		System.out.println(this.expr);
-		
+	{System.out.println(this.expr);       
 		if(this.number != null)    
 			return this.number.trans(absFile);
 		

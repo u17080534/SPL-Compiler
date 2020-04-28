@@ -15,9 +15,7 @@ public class proc_defs extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{       
-		System.out.println(this.expr);
-
+	{System.out.println(this.expr);       
 		this.procEx.trans(absFile);
 		
 		this.proc_defs_Ex.trans(absFile);

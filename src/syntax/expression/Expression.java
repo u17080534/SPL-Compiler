@@ -132,6 +132,11 @@ public abstract class Expression
 		this.expr = expr;
 	}
 
+	public String getLabel()
+	{
+		return this.expr;
+	}
+
 	public String getLocation()
 	{
 		return "";

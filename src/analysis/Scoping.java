@@ -35,7 +35,7 @@ public class Scoping
 		Vector<Symbol> usages = new Vector<Symbol>();
 		Vector<String> undefined = new Vector<String>();
 
-		//ASSIGN PROC NAME TO EVERY SYMBOL
+		//ASSIGN PROC NAME TO EVERY SYMBOL USING STACK
 		String procName = "";
 		Stack<String> procStack = new Stack<String>();
 		for(int index = 0; index < symbols.size(); index++)
@@ -52,11 +52,16 @@ public class Scoping
 						procName = symbols.get(index).getExpression().substring(4);
 					}
 					else
-						throw new UsageException(symbols.get(index), "Unknown Scoping issue encountered - scope increased without proc definition...");
+					{
+						procStack.push(procName);
+						procName = procName + symbols.get(index).getID();
+					}
 				}
 				else if(symbols.get(index).getScope() > symbols.get(index + 1).getScope())
 					procName = procStack.pop();
 			}
+
+			symbols.get(index).setProc(procName);
 		}
 
 		//BUILD DECLARATIONS LIST & USAGES LIST
@@ -65,7 +70,10 @@ public class Scoping
 			if(terminals.get(index).getExpression().indexOf("variable") == 0)
 			{
 				if(index > 0 && terminals.get(index - 1).getExpression().indexOf("type") == 0)
+				{
 					declarations.add(terminals.get(index));
+					terminals.get(index).setType(getValue(terminals.get(index - 1).getExpression()));
+				}
 				else
 					usages.add(terminals.get(index));
 			}
@@ -75,7 +83,7 @@ public class Scoping
 				declarations.add(terminals.get(index));
 		}
 
-		//CHECK FOR REDEFINITIONS
+		//CHECK FOR REDEFINITIONS IN DECLARATIONS
 		for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 			for(int index_decl_ = 0; index_decl_ < declarations.size(); index_decl_++)
 				//Names Match
@@ -99,8 +107,11 @@ public class Scoping
 			for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 			{
 				Symbol decl = declarations.get(index_decl);
-				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID() && (decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && decl.getProc().equals(usage.getProc()))))
+				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID() && (decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0)))
+				{
 					declared = true;
+					usage.setType(decl.getType());
+				}
 			}
 
 			if(!declared)
@@ -128,7 +139,7 @@ public class Scoping
 
 				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID())
 				{
-					if(decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && decl.getProc().equals(usage.getProc())))
+					if(decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0))
 					{
 						if(usage.getExpression().indexOf("variable") == 0)
 							usage.setExpression("variable 'V" + varcount + "'");
