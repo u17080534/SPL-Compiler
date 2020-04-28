@@ -35,7 +35,7 @@ run: portable
 clean:
 	$(RM) spl
 
-test:
+test: spl
 	javac -d build -cp build/junit-platform-console-standalone-1.6.2.jar test/UnitTest.java \
 	src/exception/*.java \
 	src/lexer/Token.java \
