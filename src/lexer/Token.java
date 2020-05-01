@@ -3,6 +3,7 @@ package lexer;
 import java.util.*;
 import java.io.*;
 
+//SPL-COMPILER
 public class Token
 {
 	private String input;

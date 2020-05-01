@@ -2,6 +2,7 @@ package symtable;
 
 import java.util.*;
 
+//SPL-COMPILER
 public class SymbolTable
 {
 	private Vector<Symbol> symbols;

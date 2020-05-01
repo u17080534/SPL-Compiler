@@ -6,6 +6,7 @@ import syntax.*;
 import lexer.*;
 import symtable.*;
 
+//SPL-COMPILER
 public class Parser
 {
 	private Grammar grammar;

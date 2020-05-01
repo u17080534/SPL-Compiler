@@ -3,6 +3,7 @@ package syntax.expression;
 import syntax.code.*;
 import lexer.Token.*;
 
+//SPL-COMPILER
 public class variable extends Expression 
 {   
 	private TerminalExpression variable;   

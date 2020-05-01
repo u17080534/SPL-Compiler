@@ -3,6 +3,7 @@ package syntax.expression;
 import syntax.code.*;
 import lexer.Token;
 
+//SPL-COMPILER
 public class bool extends Expression 
 {   
 	private TerminalExpression action; // T F ID EQ LT GT NOT AND OR

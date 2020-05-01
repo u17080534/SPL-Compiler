@@ -6,6 +6,7 @@ import syntax.expression.*;
 import syntax.code.File;
 import symtable.*;
 
+//SPL-COMPILER
 public class AbstractSyntaxTree
 {
 	Expression root;

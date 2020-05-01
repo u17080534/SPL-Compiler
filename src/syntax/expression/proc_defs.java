@@ -2,6 +2,7 @@ package syntax.expression;
 
 import syntax.code.*;
 
+//SPL-COMPILER
 public class proc_defs extends Expression 
 {   
 	private Expression procEx, proc_defs_Ex;   

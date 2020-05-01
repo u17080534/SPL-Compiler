@@ -2,6 +2,7 @@ package symtable;
 
 import syntax.expression.*;
 
+//SPL-COMPILER
 public class Symbol
 {
 	private Expression expr;

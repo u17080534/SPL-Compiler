@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 import exception.*;
 
+//SPL-COMPILER
 public class Lexer 
 {
 	//!Character Read Directly from Buffer

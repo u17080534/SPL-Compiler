@@ -2,6 +2,7 @@ package syntax.expression;
 
 import syntax.code.*;
 
+//SPL-COMPILER
 public class cond_loop extends Expression 
 {   
 	private TerminalExpression type;

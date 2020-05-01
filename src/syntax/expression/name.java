@@ -2,6 +2,7 @@ package syntax.expression;
 
 import syntax.code.*;
 
+//SPL-COMPILER
 public class name extends Expression 
 {   
 	private TerminalExpression variable;   

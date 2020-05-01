@@ -6,6 +6,7 @@ import lexer.*;
 import syntax.*;
 import syntax.expression.*;
 
+//SPL-COMPILER
 public class Grammar
 {
 	//!Index of this.lookahead

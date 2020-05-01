@@ -5,6 +5,8 @@ import syntax.*;
 import symtable.*;
 import exception.UsageException;
 
+//SPL-COMPILER
+//SPL-COMPILER
 public class Scoping
 {
 	//Static Function which fixes the sco

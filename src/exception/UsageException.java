@@ -2,6 +2,7 @@ package exception;
 
 import symtable.Symbol;
 
+//SPL-COMPILER
 public class UsageException extends Exception 
 {
 	private Symbol sym;

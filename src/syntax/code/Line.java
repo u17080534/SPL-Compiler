@@ -1,5 +1,6 @@
 package syntax.code;
 
+//SPL-COMPILER
 public class Line 
 {
 	private int number;

@@ -2,6 +2,7 @@ package syntax.expression;
 
 import syntax.code.*;
 
+//SPL-COMPILER
 public class assign_ extends Expression 
 {   
 	private TerminalExpression literal; //string

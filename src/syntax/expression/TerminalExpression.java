@@ -5,6 +5,7 @@ import lexer.Token;
 import lexer.Token.Tok;
 import analysis.Scoping;
 
+//SPL-COMPILER
 public class TerminalExpression extends Expression 
 {   
 	private Token token;   

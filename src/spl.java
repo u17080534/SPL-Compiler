@@ -8,6 +8,7 @@ import symtable.*;
 import analysis.*;
 import syntax.code.File;
 
+//SPL-COMPILER
 public class SPL 
 { 
     //!Handled File

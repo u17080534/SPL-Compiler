@@ -2,6 +2,7 @@ package syntax.expression;
 
 import syntax.code.*;
 
+//SPL-COMPILER
 public class decl extends Expression 
 {   
 	private Expression typeEx, nameEx, decl_Ex;   

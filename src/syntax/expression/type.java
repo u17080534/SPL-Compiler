@@ -4,6 +4,7 @@ import syntax.code.*;
 import lexer.*;
 import lexer.Token;
 
+//SPL-COMPILER
 public class type extends Expression 
 {   
 	private TerminalExpression typex;

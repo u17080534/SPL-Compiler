@@ -1,5 +1,6 @@
 package exception;
 
+//SPL-COMPILER
 public class LexerException extends Exception 
 {
 	private String location;

@@ -1,6 +1,7 @@
 package exception;
 import lexer.Token;
 
+//SPL-COMPILER
 public class SyntaxException extends Exception 
 {
 	private Token token;

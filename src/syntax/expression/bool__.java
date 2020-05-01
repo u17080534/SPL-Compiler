@@ -2,6 +2,7 @@ package syntax.expression;
 
 import syntax.code.*;
 
+//SPL-COMPILER
 public class bool__ extends Expression 
 {   
 	private Expression boolEx;   
