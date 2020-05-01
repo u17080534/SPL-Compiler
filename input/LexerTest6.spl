@@ -1,0 +1,15 @@
+num num1;
+num num2;
+num num3;
+num num4;
+
+proc new{
+	num1=0;
+	num2=901;
+	
+	
+	num4=-042;
+	
+	
+	num3=014;
+}

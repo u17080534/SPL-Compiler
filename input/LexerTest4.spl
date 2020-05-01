@@ -1,0 +1,22 @@
+proc bye
+{
+
+	num i1;
+    num i2;
+    string msg;
+    msg = "hello";
+    input(i2);
+
+    num i;
+    for(i = 0; i1 < i2; i = add(i,1))
+    {
+        output(msg)
+    };
+
+   
+    while((i1 < i2))
+    {
+        output(msg)
+    }
+  
+}
