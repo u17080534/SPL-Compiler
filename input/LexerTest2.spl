@@ -1,6 +1,0 @@
-string Tester;
-
-proc bye
-{
-	Tester="JohnIsABuilder";
-}

@@ -1,0 +1,8 @@
+1: if (tok_if)
+2: 3 (tok_number_literal)
+3: ( (tok_open_paren)
+4: eq (tok_eq)
+5: "  7" (tok_string_literal)
+6: { (tok_open_brace)
+7: add (tok_add)
+8: sub (tok_sub)
