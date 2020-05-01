@@ -30,7 +30,8 @@ public class cond_loop extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		Line codeTrans = null;
 
 		String ty = this.type.trans(absFile).toString();

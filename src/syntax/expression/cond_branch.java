@@ -18,7 +18,8 @@ public class cond_branch extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		/*
 		IF:
 			N   		 	TMPI = <BOOL>

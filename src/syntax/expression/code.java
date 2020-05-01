@@ -15,7 +15,8 @@ public class code extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		Line l1 = this.instrEx.trans(absFile);
 		
 		absFile.add(l1);

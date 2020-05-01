@@ -17,7 +17,8 @@ public class io extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		String act = this.action.trans(absFile).toString();
 
 		if(act.equals("output"))
