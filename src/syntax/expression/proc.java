@@ -16,7 +16,8 @@ public class proc extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		//Label the start of the proc
 		absFile.point(0);
 		

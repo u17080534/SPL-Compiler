@@ -15,7 +15,8 @@ public class bool_ extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		return new Line("");   
 	} 
 }

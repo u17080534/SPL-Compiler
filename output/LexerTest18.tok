@@ -1,0 +1,7 @@
+1: integer (tok_identifier)
+2: abcd (tok_identifier)
+3: ; (tok_semi)
+4: abcd (tok_identifier)
+5: = (tok_assign)
+6: 12343544678988765433435667879876543 (tok_number_literal)
+7: ; (tok_semi)

@@ -15,7 +15,8 @@ public class assign extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		Line l1 = this.varEx.trans(absFile);
 		
 		Line l2 = this.assign_Ex.trans(absFile);

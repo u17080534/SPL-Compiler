@@ -24,7 +24,8 @@ public class assign_ extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		Line l1 = this.literal.trans(absFile);
 
 		String str = l1.toString();
