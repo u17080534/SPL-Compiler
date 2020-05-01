@@ -14,7 +14,8 @@ public class call extends Expression
 	}  
 
 	public Line trans(File absFile)
-	{System.out.println(this.expr);       
+	{
+		//System.out.println(this.expr);       
 		//GOSUB %ID%
 		return new Line("GOSUB %" + this.func.trans(absFile).toString() + "%");   
 	}

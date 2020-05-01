@@ -166,6 +166,8 @@ public class Scoping
 
 			throw new UsageException("There are undefined usages/calls: " + str);
 		}
+
+		symbols = table.list();
 	}
 
 	public static String getValue(String expr)
