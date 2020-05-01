@@ -1,5 +1,0 @@
-proc hello{
-	num one;
-	one= abc;
-	zero =0
-}
