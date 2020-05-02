@@ -46,24 +46,27 @@ public class Scoping
 
 			if(index + 1 < symbols.size())
 			{
-				if(symbols.get(index).getScope() < symbols.get(index + 1).getScope())
-				{	
-					if(symbols.get(index).getExpression().indexOf("proc") == 0)
-					{
-						procStack.push(procName);
-						procName = symbols.get(index).getExpression().substring(4);
-					}
-					else
-					{
-						procStack.push(procName);
-						procName = procName + symbols.get(index).getID();
-					}
-				}
-				else if(symbols.get(index).getScope() > symbols.get(index + 1).getScope())
-					procName = procStack.pop();
-			}
+				int scope_diff = symbols.get(index + 1).getScope() - symbols.get(index).getScope();
 
-			symbols.get(index).setProc(procName);
+				if(scope_diff < 0)
+					for(int step = scope_diff; step < 0; step++)
+						procName = procStack.pop();
+
+				else if(scope_diff > 0)
+					for(int step = 0; step < scope_diff; step++)
+					{
+						if(symbols.get(index).getExpression().indexOf("proc") == 0) //ProcDef
+						{
+							procStack.push(procName);
+							procName = getValue(symbols.get(index).getExpression());
+						}
+						else //While/For/If/Else
+						{
+							procStack.push(procName);
+							procName = procName + symbols.get(index).getID();
+						}
+					}
+			}
 		}
 
 		//BUILD DECLARATIONS LIST & USAGES LIST

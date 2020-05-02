@@ -1,0 +1,55 @@
+S 			→ PROG
+
+PROG 		→ PROC_DEFS PROG' | CODE PROG'
+
+PROG' 		→ PROG | ϵ
+
+PROC_DEFS 	→ PROC PROC_DEFS'
+
+PROC_DEFS'  → PROC_DEFS | CODE | ϵ
+
+PROC 		→ proc UserDefinedIdentifier { PROG }
+
+CODE 		→ INSTR CODE'
+
+CODE' 		→ ; CODE | ; PROC_DEFS | ϵ
+
+DECL 		→ TYPE NAME DECL'
+
+DECL' 		→ ; DECL | ϵ
+
+IO 			→ input ( VAR ) | output ( VAR )
+
+COND_BRANCH → if ( BOOL ) then { PROG } COND_BRANCH'
+
+COND_BRANCH'→ else { PROG } | ϵ
+
+COND_LOOP 	→ while ( BOOL ) { PROG } | for ( VAR = 0; VAR < VAR ; VAR = add ( VAR , 1 ) ) { PROG }
+
+CALC 		→ add ( CALC' | sub ( CALC' | mult ( CALC'
+
+CALC' 		→ NUMEXPR , CALC"
+
+CALC" 		→ NUMEXPR )
+
+BOOL 		→ T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
+
+BOOL' 		→ BOOL , BOOL"
+
+BOOL" 		→ BOOL )
+
+INSTR 		→ halt | DECL | IO | CALL | ASSIGN  | COND_BRANCH | COND_LOOP
+
+NUMEXPR 	→ VAR | CALC | integerLiteral
+
+TYPE 		→ num | string | bool
+
+CALL 		→ userDefinedIdentifier
+
+NAME 		→ userDefinedIdentifier
+
+VARIABLE	→ userDefinedIdentifier
+
+ASSIGN 		→ VAR = ASSIGN'
+
+ASSIGN' 	→ stringLiteral | VAR | NUMEXPR | BOOL

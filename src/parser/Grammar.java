@@ -91,7 +91,7 @@ public class Grammar
 				e1 = CODE();
 			}
 			else
-				throw new SyntaxException(this.current, "Program Error: Unknown Token Encountered.");
+				throw new SyntaxException(this.current, "Program Error: Instruction is expected inside of proc.");
 
 			Expression e2 = PROG_();
 
@@ -104,27 +104,21 @@ public class Grammar
 		return ex;
 	}
 
-	// PROG' → ; PROC_DEFS | ; CODE | ϵ
+	//PROG' → PROG | ϵ
 	private Expression PROG_() throws SyntaxException
 	{
 		try
 		{
-			if(this.lookahead == Token.Tok.TOK_SEMI)
+			Expression e1 = null;
+			if(this.lookahead == Token.Tok.TOK_PROC)
 			{
-				this.readToken();
-
-				Expression e1 = null;
-
-				if(this.lookahead == Token.Tok.TOK_PROC)
-				{
-					e1 = PROC_DEFS();
-					return new prog_(e1);
-				}
-				else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
-				{
-					e1 = CODE();
-					return new prog_(e1);
-				}
+				e1 = PROG();
+				return new prog_(e1);
+			}
+			else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
+			{
+				e1 = PROG();
+				return new prog_(e1);
 			}
 
 			return new prog_();
