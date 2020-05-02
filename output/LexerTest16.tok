@@ -1,7 +1,0 @@
-1: string (tok_string)
-2: abc (tok_identifier)
-3: ; (tok_semi)
-4: abc (tok_identifier)
-5: = (tok_assign)
-6: "    " (tok_string_literal)
-7: ; (tok_semi)
