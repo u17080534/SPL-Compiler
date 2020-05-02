@@ -5,7 +5,7 @@ BUILDFLAGS = -g -d build
 TESTFLAGS = -d build
 
 RM = rm # Linux
-# RM = del # Windows
+RM = del # Windows
 
 default: portable
 

@@ -18,13 +18,13 @@ proc Guess
         EQ = eq(answer, other);
 
         if(EQ) then
-    {
-        output (CORRECT)
-    }
-    else
-    {
-        output (WRONG)
-    }
+        {
+            output (CORRECT)
+        }
+        else
+        {
+            output (WRONG)
+        }
     }
 }
 

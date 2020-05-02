@@ -1477,8 +1477,8 @@ public class Lexer
 
 			if(this.readChar == '\n' || this.readChar == '\r')
 			{
-				// if(System.getProperty("line.separator").equals("\r\n"))
-				this.readChar = this.buffer.read();
+				//This was for windows but was causing issues so the method was changed
+				// 		if(System.getProperty("line.separator").equals("\r\n")) this.readChar = this.buffer.read();
 
 				ch = '#';
 				this.col = 0;
