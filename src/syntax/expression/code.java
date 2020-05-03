@@ -20,7 +20,7 @@ public class code extends Expression
 		//System.out.println(this.expr);       
 		Line l1 = this.instrEx.trans(absFile);
 		
-		absFile.add(l1);
+		absFile.add(l1, true);
 
 		if(this.code_Ex != null)
 			this.code_Ex.trans(absFile);

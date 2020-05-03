@@ -5,13 +5,13 @@
 4:TYPE
 5:type 'string'
 6:NAME
-7:variable 'V0'
+7:variable 'WRONG'
 8:CODE_
 9:CODE
 10:INSTR
 11:ASSIGN
 12:VARIABLE
-13:variable 'V0'
+13:variable 'WRONG'
 14:ASSIGN_
 15:assign '"WRONG"'
 16:CODE_
@@ -21,13 +21,13 @@
 20:TYPE
 21:type 'string'
 22:NAME
-23:variable 'V1'
+23:variable 'CORRECT'
 24:CODE_
 25:CODE
 26:INSTR
 27:ASSIGN
 28:VARIABLE
-29:variable 'V1'
+29:variable 'CORRECT'
 30:ASSIGN_
 31:assign '"CORRECT"'
 32:CODE_
@@ -37,13 +37,13 @@
 36:TYPE
 37:type 'bool'
 38:NAME
-39:variable 'V2'
+39:variable 'EQ'
 40:CODE_
 41:CODE
 42:INSTR
 43:ASSIGN
 44:VARIABLE
-45:variable 'V2'
+45:variable 'EQ'
 46:ASSIGN_
 47:assign 'bool'
 48:BOOL
@@ -51,7 +51,7 @@
 50:CODE_
 51:PROC_DEFS
 52:PROC
-53:proc 'P0'
+53:proc 'Guess'
 54:PROG
 55:CODE
 56:INSTR
@@ -61,7 +61,7 @@
 60:bool 'not'
 61:BOOL
 62:VARIABLE
-63:variable 'V2'
+63:variable 'EQ'
 64:PROG
 65:CODE
 66:INSTR
@@ -69,19 +69,19 @@
 68:TYPE
 69:type 'num'
 70:NAME
-71:variable 'V3'
+71:variable 'answer'
 72:DECL_
 73:DECL
 74:TYPE
 75:type 'num'
 76:NAME
-77:variable 'V4'
+77:variable 'other'
 78:CODE_
 79:CODE
 80:INSTR
 81:ASSIGN
 82:VARIABLE
-83:variable 'V4'
+83:variable 'other'
 84:ASSIGN_
 85:assign 'numexpr'
 86:NUMEXPR
@@ -92,21 +92,21 @@
 91:IO
 92:io 'input'
 93:VARIABLE
-94:variable 'V3'
+94:variable 'answer'
 95:CODE_
 96:CODE
 97:INSTR
 98:ASSIGN
 99:VARIABLE
-100:variable 'V2'
+100:variable 'EQ'
 101:ASSIGN_
 102:assign 'bool'
 103:BOOL
 104:bool 'eq'
 105:VARIABLE
-106:variable 'V3'
+106:variable 'answer'
 107:VARIABLE
-108:variable 'V4'
+108:variable 'other'
 109:CODE_
 110:CODE
 111:INSTR
@@ -114,14 +114,14 @@
 113:tok_if 'if'
 114:BOOL
 115:VARIABLE
-116:variable 'V2'
+116:variable 'EQ'
 117:PROG
 118:CODE
 119:INSTR
 120:IO
 121:io 'output'
 122:VARIABLE
-123:variable 'V1'
+123:variable 'CORRECT'
 124:COND_BRANCH_
 125:PROG
 126:CODE
@@ -129,50 +129,55 @@
 128:IO
 129:io 'output'
 130:VARIABLE
-131:variable 'V0'
+131:variable 'WRONG'
 132:CODE_
 133:PROC_DEFS
 134:PROC
-135:proc 'P1'
+135:proc 'scope0'
 136:PROG
 137:PROC_DEFS
 138:PROC
-139:proc 'P2'
+139:proc 'scope1a'
 140:PROG
 141:CODE
 142:INSTR
 143:IO
 144:io 'output'
 145:VARIABLE
-146:variable 'V0'
+146:variable 'WRONG'
 147:PROC_DEFS_
 148:PROC_DEFS
 149:PROC
-150:proc 'P3'
+150:proc 'scope1b'
 151:PROG
 152:CODE
 153:INSTR
 154:IO
 155:io 'output'
 156:VARIABLE
-157:variable 'V0'
+157:variable 'WRONG'
 158:PROC_DEFS_
 159:PROC_DEFS
 160:PROC
-161:proc 'P4'
+161:proc 'scope1c'
 162:PROG
 163:PROC_DEFS
 164:PROC
-165:proc 'P5'
+165:proc 'scope2'
 166:PROG
 167:CODE
 168:INSTR
 169:IO
 170:io 'output'
 171:VARIABLE
-172:variable 'V0'
+172:variable 'WRONG'
 173:PROC_DEFS_
 174:CODE
 175:INSTR
 176:CALL
-177:call 'P0'
+177:call 'scope1b'
+178:PROC_DEFS_
+179:CODE
+180:INSTR
+181:CALL
+182:call 'Guess'

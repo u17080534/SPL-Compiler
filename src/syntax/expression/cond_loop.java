@@ -55,17 +55,17 @@ public class cond_loop extends Expression
 
 			absFile.label(lblStart);
 
-			absFile.add(new Line(temp + " = " + this.condEx1.trans(absFile).toString()));
+			absFile.add(new Line(temp + " = " + this.condEx1.trans(absFile).toString()), true);
 
-			absFile.add(new Line(temp + " = NOT " + temp));
+			absFile.add(new Line(temp + " = NOT " + temp), true);
 
-			absFile.add(new Line("IF " + temp + " THEN GOTO %" + lblEnd + "+1%"));
+			absFile.add(new Line("IF " + temp + " THEN GOTO %" + lblEnd + "%"), true);
 
 			codeTrans = this.condEx2.trans(absFile);
 
 			absFile.label(lblEnd);
 
-			absFile.add(new Line("GOTO %" + lblStart + "%"));
+			absFile.add(new Line("GOTO %" + lblStart + "%"), true);
 		}
 		else if(ty.equals("for")) //for
 		{

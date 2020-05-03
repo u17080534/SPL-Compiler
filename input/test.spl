@@ -44,6 +44,8 @@ proc Guess
                 output (WRONG)
             }
         }
+
+        scope1b
     }
 }
 

@@ -59,9 +59,9 @@ public class bool extends Expression
 		if(this.e1 == null) // T / F
 		{
 			if(distinct.equals("T"))
-				return new Line("1");
+				line = new Line("1");
 			else if(distinct.equals("F"))
-				return new Line("0");
+				line = new Line("0");
 		}
 		else
 		{
@@ -70,7 +70,7 @@ public class bool extends Expression
 				if(distinct.equals("not"))
 				{
 					absFile.add(new Line(temp + " = NOT " + this.e1.trans(absFile).toString()));
-					return new Line(temp);
+					line = new Line(temp);
 				}
 				else
 					System.out.println("ISSUE " + distinct);
@@ -82,35 +82,35 @@ public class bool extends Expression
 					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
 					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
 					absFile.add(new Line(temp + " = " + temp + "1 = " + temp + "2"));
-					return new Line(temp);
+					line = new Line(temp);
 				}
 				else if(distinct.equals(">"))
 				{
 					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
 					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
 					absFile.add(new Line(temp + " = " + temp + "1 > " + temp + "2"));
-					return new Line(temp);				
+					line = new Line(temp);				
 				}
 				else if(distinct.equals("<"))
 				{
 					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
 					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
 					absFile.add(new Line(temp + " = " + temp + "1 < " + temp + "2"));
-					return new Line(temp);
+					line = new Line(temp);
 				}
 				else if(distinct.equals("and"))
 				{
-					return new Line(temp);
+					line = new Line(temp);
 				}
 				else if(distinct.equals("or"))
 				{
-					return new Line(temp);
+					line = new Line(temp);
 				}
 				else
 					System.out.println("ISSUE " + distinct);
 			}
 		}
 
-		return null;
+		return line;
 	}
 }

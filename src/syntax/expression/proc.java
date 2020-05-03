@@ -21,31 +21,44 @@ public class proc extends Expression
 		//System.out.println(this.expr);       
 		//Label the start of the proc
 
+		System.out.println("LAST LINE: " + absFile.getPointed().toString());
+
 		int index = absFile.getLabel(this.proced.getSymbol().getProc()); //pos of current proc in file
 
 		int oldIndex = absFile.point(0); //where proc is defined in upper level
+		int diff = absFile.getPointer();
+			// System.out.println(this.proced + " " + this.progEx + " OLD -> "+oldIndex);
 
-		System.out.println(this.proced + " " + this.progEx + " OLD -> "+oldIndex);
-		System.out.println("\t"+this.proced.trans(absFile).toString() + " > "+this.proced.getSymbol().getProc() + " " + index);
-		System.out.println(absFile.getLabels());
+			// System.out.println("\t"+this.proced.trans(absFile).toString() + " > "+this.proced.getSymbol().getProc() + " " + index);
+
+			// System.out.println(absFile.getLabels());
 		
 		absFile.label(this.proced.trans(absFile).toString());
 		
 		Line line = this.progEx.trans(absFile);
 
-		absFile.add(new Line("RETURN"));
+		if(absFile.getPointed().toString().indexOf("RETURN") < 0)
+			absFile.add(new Line("RETURN"), true);
 
-		System.out.println("00	"+line);
+		// if(!this.proced.getSymbol().getProc().equals(""))
+		// 	absFile.label(this.proced.getSymbol().getProc());
 
 		absFile.label("PROC_DEFS");
 
-		oldIndex = absFile.point(oldIndex + 1);
+		diff = absFile.getPointer() - diff;
 
-		System.out.println("00"+this.proced + " " + this.progEx + " OLD -> "+oldIndex);
+		if(oldIndex == -1)
+			diff = 0;
 
-		System.out.println("\t"+this.proced.trans(absFile).toString() + " > "+this.proced.getSymbol().getProc() + " " + index);
+		absFile.point(oldIndex + diff);
 
-		System.out.println(absFile.getLabels());
+			System.out.println("THIS proced: " + this.proced + "\n\tPROGEX: " + this.progEx + "\n\tOLDindex -> "+oldIndex);
+
+			System.out.println("\t"+this.proced.trans(absFile).toString() + " > "+this.proced.getSymbol().getProc() + " " + index);
+
+			System.out.println(absFile.getLabels());
+
+			System.out.println("LINE " + line);
 
 		return line; 
 	} 

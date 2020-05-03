@@ -72,7 +72,26 @@ public class File
 			if(this.point != -1)
 			{
 				for(HashMap.Entry<String, Integer> label : this.labels.entrySet())
-					if(label.getValue() >= this.point)
+					if(label.getValue() > this.point)
+						label.setValue(label.getValue() + 1);
+
+				this.lines.add(this.point, line);
+
+				this.point++;
+			}
+			else
+				this.lines.add(line);
+		}
+	}
+
+	public void add(Line line, boolean forcelbl)
+	{
+		if(line != null)
+		{
+			if(this.point != -1)
+			{
+				for(HashMap.Entry<String, Integer> label : this.labels.entrySet())
+					if(label.getValue() > this.point || (forcelbl && label.getValue() == this.point))
 						label.setValue(label.getValue() + 1);
 
 				this.lines.add(this.point, line);
@@ -89,8 +108,6 @@ public class File
 	{
 		int tmp = this.point;
 		this.point = -1;
-		// if(tmp == -1)
-		// 	tmp = this.lines.size();
 		return tmp;
 	}
 
@@ -99,37 +116,27 @@ public class File
 	{
 		int tmp = this.point;
 		this.point = index;
-		// if(tmp == -1)
-		// 	tmp = this.lines.size();
 		return tmp;
 	}
 
-	public boolean label(String label)
+	public void label(String label)
 	{
-		if(this.labels.containsKey(label))
-			return false;
-		
 		int lblIndex = this.lines.size();
 
 		if(this.point != -1)
 			lblIndex = this.point;
 
 		this.labels.put(label, new Integer(lblIndex));
-		return true;
 	}
 
-	public boolean label(String label, int diff)
+	public void label(String label, int diff)
 	{
-		// if(this.labels.containsKey(label))
-		// 	return false;
-
 		int lblIndex = this.lines.size();
 
 		if(this.point != -1)
 			lblIndex = this.point;
 		
 		this.labels.put(label, new Integer(lblIndex - diff));
-		return true;
 	}
 
 	public boolean hasLabel(String label)
@@ -148,6 +155,21 @@ public class File
 	public Map<String, Integer> getLabels()
 	{
 		return this.labels;
+	}
+
+	public int getPointer()
+	{
+		return this.point;
+	}
+
+	public Line getPointed()
+	{
+		int tmp = this.point;
+		
+		if(tmp == -1)
+			tmp = this.lines.size() - 1;
+
+		return this.lines.get(tmp);
 	}
 
 	@Override
@@ -169,7 +191,7 @@ public class File
 		{
 			refined.point(0);
 
-			refined.add(new Line("GOTO %PROC_DEFS%"));
+			refined.add(new Line("GOTO %PROC_DEFS%"), true);
 
 			refined.point();
 		}

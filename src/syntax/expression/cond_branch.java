@@ -45,11 +45,11 @@ public class cond_branch extends Expression
 
 		if(this.cond_branch_Ex == null)
 		{
-			absFile.add(new Line("TMPI = " + this.boolEx.trans(absFile).toString()));
+			absFile.add(new Line("TMPI = " + this.boolEx.trans(absFile).toString()), true);
 
-			absFile.add(new Line("TMPI = NOT TMPI"));
+			absFile.add(new Line("TMPI = NOT TMPI"), true);
 
-			absFile.add(new Line("IF TMPI THEN GOTO %" + lblEnd + "+1%"));
+			absFile.add(new Line("IF TMPI THEN GOTO %" + lblEnd + "+1%"), true);
 
 			codeTrans = this.codeEx.trans(absFile);
 
@@ -57,19 +57,19 @@ public class cond_branch extends Expression
 		}
 		else
 		{
-			absFile.add(new Line("TMPI = " + this.boolEx.trans(absFile).toString()));
+			absFile.add(new Line("TMPI = " + this.boolEx.trans(absFile).toString()), true);
 
-			absFile.add(new Line("IF TMPI THEN GOTO %" + lblElse + "%"));
+			absFile.add(new Line("IF TMPI THEN GOTO %" + lblElse + "%"), true);
 
 			this.cond_branch_Ex.trans(absFile);
 
-			absFile.add(new Line("GOTO %" + lblEnd + "+1%"));
+			absFile.add(new Line("GOTO %" + lblEnd + "+1%"), true);
 
 			absFile.label(lblElse);
 
-			absFile.add(new Line("TMPI = NOT TMPI"));
+			absFile.add(new Line("TMPI = NOT TMPI"), true);
 
-			absFile.add(new Line("IF TMPI THEN GOTO %" + lblEnd + "+1%"));
+			absFile.add(new Line("IF TMPI THEN GOTO %" + lblEnd + "+1%"), true);
 
 			codeTrans = this.codeEx.trans(absFile);
 
