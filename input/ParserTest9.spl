@@ -8,4 +8,27 @@ proc checnuber{
 	if(eq(m,zero))
 		then{r="even"}
 		else{r="odd"}
-	}proc xx{output (WRONG)} proc yy{ proc xt{output (WRONG)} proc pp{output (WRONG)} proc yh{proc pv{output (WRONG)}}}
+	};
+
+	proc xx{
+		output (zero)
+		} 
+	proc yy
+	{ 
+		proc xt
+		{
+			output (zero)
+		} 
+		proc pp
+		{
+			output (zero)
+		} 
+		proc yh
+		{
+			proc pv
+			{
+				output (zero)
+			}
+		}
+	}
+}

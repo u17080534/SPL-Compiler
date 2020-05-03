@@ -1478,7 +1478,6 @@ public class Lexer
 			if(this.readChar == '\r')
 			{
 				ch = '#';
-				this.col = 0;
 			}
 			if(this.readChar == '\n')
 			{

@@ -158,7 +158,13 @@ public class Scoping
 			if(decl.getExpression().indexOf("variable") == 0)
 				rename = "variable 'V" + (varcount++) + "'";
 			if(decl.getExpression().indexOf("proc") == 0)
+			{
 				rename = "proc 'P" + (proccount++) + "'";
+
+				for(int index = 0; index < symbols.size(); index++)
+					if(symbols.get(index).getProc().equals(getValue(decl.getExpression())))
+						symbols.get(index).setProc(getValue(rename));
+			}
 
 			decl.setExpression(rename);
 		}

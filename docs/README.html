@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:6419/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>README.md - Grip</title>
+  <link rel="icon" href="http://localhost:6419/__/grip/static/favicon.ico">
+  <link rel="stylesheet" href="./README_files/frameworks-146fab5ea30e8afac08dd11013bb4ee0.css">
+  <link rel="stylesheet" href="./README_files/github-c611305d49c042bc2dcf1dd251e0d1c3.css">
+  <link rel="stylesheet" href="./README_files/site-90a338b2464ec321e425c6f96fd2e675.css">
+  <link rel="stylesheet" href="./README_files/octicons.css">
+  <style>
+    /* Page tweaks */
+    .preview-page {
+      margin-top: 64px;
+    }
+    /* User-content tweaks */
+    .timeline-comment-wrapper > .timeline-comment:after,
+    .timeline-comment-wrapper > .timeline-comment:before {
+      content: none;
+    }
+    /* User-content overrides */
+    .discussion-timeline.wide {
+      width: 920px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div id="preview-page" class="preview-page" data-autorefresh-url="/__/grip/refresh/">
+
+    
+
+      <div role="main" class="main-content">
+        <div class="container new-discussion-timeline experiment-repo-nav">
+          <div class="repository-content">
+            <div id="readme" class="readme boxed-group clearfix announce instapaper_body md">
+              
+                <h3>
+                  <span class="octicon octicon-book"></span>
+                  README.md
+                </h3>
+              
+              <article class="markdown-body entry-content" itemprop="text" id="grip-content">
+                <h1>
+<a id="user-content-documentation" class="anchor" href="http://localhost:6419/#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h1>
+<p>All documentation for the different parts of the development of the SPL-Compiler is stored within the <code>docs</code> directory.
+In this directory are documents which detail the Regular Expressions, Grammar, and Finite Automata on which the compiler is based.</p>
+<p>All details on the implementation of the algorithms for the different parts of the compiler are explained within <code>DESCRIPTION.txt</code>, every section is accompanied by each group members contributions in detail. The group members' information is contained within <code>GROUP MEMBERS.txt</code>.</p>
+<h2>
+<a id="user-content-usage" class="anchor" href="http://localhost:6419/#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+<ol>
+<li>To compile the SPL-Compiler, it is require you have the following (or compatible) Java Software installed:
+<pre><code>java version "1.8.0_251"
+Java(TM) SE Runtime Environment (build 1.8.0_251-b08)
+</code></pre>
+</li>
+<li>Run the makefile as follows to compile the spl-compiler JAR file:
+<pre><code>make
+</code></pre>
+</li>
+<li>To compile a SPL program:
+<pre><code>java -jar spl [-debug] &lt;file&gt;.spl
+</code></pre>
+or to compile a given example file (<code>input/test.spl</code>):
+<pre><code>make run
+</code></pre>
+to execute Unit Testing use:
+<pre><code>make test
+</code></pre>
+</li>
+<li>Once the program is executing, all constructed data structures will be cached in the <code>output</code> directory (if <code>[-debug]</code> is enabled they will also be output in the terminal.)
+The executable <code>BASIC</code> code will be produced in the current directory.</li>
+</ol>
+<p>Note: If multiple files are supplied as arguments, they will be compiled as independent programs.</p>
+
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+
+  </div>
+  <div>&nbsp;</div>
+  </div><script>
+    function showCanonicalImages() {
+      var images = document.getElementsByTagName('img');
+      if (!images) {
+        return;
+      }
+      for (var index = 0; index < images.length; index++) {
+        var image = images[index];
+        if (image.getAttribute('data-canonical-src') && image.src !== image.getAttribute('data-canonical-src')) {
+          image.src = image.getAttribute('data-canonical-src');
+        }
+      }
+    }
+
+    function scrollToHash() {
+      if (location.hash && !document.querySelector(':target')) {
+        var element = document.getElementById('user-content-' + location.hash.slice(1));
+        if (element) {
+           element.scrollIntoView();
+        }
+      }
+    }
+
+    function autorefreshContent(eventSourceUrl) {
+      var initialTitle = document.title;
+      var contentElement = document.getElementById('grip-content');
+      var source = new EventSource(eventSourceUrl);
+      var isRendering = false;
+
+      source.onmessage = function(ev) {
+        var msg = JSON.parse(ev.data);
+        if (msg.updating) {
+          isRendering = true;
+          document.title = '(Rendering) ' + document.title;
+        } else {
+          isRendering = false;
+          document.title = initialTitle;
+          contentElement.innerHTML = msg.content;
+          showCanonicalImages();
+        }
+      }
+
+      source.onerror = function(e) {
+        if (e.readyState === EventSource.CLOSED && isRendering) {
+          isRendering = false;
+          document.title = initialTitle;
+        }
+      }
+    }
+
+    window.onhashchange = function() {
+      scrollToHash();
+    }
+
+    window.onload = function() {
+      scrollToHash();
+    }
+
+    showCanonicalImages();
+
+    var autorefreshUrl = document.getElementById('preview-page').getAttribute('data-autorefresh-url');
+    if (autorefreshUrl) {
+      autorefreshContent(autorefreshUrl);
+    }
+  </script>
+
+</body></html>

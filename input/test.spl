@@ -25,6 +25,25 @@ proc Guess
         {
             output (WRONG)
         }
+    };
+
+    proc scope0
+    { 
+        proc scope1a
+        {
+            output (WRONG)
+        } 
+        proc scope1b
+        {
+            output (WRONG)
+        } 
+        proc scope1c
+        {
+            proc scope2
+            {
+                output (WRONG)
+            }
+        }
     }
 }
 

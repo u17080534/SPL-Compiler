@@ -1,7 +1,7 @@
 0:PROG
 1:PROC_DEFS
 2:PROC
-3:proc 'checknuber'
+3:proc 'checnuber'
 4:PROG
 5:CODE
 6:INSTR
@@ -116,3 +116,55 @@
 115:variable 'r'
 116:ASSIGN_
 117:assign '"odd"'
+118:CODE_
+119:PROC_DEFS
+120:PROC
+121:proc 'xx'
+122:PROG
+123:CODE
+124:INSTR
+125:IO
+126:io 'output'
+127:VARIABLE
+128:variable 'zero'
+129:PROC_DEFS_
+130:PROC_DEFS
+131:PROC
+132:proc 'yy'
+133:PROG
+134:PROC_DEFS
+135:PROC
+136:proc 'xt'
+137:PROG
+138:CODE
+139:INSTR
+140:IO
+141:io 'output'
+142:VARIABLE
+143:variable 'zero'
+144:PROC_DEFS_
+145:PROC_DEFS
+146:PROC
+147:proc 'pp'
+148:PROG
+149:CODE
+150:INSTR
+151:IO
+152:io 'output'
+153:VARIABLE
+154:variable 'zero'
+155:PROC_DEFS_
+156:PROC_DEFS
+157:PROC
+158:proc 'yh'
+159:PROG
+160:PROC_DEFS
+161:PROC
+162:proc 'pv'
+163:PROG
+164:CODE
+165:INSTR
+166:IO
+167:io 'output'
+168:VARIABLE
+169:variable 'zero'

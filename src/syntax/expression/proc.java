@@ -20,18 +20,33 @@ public class proc extends Expression
 	{
 		//System.out.println(this.expr);       
 		//Label the start of the proc
-		absFile.point(0);
+
+		int index = absFile.getLabel(this.proced.getSymbol().getProc()); //pos of current proc in file
+
+		int oldIndex = absFile.point(0); //where proc is defined in upper level
+
+		System.out.println(this.proced + " " + this.progEx + " OLD -> "+oldIndex);
+		System.out.println("\t"+this.proced.trans(absFile).toString() + " > "+this.proced.getSymbol().getProc() + " " + index);
+		System.out.println(absFile.getLabels());
 		
 		absFile.label(this.proced.trans(absFile).toString());
-
-		this.progEx.trans(absFile);
+		
+		Line line = this.progEx.trans(absFile);
 
 		absFile.add(new Line("RETURN"));
 
+		System.out.println("00	"+line);
+
 		absFile.label("PROC_DEFS");
 
-		absFile.point();
+		oldIndex = absFile.point(oldIndex + 1);
 
-		return null; 
+		System.out.println("00"+this.proced + " " + this.progEx + " OLD -> "+oldIndex);
+
+		System.out.println("\t"+this.proced.trans(absFile).toString() + " > "+this.proced.getSymbol().getProc() + " " + index);
+
+		System.out.println(absFile.getLabels());
+
+		return line; 
 	} 
 }

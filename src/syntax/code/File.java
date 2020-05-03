@@ -51,7 +51,7 @@ public class File
 					}
 
 					if(this.labels.get(label) == null)
-						System.out.println("LABEL "+label);
+						System.out.println("ERROR LABEL " + label);
 
 					int lineRef = this.labels.get(label) + diff;
 
@@ -71,11 +71,11 @@ public class File
 		{
 			if(this.point != -1)
 			{
-				this.lines.add(this.point, line);
-
 				for(HashMap.Entry<String, Integer> label : this.labels.entrySet())
-					if(label.getValue() > this.point)
+					if(label.getValue() >= this.point)
 						label.setValue(label.getValue() + 1);
+
+				this.lines.add(this.point, line);
 
 				this.point++;
 			}
@@ -84,17 +84,23 @@ public class File
 		}
 	}
 
+	//!Resets File Pointer
 	public int point()
 	{
 		int tmp = this.point;
 		this.point = -1;
+		// if(tmp == -1)
+		// 	tmp = this.lines.size();
 		return tmp;
 	}
 
+	//Sets File Pointer Position
 	public int point(int index)
 	{
 		int tmp = this.point;
 		this.point = index;
+		// if(tmp == -1)
+		// 	tmp = this.lines.size();
 		return tmp;
 	}
 
@@ -114,8 +120,8 @@ public class File
 
 	public boolean label(String label, int diff)
 	{
-		if(this.labels.containsKey(label))
-			return false;
+		// if(this.labels.containsKey(label))
+		// 	return false;
 
 		int lblIndex = this.lines.size();
 
@@ -134,9 +140,14 @@ public class File
 	public int getLabel(String label)
 	{
 		if(!this.labels.containsKey(label))
-			return 0;
+			return -1;
 
 		return this.labels.get(label);
+	}
+
+	public Map<String, Integer> getLabels()
+	{
+		return this.labels;
 	}
 
 	@Override

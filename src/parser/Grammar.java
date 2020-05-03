@@ -74,7 +74,7 @@ public class Grammar
 		}
 	}
 
-	//PROG → PROC_DEFS PROG' | CODE PROG'
+	//PROG → PROC_DEFS | CODE
 	private Expression PROG() throws SyntaxException
 	{
 		Expression ex;
@@ -93,9 +93,9 @@ public class Grammar
 			else
 				throw new SyntaxException(this.current, "Program Error: Instruction is expected inside of proc.");
 
-			Expression e2 = PROG_();
+			// Expression e2 = PROG_();
 
-			ex = new prog(e1, e2);
+			ex = new prog(e1);
 		}
 		catch(Exception error)
 		{
@@ -105,29 +105,29 @@ public class Grammar
 	}
 
 	//PROG' → PROG | ϵ
-	private Expression PROG_() throws SyntaxException
-	{
-		try
-		{
-			Expression e1 = null;
-			if(this.lookahead == Token.Tok.TOK_PROC)
-			{
-				e1 = PROG();
-				return new prog_(e1);
-			}
-			else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
-			{
-				e1 = PROG();
-				return new prog_(e1);
-			}
+	// private Expression PROG_() throws SyntaxException
+	// {
+	// 	try
+	// 	{
+	// 		Expression e1 = null;
+	// 		if(this.lookahead == Token.Tok.TOK_PROC)
+	// 		{
+	// 			e1 = PROG();
+	// 			return new prog_(e1);
+	// 		}
+	// 		else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
+	// 		{
+	// 			e1 = PROG();
+	// 			return new prog_(e1);
+	// 		}
 
-			return new prog_();
-		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
-	}
+	// 		return new prog_();
+	// 	}
+	// 	catch(Exception ex)
+	// 	{
+	// 		throw ex;
+	// 	}
+	// }
 
 	// PROC_DEFS → PROC PROC_DEFS'
 	private Expression PROC_DEFS() throws SyntaxException

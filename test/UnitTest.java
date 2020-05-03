@@ -54,7 +54,7 @@ public class UnitTest
             "", //4
             "", //5
             "Lexical Error [line: 11, col: 12]: Numeric literals other than 0 must begin with [1-9]", //6
-            "Lexical Error [line: 15, col: 1]: newline character was unexpected in this case", //7
+            "Lexical Error [line: 14, col: 15]: newline character was unexpected in this case", //7
             "", //8
             "", //9
             "Lexical Error [line: 1, col: 9]: Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number",//error //10
@@ -124,8 +124,7 @@ public class UnitTest
             "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis Token=[if - tok_if[5,6]]",//6
             "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis Token=[m - tok_identifier[5,10]]",//7
             "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis Token=[) - tok_close_paren[7,20]]",//8
-            "Syntax Error: Procedural Error: Expected Closing Brace.\n" +
-                "\tHint: You may be missing a semicolon (;) between instructions. Token=[} - tok_close_brace[11,6]]",//9
+            "",//9
             "Syntax Error: Invalid assignment: Bad Right Operand. Token=[= - tok_assign[3,10]]",//10
             "Syntax Error: Unexpected Token: tok_open_brace - 'proc' expected. Token=[proc - tok_proc[1,1]]",//11
             "Syntax Error: Invalid boolean expression given. Token=[m - tok_identifier[5,11]]",//12

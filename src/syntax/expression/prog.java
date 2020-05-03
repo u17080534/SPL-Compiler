@@ -7,13 +7,21 @@ public class prog extends Expression
 {   
 	private Expression codeEx, prog_Ex;   
 
-	public prog(Expression e1, Expression e2)
+	public prog(Expression e1)//, Expression e2)
 	{ 
-		super(e1, e2);
+		super(e1);
 		this.expr = "PROG";
 		this.codeEx = e1; 
-		this.prog_Ex = e2; 
+		// this.prog_Ex = e2; 
 	}  
+
+	// public prog(Expression e1, Expression e2)
+	// { 
+	// 	super(e1, e2);
+	// 	this.expr = "PROG";
+	// 	this.codeEx = e1; 
+	// 	this.prog_Ex = e2; 
+	// }  
 
 	@Override
 	public void scope(int scope)
@@ -33,8 +41,8 @@ public class prog extends Expression
 		if(this.codeEx != null)
 			line = this.codeEx.trans(absFile);
 
-		if(this.prog_Ex != null)
-			this.prog_Ex.trans(absFile);   
+		// if(this.prog_Ex != null)
+		// 	this.prog_Ex.trans(absFile);   
  
 		return line;
 	} 
