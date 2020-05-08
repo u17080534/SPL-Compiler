@@ -1,21 +1,21 @@
-bool Tester;
+bool tester;
 
-proc Test{
-	Tester=True;
+proc test{
+	tester=T;
 	string msg;
 
-	if (Tester) then
+	if (tester) then
 	{
-		msg="True"
+		msg="true"
 	};
 
-	proc ExtraTest
+	proc extratest
 	{
 		input(msg);
 
-		if (Tester) then
+		if (tester) then
 		{
-			msg="True"
+			msg="true"
 		}
 		else
 		{

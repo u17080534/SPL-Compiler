@@ -2,6 +2,7 @@ package analysis;
 
 import java.util.*;
 import syntax.*;
+import syntax.expression.Expression;
 import symtable.*;
 import exception.UsageException;
 
@@ -58,7 +59,7 @@ public class Scoping
 						if(symbols.get(index).getExpression().indexOf("proc") == 0) //ProcDef
 						{
 							procStack.push(procName);
-							procName = getValue(symbols.get(index).getExpression());
+							procName = Expression.getValue(symbols.get(index).getExpression());
 						}
 						else //While/For/If/Else
 						{
@@ -77,7 +78,7 @@ public class Scoping
 				if(index > 0 && terminals.get(index - 1).getExpression().indexOf("type") == 0)
 				{
 					declarations.add(terminals.get(index));
-					terminals.get(index).setType(getValue(terminals.get(index - 1).getExpression()));
+					terminals.get(index).setType(Expression.getValue(terminals.get(index - 1).getExpression()));
 				}
 				else
 					usages.add(terminals.get(index));
@@ -92,7 +93,7 @@ public class Scoping
 		for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 			for(int index_decl_ = 0; index_decl_ < declarations.size(); index_decl_++)
 				//Names Match
-				if(index_decl != index_decl_ && getValue(declarations.get(index_decl).getExpression()).equals(getValue(declarations.get(index_decl_).getExpression())))
+				if(index_decl != index_decl_ && Expression.getValue(declarations.get(index_decl).getExpression()).equals(Expression.getValue(declarations.get(index_decl_).getExpression())))
 				{
 					//Different code segment, so treat as different var
 					if(declarations.get(index_decl).getScope() < declarations.get(index_decl_).getScope())
@@ -112,10 +113,22 @@ public class Scoping
 			for(int index_decl = 0; index_decl < declarations.size(); index_decl++)
 			{
 				Symbol decl = declarations.get(index_decl);
-				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID() && (decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0)))
+
+				if(usage.getExpression().indexOf("variable") == 0)
 				{
-					declared = true;
-					usage.setType(decl.getType());
+					if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() < usage.getID() && (decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0)))
+					{
+						declared = true;
+						usage.setType(decl.getType());
+					}
+				}
+				else if(usage.getExpression().indexOf("call") == 0)
+				{
+					if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() != usage.getID() && (decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0)))
+					{
+						declared = true;
+						usage.setType(decl.getType());
+					}
 				}
 			}
 
@@ -142,16 +155,20 @@ public class Scoping
 			{
 				Symbol usage = usages.get(index_use);
 
-				if(getValue(decl.getExpression()).equals(getValue(usage.getExpression())) && decl.getID() < usage.getID())
+				if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() != usage.getID())
 				{
-					if(decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0))
-					{
+					// if(decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0))
+					// {
 						if(usage.getExpression().indexOf("variable") == 0)
-							usage.setExpression("variable 'V" + varcount + "'");
+						{
+							if(decl.getID() < usage.getID() && decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0))
+								usage.setExpression("variable 'V" + varcount + "'");
+						}
 
 						if(usage.getExpression().indexOf("call") == 0)
-							usage.setExpression("call 'P" + proccount + "'");
-					}
+							if(decl.getScope() < usage.getScope() || (decl.getScope() == usage.getScope() && usage.getProc().indexOf(decl.getProc()) == 0))
+								usage.setExpression("call 'P" + proccount + "'");
+					// }
 				}
 			}
 
@@ -162,8 +179,8 @@ public class Scoping
 				rename = "proc 'P" + (proccount++) + "'";
 
 				for(int index = 0; index < symbols.size(); index++)
-					if(symbols.get(index).getProc().equals(getValue(decl.getExpression())))
-						symbols.get(index).setProc(getValue(rename));
+					if(symbols.get(index).getProc().equals(Expression.getValue(decl.getExpression())))
+						symbols.get(index).setProc(Expression.getValue(rename));
 			}
 
 			decl.setExpression(rename);
@@ -179,22 +196,5 @@ public class Scoping
 		}
 
 		symbols = table.list();
-	}
-
-	public static String getValue(String expr)
-	{
-		int start = expr.indexOf("'") + 1;
-
-		int end = expr.lastIndexOf("'");
-
-		if(start == -1)
-			start = 0;
-
-		if(end == -1)
-			end = expr.length();
-
-		String str = expr.substring(start, end);
-
-		return str;
 	}
 }

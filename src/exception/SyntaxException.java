@@ -8,7 +8,7 @@ public class SyntaxException extends Exception
 
     public SyntaxException(Token token, String message)
     {
-        super(message + " Token=[" + token + "]");
+        super(message + " [" + (token == null ? "1,1" : token) + "]");
     	this.token = token;
     }
 

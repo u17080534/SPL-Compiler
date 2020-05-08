@@ -1,0 +1,22 @@
+0:PROG
+1:PROC_DEFS
+2:PROC
+3:proc 'hello'
+4:PROG
+5:CODE
+6:INSTR
+7:DECL
+8:TYPE
+9:type 'num'
+10:NAME
+11:variable 'zero'
+12:CODE_
+13:CODE
+14:INSTR
+15:ASSIGN
+16:VARIABLE
+17:variable 'zero'
+18:ASSIGN_
+19:assign 'numexpr'
+20:NUMEXPR
+21:tok_number_literal '0'

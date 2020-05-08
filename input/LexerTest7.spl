@@ -3,17 +3,17 @@
 proc begin
 {
 
-	string Test4;
-	Test4="";
+	string test4;
+	test4="";
 
-	string Test3;
-	Test3="2hello";
+	string test3;
+	test3="2hello";
 
 
-	string Test2;
-	Test2="Al
+	string test2;
+	test2="al
 
-	string Test1;
+	string test1;
    
-	Test1="123456789"
+	test1="123456789"
 }

@@ -1,3 +1,4 @@
+hello;
 proc hello{
 	num one;
 	one= abc;

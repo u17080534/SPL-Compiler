@@ -134,20 +134,20 @@ public class Lexer
 	    {	
 	    	try
 	    	{   	
-	    		ch = this.read();
+	    		ch = this.read(); // 0 means it was a newline that must be skipped
 
-	    		if(!isValidChar(ch))
+	    		if(ch > 0 && !isValidChar(ch))
 	    			throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not a recognized character");
 	    	}
 	    	catch(EmptyStreamException ex)
 	    	{
-	    		cont = false;
 	    		ch = 0;
+	    		cont = false;
 	    	}
 
 			if(state == 0)
 			{
-				if(numInRange(ch, 0, 9))
+				if(ch > 0 && numInRange(ch, 0, 9))
 					throw new LexerException(tokenPosition(token, state), "Number literals other than 0 must begin with [1-9]");
 				
 				if(isAcceptState(0))
@@ -160,7 +160,7 @@ public class Lexer
 					//Return Tok Directly when following input is irrelevant
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 1)
@@ -175,8 +175,10 @@ public class Lexer
 					state = 3;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 2)
 			{
@@ -190,8 +192,10 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 3)
 			{
@@ -205,8 +209,10 @@ public class Lexer
 					state = 5;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 5)
 			{	
@@ -220,8 +226,10 @@ public class Lexer
 					state = 7;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 7)
 			{
@@ -235,8 +243,10 @@ public class Lexer
 					state = 9;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 9)
 			{
@@ -250,8 +260,10 @@ public class Lexer
 					state = 11;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 11)
 			{
@@ -265,8 +277,10 @@ public class Lexer
 					state = 13;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 13)
 			{
@@ -280,8 +294,10 @@ public class Lexer
 					state = 15;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 15)
 			{
@@ -295,8 +311,10 @@ public class Lexer
 					state = 17;
 					charStack.push(new Character(ch));
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
+				else if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted within literal character strings");
 			}
 			else if(state == 17)
 			{
@@ -308,8 +326,13 @@ public class Lexer
 				else
 				{
 					String badstr = "";
+
 					while(!charStack.empty())
 						badstr = (Character) charStack.pop() + badstr;
+
+					if(ch == 0)
+						throw new LexerException(tokenPosition(token, state), "newline character found within string");
+
 					throw new LexerException(tokenPosition(token, state), "'" + badstr + "' strings have at most 8 characters");
 				}
 			}
@@ -329,8 +352,8 @@ public class Lexer
 
 					break Tokenized;
                 }
-				else
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Identifier Token Rejected");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected: Identifier token rejected");
 			}
 			else if(state == 24)
 			{
@@ -341,7 +364,7 @@ public class Lexer
                 }
                 else if(charIsLetter(ch))
                 {
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number");
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected: Identifiers may not begin with numeric characters, only literal numeric expressions may start with a number");
                 }
                 else if(isAcceptState(24))
                 {
@@ -352,8 +375,8 @@ public class Lexer
 
 					break Tokenized;
                 }
-                else
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: Numeric Token Rejected");
+                else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected: numeric token rejected");
 			}
 			else if(state == 25)
 			{
@@ -364,8 +387,9 @@ public class Lexer
                 }
                 else if(numInRange(ch, 0, 0))
                 	throw new LexerException(tokenPosition(token, state), "Numeric literals other than 0 must begin with [1-9]");
-                else
-                	throw new LexerException(tokenPosition(token, state), "Unexpected Input: Numeric Token Rejected");
+                else if(ch > 0)
+                	throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected: numeric token rejected");
+
 			}
 			else if(state == 26)
 			{
@@ -374,7 +398,7 @@ public class Lexer
 					state = 1;
 					charStack.push(new Character(ch));
 				}
-				else if(matchChar(ch, "<> #(){}=;,")) //ch == <,>, ,#,(,),{,},=
+				else if(matchChar(ch, "<> (){}=;,")) //ch == <,>, ,#,(,),{,},=
 				{
 					state = 65;
 					charStack.push(new Character(ch));
@@ -401,7 +425,7 @@ public class Lexer
 					state = 32;
 					charStack.push(new Character(ch));
 				}
-				else if(matchChar(ch, "cdgjklqruvxyz") || matchChar(ch, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+				else if(matchChar(ch, "cdgjklqruvxyz"))// || matchChar(ch, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
 				{
 					state = 20;
 					charStack.push(new Character(ch));
@@ -476,8 +500,8 @@ public class Lexer
 					charStack.push(new Character(ch));
 					state = 0;
 				}
-				else
-					throw new LexerException(tokenPosition(token, state), "Unexpected Input: \"" + ch + "\"");
+				else if(ch > 0)
+					throw new LexerException(tokenPosition(token, state), "'" + ch + "' is not accepted in identifiers");
 			}         
 			else if(state == 27)
 			{
@@ -501,7 +525,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 28)
@@ -525,7 +549,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 29)
@@ -556,7 +580,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 30)
@@ -581,7 +605,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 31)
@@ -605,7 +629,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 32)
@@ -622,7 +646,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 33)
@@ -646,7 +670,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 34)
@@ -670,7 +694,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 35)
@@ -701,7 +725,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 36)
@@ -725,7 +749,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 37)
@@ -750,7 +774,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 38)
@@ -774,7 +798,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 39)
@@ -805,7 +829,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 40)
@@ -829,7 +853,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 41)
@@ -853,7 +877,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 42)
@@ -878,7 +902,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 43)
@@ -902,7 +926,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 44)
@@ -926,7 +950,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 45)
@@ -957,7 +981,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 46)
@@ -981,7 +1005,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 47)
@@ -1012,7 +1036,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 48)
@@ -1036,7 +1060,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 49)
@@ -1061,7 +1085,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 50)
@@ -1085,7 +1109,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 51)
@@ -1109,7 +1133,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 52)
@@ -1140,7 +1164,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 53)
@@ -1164,7 +1188,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 54)
@@ -1188,7 +1212,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 55)
@@ -1212,7 +1236,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 56)
@@ -1236,7 +1260,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 57)
@@ -1260,7 +1284,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 58)
@@ -1285,7 +1309,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 59)
@@ -1309,7 +1333,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 60)
@@ -1333,7 +1357,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 61)
@@ -1358,7 +1382,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 62)
@@ -1382,7 +1406,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 63)
@@ -1406,7 +1430,7 @@ public class Lexer
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
 			else if(state == 65)
@@ -1434,16 +1458,16 @@ public class Lexer
 						tokenRep = Token.Tok.TOK_COMM;
 					else if(token.indexOf(';') >= 0)
 						tokenRep = Token.Tok.TOK_SEMI;
-					else if(token.indexOf('#') >= 0) 
-						{/*newline*/}
+					// else if(token.indexOf('#') >= 0) 
+					// 	{/*newline*/}
 
 					break Tokenized;
 				}
-				else
+				else if(ch > 0)
 					throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 			}
-			else
-				throw new LexerException(tokenPosition(token, state), "Unexpected Input Behaviour: " + ch);
+			else if(ch > 0)
+				throw new LexerException(tokenPosition(token, state), "'" + ch + "' was unexpected in this case");
 	    } 
 		
 		//We have left over char after accepting a token, so push it to the buffer stack
@@ -1477,14 +1501,11 @@ public class Lexer
 
 			if(this.readChar == '\r')
 			{
-				ch = '#';
+				ch = 0;
 			}
-			if(this.readChar == '\n')
+			else if(this.readChar == '\n')
 			{
-				//This was for windows but was causing issues so the method was changed
-				// 		if(System.getProperty("line.separator").equals("\r\n")) this.readChar = this.buffer.read();
-
-				ch = '#';
+				ch = 0;
 				this.col = 0;
 				this.row++;
 			}
@@ -1517,13 +1538,13 @@ public class Lexer
 
 	public boolean isValidChar(char ch)
 	{
-		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>(){}# =,-;\"";
+		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>(){} =,-;\"";
 		return str.indexOf(ch) >= 0;
 	}
 
 	public boolean charIsLetter(char ch)
 	{
-		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String str = "abcdefghijklmnopqrstuvwxyz";
 		return str.indexOf(ch) >= 0;
 	}
 

@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import lexer.*;
+import parser.*;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;
@@ -49,22 +50,22 @@ public class UnitTest
 
         String[] results = {
             "Lexical Error [line: 1, col: 1]: '@' is not a recognized character",  //1
-            "Lexical Error [line: 5, col: 22]: '\"JohnIsAB' strings have at most 8 characters", //2
+            "Lexical Error [line: 5, col: 22]: '\"johnisab' strings have at most 8 characters", //2
             "Lexical Error [line: 40, col: 10]: '!' is not a recognized character", //3
             "", //4
             "", //5
             "Lexical Error [line: 11, col: 12]: Numeric literals other than 0 must begin with [1-9]", //6
-            "Lexical Error [line: 14, col: 15]: newline character was unexpected in this case", //7
-            "", //8
+            "Lexical Error [line: 14, col: 14]: newline character found within string", //7
+            "Lexical Error [line: 1, col: 15]: '#' is not a recognized character", //8
             "", //9
-            "Lexical Error [line: 1, col: 9]: Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number",//error //10
+            "Lexical Error [line: 1, col: 9]: 'a' was unexpected: Identifiers may not begin with numeric characters, only literal numeric expressions may start with a number",//error //10
             "",  //11
-            "Lexical Error [line: 2, col: 6]: Unexpected Input: Numeric Token Rejected" ,//12
+            "Lexical Error [line: 2, col: 6]: '-' was unexpected: numeric token rejected" ,//12
             "",//13
-            "",//14
-            "Lexical Error [line: 2, col: 10]: ';' was unexpected in this case",//15
+            "Lexical Error [line: 1, col: 5]: '#' is not a recognized character",//14
+            "Lexical Error [line: 2, col: 10]: ';' is not accepted within literal character strings",//15
             "",//16
-            "Lexical Error [line: 2, col: 11]: Unexpected Input: Identifiers may not begin with numerical characters, only literal numeric expressions may start with a number",//17
+            "Lexical Error [line: 2, col: 11]: 'd' was unexpected: Identifiers may not begin with numeric characters, only literal numeric expressions may start with a number",//17
             "" //18
         };
 
@@ -84,6 +85,7 @@ public class UnitTest
 
             if(result != "")
                 System.out.println("\t" + result + "\n");
+
             assertEquals(result, results[index]);
         }
         
@@ -114,24 +116,24 @@ public class UnitTest
         };
 
         String[] results = {
-            "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis Token=[if - tok_if[1,1]]",//1
-            "",//2
+            "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis [if - tok_if[1,1]]",//1
+            "Syntax Error: Instruction is expected at start of program or new procedure [{ - tok_open_brace[21,8]]",//2
             "",//3
-            "Syntax Error: Procedural Error: Expected Closing Brace.\n" +
-                "\tHint: You may be missing a semicolon (;) between instructions. Token=[zero - tok_identifier[2,10]]",//4
-            "Syntax Error: Procedural Error: Expected Closing Brace.\n" +
-            "\tHint: You may be missing a semicolon (;) between instructions. Token=[zero - tok_identifier[3,6]]",//5
-            "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis Token=[if - tok_if[5,6]]",//6
-            "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis Token=[m - tok_identifier[5,10]]",//7
-            "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis Token=[) - tok_close_paren[7,20]]",//8
+            "Syntax Error: Expected Closing Brace\n" +
+                "\tHint: You may be missing a semicolon (;) between instructions [zero - tok_identifier[3,10]]",//4
+            "Syntax Error: Expected Closing Brace\n" +
+            "\tHint: You may be missing a semicolon (;) between instructions [zero - tok_identifier[4,6]]",//5
+            "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis [if - tok_if[6,6]]",//6
+            "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis [m - tok_identifier[6,10]]",//7
+            "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis [) - tok_close_paren[8,20]]",//8
             "",//9
-            "Syntax Error: Invalid assignment: Bad Right Operand. Token=[= - tok_assign[3,10]]",//10
-            "Syntax Error: Unexpected Token: tok_open_brace - 'proc' expected. Token=[proc - tok_proc[1,1]]",//11
-            "Syntax Error: Invalid boolean expression given. Token=[m - tok_identifier[5,11]]",//12
-            "Syntax Error: Procedural Error: Expected Closing Brace.\n" +
-                "\tHint: You may be missing a semicolon (;) between instructions. Token=[} - tok_close_brace[11,6]]",//9,///error/13
-            "Syntax Error: Intruction Syntax Error: Instruction expected following semicolon. (;) Token=[; - tok_semi[3,13]]",//15
-            ""
+            "Syntax Error: Invalid assignment: Bad Right Operand [= - tok_assign[4,10]]",//10
+            "Syntax Error: Unexpected Token: tok_open_brace - proc identifier expected [proc - tok_proc[1,10]]",//11
+            "Syntax Error: Invalid boolean expression given [m - tok_identifier[6,11]]",//12
+            "Syntax Error: Expected Closing Brace\n" +
+                "\tHint: You may be missing a semicolon (;) between instructions [} - tok_close_brace[12,6]]",//9,///error/13
+            "Syntax Error: Final instruction in code block has a trailing semicolon (;) [; - tok_semi[4,14]]",//15
+            ""//16
         };
 
         for(int index = 0; index < args.length; index++)

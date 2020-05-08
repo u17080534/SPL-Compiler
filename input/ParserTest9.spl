@@ -1,3 +1,4 @@
+checnuber;
 proc checnuber{
 	num zero;
 	zero= 0;
@@ -13,22 +14,4 @@ proc checnuber{
 	proc xx{
 		output (zero)
 		} 
-	proc yy
-	{ 
-		proc xt
-		{
-			output (zero)
-		} 
-		proc pp
-		{
-			output (zero)
-		} 
-		proc yh
-		{
-			proc pv
-			{
-				output (zero)
-			}
-		}
-	}
 }

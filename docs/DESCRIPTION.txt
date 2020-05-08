@@ -1,12 +1,18 @@
 # COMPILER ALGORITHM DESCRIPTION:
 
+*SPL LANGUAGE ASSUMPTIONS*
+1. Every instruction in a code block, except for the last instruction, must be followed by a semi-colon.
+2. It is considered necessary to place a semicolon between an instruction and a new proc definition, this is because semicolons are needed if instruction is not last in code block.
+	Grammar Rule: INSTR; PROC
+3. A tab counts as 5 spaces (when counting the character position in the file)
+
 00 - LEXER
 
 	The Lexer implementation is as follows:
 
 		(i) The input file is scanned, one character at a time.
 
-		(ii) The DFA (included in docs) is implemented using a while-loop with nested if-statements as follows:
+		(ii) The DFA (doc included in LEXER direcotry) is implemented using a while-loop with nested if-statements as follows:
 
 			Each IF considers the possible transitions of current state,
 					and the current char is the most recently read character from the input stream:
@@ -24,21 +30,14 @@
 				ELSE:
 				 -> reject input & throw exception;
 
-			Clearly, the longest potential token is chosen by the lexer - this is why the buffer stack is needed: in the case that the lexer 'sees' a potential token that is longer than the currently accepted token, where it then does not find the rest of the potential token in the following characters - now these left over characters must be pushed to the stack, which is read through before the buffered character stream (so these characters are carried over for the next token to be read.)
+			Clearly, the longest potential token is chosen by the lexer (LONGEST MATCH) - this is why the buffer stack is needed: in the case that the lexer 'sees' a potential token that is longer than the currently accepted token, where it then does not find the rest of the potential token in the following characters - now these left over characters must be pushed to the stack, which is read through before the buffered character stream (so these characters are carried over for the next token to be read.)
 
 		(iii) The DFA is continously used to scan tokens from the input stream, until the input stream is finished, it then returns the scanned tokens if no errors were thrown.
-
-	*ASSUMPTIONS*
-		1. Every instruction in a code block, except for the last instruction, must be followed by a semi-colon.
-		2. It is considered necessary to place a semicolon between an instruction and a new proc definition, this is because semicolons are needed if it is not last instruction in code block.
-		3. It is considered optional to place a semicolon between a new proc definition and an instruction that follows.
-		4. Any literal '#' characters in the input will be seen as a newline (newline characters are interpreted normally)
-		5. A tab counts as 5 spaces (when counting the character position in the file)
 
 	CONTRIBUTIONS:
 		BYRON TOMKINSON	- Planning: NFA+DFA Design & Conversions.
 				- Programming: Lexer Class Implementation.
-				- Documentation: DFA-JFLAP.
+				- Documentation: DFA.pdf.
 
 		JORDAN MANAS 	- Planning: NFA+DFA Design & Conversions.
 				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation; Unit-Testing Class Setup.
@@ -51,21 +50,27 @@
 
 	The Parser & AST implementation is as follows:
 
-		The Parser is implemented as an LL(1) Parser - the expressions are determined using left-most derivation (i.e. inputs are read from left to right), and a look ahead of 1 position is used when evaluating symbols for parsing.
+		Changes to the given Grammar:
+			- All ambiguous cases of expression derivation route were changed to have only a single route of derivation, when a lookahead would not have been sufficient in resolving the ambiguite. For example: the BOOL and NUMEXPR rules were changed significantly to remove ambiguity.
+			- The rules for handling instructions and procs were modified as to make sense of the way semicolons are used.
 
-		Each expression that is evaluated, from the given symbols, constructs a new concrete-expression-node object that it will return. Each different expression from the context-free-grammar has its own corresponding concrete-expression-node that is constructed within its own implementation as a function present in the Grammar Class. The abstract-syntax-tree is constructed by assigning a new expression-node its descendent nodes in a recursive manner.
+		The Parser is implemented as an LL(1) Parser. The expressions are evaluated using left-to-right derivation (i.e. inputs are read from left to right), and a look ahead of 1 position is used when evaluating tokens.
+
+		Each grammar rule/expression is evaluated as its own function, with a corresponding name, within the Grammar class. 
+		When each expression is evaluated, using the given tokens, a new concrete-expression-node object is constructed, which is to be returned recursively. 
+		Each different expression from the grammar has its own corresponding concrete-expression-node used in the abstract-syntax-tree. 
+		The abstract-syntax-tree is constructed by assigning a new expression-node its descendent nodes in a recursive manner, inside the constructor.
 			If any tokens that do not comply with the grammar are encountered, the appropriate exception is thrown.
 
 		The AST is then traversed and removes any unnecessary nodes.
-
 		On construction of an expression, a linked symbol object is created, then added to the symbol table, also holding a reference to the expression node.
 
 	CONTRIBUTIONS:
-		BYRON TOMKINSON	- Planning: CFG Design.
+		BYRON TOMKINSON	- Planning: Grammar Design.
 
-		JORDAN MANAS 	- Planning: CFG Design.
+		JORDAN MANAS 	- Planning: Grammar Design.
 				- Programming: AST Class Implementation; Expression Classes Implementation; Parser Class Implementation; Grammar Class Implementation; SymbolTable Class Implementation.
-				- Documentation: Context Free Grammar.txt.
+				- Documentation: Grammar.txt.
 
 		PATRIC EDWARDS	- Programming: Unit-Testing Class Implementation.
 

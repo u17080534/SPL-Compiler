@@ -1,13 +1,14 @@
-string WRONG;
-WRONG = "WRONG";
-string CORRECT;
-CORRECT = "CORRECT";
-bool EQ;
-EQ = F;
+string wrong;
+wrong = "wrong";
+string correct;
+correct = "correct";
+bool eqv;
+eqv = F;
+hello;
 
-proc Guess
+proc guess
 {
-    while(not EQ)
+    while(not eqv)
     {
         num answer;
         num other;
@@ -15,38 +16,28 @@ proc Guess
 
         input (answer);
 
-        EQ = eq(answer, other);
+        eqv = eq(answer, other);
 
-        if(EQ) then
+        if(eqv) then
         {
-            output (CORRECT)
+            output (correct)
         }
         else
         {
-            output (WRONG)
+            output (wrong)
         }
-    };
-
-    proc scope0
-    { 
-        proc scope1a
-        {
-            output (WRONG)
-        } 
-        proc scope1b
-        {
-            output (WRONG)
-        } 
-        proc scope1c
-        {
-            proc scope2
-            {
-                output (WRONG)
-            }
-        }
-
-        scope1b
     }
 }
 
-Guess
+proc hello
+{
+    string h;
+    h = "hello";
+    hello2;
+    guess;
+
+    proc hello2
+    {
+        output(h)
+    }
+}

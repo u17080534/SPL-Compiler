@@ -36,7 +36,7 @@ public class File
 				int pIndex1 = line.indexOf("%");
 				int pIndex2 = line.lastIndexOf("%");
 
-				if(pIndex1 >= 0 && pIndex2 >= 0)
+				if(false && pIndex1 >= 0 && pIndex2 >= 0)
 				{
 					String label = line.substring(pIndex1 + 1, pIndex2);
 
@@ -165,6 +165,16 @@ public class File
 	public Line getPointed()
 	{
 		int tmp = this.point;
+		
+		if(tmp == -1)
+			tmp = this.lines.size() - 1;
+
+		return this.lines.get(tmp);
+	}
+
+	public Line getPointed(int diff)
+	{
+		int tmp = this.point + diff;
 		
 		if(tmp == -1)
 			tmp = this.lines.size() - 1;

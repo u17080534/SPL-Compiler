@@ -1,4 +1,5 @@
+hello;
 proc hello{
 	num zero;
-	zero =0;
+	zero = 0;
 }

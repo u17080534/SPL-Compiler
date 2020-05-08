@@ -1,10 +1,33 @@
 input(x);
+
 n=x;
+
 r="unknown";
+
 s="even";
+
 checknumber;
-if(eq(r,s)) then {
-output(s)}
-else{
-output(r)
-}; proc xx{output (r)} proc yy{ proc xt{output (r)} proc pp{output (r)} proc yh{proc pv{output (r)}}}
+
+if(eq(r,s)) then 
+{
+	output(s)}
+else
+{
+	output(r)
+}; 
+
+proc xx{output (r)} 
+
+proc yy{ 
+	proc xt{
+		output (r)
+	} 
+	proc pp{
+		output (r)
+	} 
+	proc yh{
+		proc pv{
+			output (r)
+		}
+	}
+}

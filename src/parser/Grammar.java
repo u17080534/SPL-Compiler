@@ -31,7 +31,12 @@ public class Grammar
 
 		try
         {
-           	return new AbstractSyntaxTree(START());
+           	AbstractSyntaxTree tree = new AbstractSyntaxTree(START());
+
+           	if(this.index + 1 < this.tokenstream.size())
+           		throw new SyntaxException(this.tokenstream.get(this.index), "A proc definition cannot be followed by anything other than a new proc definition");
+
+           	return tree;
         }
         catch(SyntaxException ex)
         {
@@ -47,6 +52,9 @@ public class Grammar
 			this.lookahead = this.tokenstream.get(++this.index).getToken();
 		else
 			this.lookahead = Token.Tok.NULL;
+
+		// System.out.println(current);
+		// System.out.println(this.lookahead);
 	}
 
 	private Token.Tok look(int ahead)
@@ -74,60 +82,52 @@ public class Grammar
 		}
 	}
 
-	//PROG → PROC_DEFS | CODE
+	//PROG → CODE PROG_
 	private Expression PROG() throws SyntaxException
 	{
-		Expression ex;
+		Expression ex = null;
+
 		try
 		{
-			Expression e1 = null;
-
-			if(this.lookahead == Token.Tok.TOK_PROC)
+			if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
 			{
-				e1 = PROC_DEFS();
-			}
-			else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
-			{
-				e1 = CODE();
+				Expression e1 = CODE();
+				Expression e2 = PROG_();
+				ex = new prog(e1, e2);
 			}
 			else
-				throw new SyntaxException(this.current, "Program Error: Instruction is expected inside of proc.");
-
-			// Expression e2 = PROG_();
-
-			ex = new prog(e1);
+				throw new SyntaxException(this.current, "Instruction is expected at start of program or new procedure");
 		}
 		catch(Exception error)
 		{
 			throw error;
 		}
+
 		return ex;
 	}
 
-	//PROG' → PROG | ϵ
-	// private Expression PROG_() throws SyntaxException
-	// {
-	// 	try
-	// 	{
-	// 		Expression e1 = null;
-	// 		if(this.lookahead == Token.Tok.TOK_PROC)
-	// 		{
-	// 			e1 = PROG();
-	// 			return new prog_(e1);
-	// 		}
-	// 		else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
-	// 		{
-	// 			e1 = PROG();
-	// 			return new prog_(e1);
-	// 		}
+	// PROG' → ; PROC_DEFS | ϵ
+	private Expression PROG_() throws SyntaxException
+	{
+		try
+		{
+			if(this.lookahead == Token.Tok.TOK_SEMI)
+			{
+				this.readToken();
+				Expression e1 = PROC_DEFS();
+				return new prog_(e1);
+			}
 
-	// 		return new prog_();
-	// 	}
-	// 	catch(Exception ex)
-	// 	{
-	// 		throw ex;
-	// 	}
-	// }
+			else if(this.lookahead == Token.Tok.TOK_PROC)
+				throw new SyntaxException(this.current, "Instruction missing semicolon (;) as it has tokens following it");
+			
+			return new prog_();
+		}
+		catch(Exception error)
+		{
+			throw error;
+		}
+	}
 
 	// PROC_DEFS → PROC PROC_DEFS'
 	private Expression PROC_DEFS() throws SyntaxException
@@ -144,22 +144,20 @@ public class Grammar
 		}
 	}
 
-	// PROC_DEFS' → PROC_DEFS  | CODE | ϵ
+	// PROC_DEFS' → PROC_DEFS | ϵ
 	private Expression PROC_DEFS_() throws SyntaxException
 	{
 		try
 		{
+			if(this.lookahead == Token.Tok.TOK_SEMI)
+				throw new SyntaxException(this.current, "Semicolon (;) is not expected after a new proc definition");
+
 			if(this.lookahead == Token.Tok.TOK_PROC)
 			{
 				Expression e = PROC_DEFS();
 				return new proc_defs_(e);
 			}
-			else if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
-			{
-				Expression e = CODE();
-				return new proc_defs_(e);
-			}
-
+			
 			return new proc_defs_();
 		}
 		catch(Exception ex)
@@ -194,11 +192,13 @@ public class Grammar
 							return new proc(new TerminalExpression(tok, e1), e2);
 						}
 
-						throw new SyntaxException(this.current, "Procedural Error: Expected Closing Brace.\n\tHint: You may be missing a semicolon (;) between instructions.");
+						throw new SyntaxException(this.current, "Expected Closing Brace\n\tHint: You may be missing a semicolon (;) between instructions");
 					}
 
-					throw new SyntaxException(this.current, "Procedural Error: Expected Opening Brace.\n\tHint: You may be missing a semicolon (;) between instructions.");
+					throw new SyntaxException(this.current, "Expected Opening Brace\n\tHint: You may be missing a semicolon (;) between instructions");
 				}
+
+				throw new SyntaxException(this.current, "Unexpected Token: " + this.lookahead + " - proc identifier expected");
 			}
 		}
 		catch(Exception ex)
@@ -206,7 +206,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Unexpected Token: " + this.lookahead + " - 'proc' expected.");
+		throw new SyntaxException(this.current, "Final instruction in code block has a trailing semicolon (;)");
 	}
 
 	// CODE → INSTR CODE'
@@ -224,28 +224,22 @@ public class Grammar
 		}
 	}
 
-	// CODE' → ; CODE | ; PROC_DEFS | ϵ
+	// CODE' → ; CODE | ϵ
 	private Expression CODE_() throws SyntaxException
 	{
 		try
 		{
 			if(this.lookahead == Token.Tok.TOK_SEMI)
 			{
-				this.readToken();
+				// this.readToken();
 				
-				if(this.lookahead == Token.Tok.TOK_PROC)
+				if(this.look(1) == Token.Tok.TOK_HALT || this.look(1) == Token.Tok.TOK_NUM || this.look(1) == Token.Tok.TOK_STRING || this.look(1) == Token.Tok.TOK_BOOL || this.look(1) == Token.Tok.TOK_INPUT || this.look(1) == Token.Tok.TOK_OUTPUT || this.look(1) == Token.Tok.TOK_IF || this.look(1) == Token.Tok.TOK_WHILE || this.look(1) == Token.Tok.TOK_ID)
 				{
-					Expression e = PROC_DEFS();
-					return new code_(e);
-				}
-				else if(this.lookahead != Token.Tok.NULL)
-				{
+					this.readToken();
 					Expression e = CODE();
 					return new code_(e);
 				}
 			}
-			else if(this.lookahead == Token.Tok.TOK_PROC)
-				throw new SyntaxException(this.current, "Semicolon (;) expected after instruction if not last instruction in procedure.");
 
 			return new code_();
 		}
@@ -271,7 +265,7 @@ public class Grammar
 		}
 	}
 
-	// DECL' → DECL | ϵ
+	// DECL' → ; DECL | ϵ
 	private Expression DECL_() throws SyntaxException
 	{
 		try
@@ -284,6 +278,8 @@ public class Grammar
 					Expression e1 = DECL();
 					return new decl_(e1);
 				}
+				
+				// else is another instruction
 			}
 
 			return new decl_();
@@ -294,7 +290,7 @@ public class Grammar
 		}
 	}
 
-	// COND_BRANCH → if ( BOOL ) then { PROG } COND_BRANCH'
+	// COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
 	private Expression COND_BRANCH() throws SyntaxException
 	{
 		try
@@ -316,7 +312,7 @@ public class Grammar
 							if(this.lookahead == Token.Tok.TOK_OB)
 							{
 								this.readToken();
-								Expression e2 = PROG();
+								Expression e2 = CODE();
 								if(this.lookahead == Token.Tok.TOK_CB)
 								{
 									this.readToken();
@@ -342,7 +338,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Token (if)");
 	}
 
-	// COND_BRANCH'→ else { PROG } | ϵ
+	// COND_BRANCH'→ else { CODE } | ϵ
 	private Expression COND_BRANCH_() throws SyntaxException
 	{
 		try
@@ -353,7 +349,7 @@ public class Grammar
 				if(this.lookahead == Token.Tok.TOK_OB)
 				{
 					this.readToken();
-					Expression e = PROG();
+					Expression e = CODE();
 					if(this.lookahead == Token.Tok.TOK_CB)
 					{
 						this.readToken();
@@ -364,8 +360,8 @@ public class Grammar
 				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Brace");
 			}
 
-			// return new cond_branch_();
-			return null;
+			return new cond_branch_();
+			// return null;
 		}
 		catch(Exception ex)
 		{
@@ -373,7 +369,7 @@ public class Grammar
 		}
 	}
 
-	// COND_LOOP → while ( BOOL ) { PROG } | for ( VARIABLE = 0; VARIABLE < VARIABLE ; VARIABLE = add ( VARIABLE , 1 ) ) { PROG }
+	// COND_LOOP → while ( BOOL ) { CODE } | for ( VARIABLE = 0; VARIABLE < VARIABLE ; VARIABLE = add ( VARIABLE , 1 ) ) { CODE }
 	private Expression COND_LOOP() throws SyntaxException
 	{
 		try
@@ -392,7 +388,7 @@ public class Grammar
 						if(this.lookahead == Token.Tok.TOK_OB)
 						{
 							this.readToken();
-							Expression e3 = PROG();
+							Expression e3 = CODE();
 							if(this.lookahead == Token.Tok.TOK_CB)
 							{
 								this.readToken();
@@ -461,7 +457,7 @@ public class Grammar
 																			if(this.lookahead == Token.Tok.TOK_OB)
 																			{
 																				this.readToken();
-																				Expression e7 = PROG();
+																				Expression e7 = CODE();
 																				if(this.lookahead == Token.Tok.TOK_CB)
 																				{
 																					this.readToken();
@@ -475,9 +471,9 @@ public class Grammar
 																	}
 																	throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Parenthesis");
 																}
-																throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value => 1.");
+																throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value => 1");
 															}
-															throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value.");
+															throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value");
 														}
 														throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Token (,)");
 													}
@@ -493,9 +489,9 @@ public class Grammar
 								}
 								throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Token (;)");
 							}
-							throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value => 0.");
+							throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value => 0");
 						}
-						throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value.");
+						throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Number Value");
 					}
 					throw new SyntaxException(this.current, "Invalid Conditional Syntax: Assignment Operation");
 				}
@@ -507,7 +503,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid loop syntax.");
+		throw new SyntaxException(this.current, "Invalid loop syntax");
 	}
 
 	// IO → input ( VARIABLE ) | output ( VARIABLE )
@@ -672,7 +668,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid boolean expression given.");
+		throw new SyntaxException(this.current, "Invalid boolean expression given");
 	}
 
 	// BOOL' → BOOL , BOOL"
@@ -767,7 +763,7 @@ public class Grammar
 			throw ex;
 		}	
 
-		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax.");
+		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax");
 	}
 
 	// CALC' → NUMEXPR , CALC"
@@ -789,7 +785,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Missing parameter in operation.\n\tHint: A comma (,) may be missing.");
+		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Missing parameter in operation\n\tHint: A comma (,) may be missing");
 	}
 
 	// CALC" → NUMEXPR )
@@ -869,7 +865,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid assignment: Bad Right Operand.");
+		throw new SyntaxException(this.current, "Invalid assignment: Bad Right Operand");
 	}
 
 	// INSTR → halt | DECL | IO | CALL | ASSIGN  | COND_BRANCH | COND_LOOP
@@ -912,7 +908,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Intruction Syntax Error: Instruction expected following semicolon. (;)");
+		throw new SyntaxException(this.current, "Final instruction in code block has a trailing semicolon (;)");
 	}
 
 	// NUMEXPR → integerLiteral | VARIABLE | CALC
@@ -942,7 +938,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid Numerical Expression Given.");
+		throw new SyntaxException(this.current, "Invalid Numerical Expression Given");
 	}
 
 	// TYPE → num | string | bool
@@ -974,7 +970,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid Type Specified.");
+		throw new SyntaxException(this.current, "Invalid Type Specified");
 	}
 
 	// CALL → userDefinedIdentifier
@@ -994,7 +990,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid Identifier Called.");
+		throw new SyntaxException(this.current, "Invalid Identifier Called");
 	}
 
 	// NAME → userDefinedIdentifier
@@ -1014,7 +1010,7 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid Identifier Used.");
+		throw new SyntaxException(this.current, "Invalid Identifier Used");
 	}
 
 	// VARIABLE → userDefinedIdentifier
@@ -1034,6 +1030,6 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Invalid Identifier Used.");
+		throw new SyntaxException(this.current, "Invalid Identifier Used");
 	}
 } 

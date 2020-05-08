@@ -1,2 +1,2 @@
 integer john;
-john = 123D5;
+john = 123d5;

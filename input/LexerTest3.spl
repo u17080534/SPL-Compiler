@@ -1,4 +1,4 @@
-proc biggerTest
+proc biggertest
 {
   
    num1=3;
@@ -10,7 +10,7 @@ proc biggerTest
     };
 }
 
-proc smallerTest
+proc smallertest
 {
     num3=3;
    num4=4;
@@ -22,7 +22,7 @@ proc smallerTest
 }
 
 
-proc andTest
+proc andtest
 {
     num1=3;
    num2=4;
@@ -35,7 +35,7 @@ proc andTest
     };
 }
 
-proc failThis
+proc failthis
 {
     if(x != y) 
     { should fail }

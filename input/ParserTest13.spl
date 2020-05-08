@@ -1,3 +1,4 @@
+checnuber;
 proc checnuber{
 	num zero;
 	zero=mult(num1,num2);

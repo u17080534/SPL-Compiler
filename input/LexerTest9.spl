@@ -1,7 +1,7 @@
 proc helloworld
 {
     string hello;
-    hello = "HELLO";
+    hello = "hello";
     output(hello);
     num i;
     num j;
@@ -25,7 +25,7 @@ proc helloworld
 proc goodbyeworld
 {
     string bye;
-    bye = "BYE";
+    bye = "bye";
     output(bye)
 }
 

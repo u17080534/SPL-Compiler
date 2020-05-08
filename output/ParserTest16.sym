@@ -1,32 +1,37 @@
 0:PROG
-1:PROC_DEFS
-2:PROC
-3:proc 'hello'
-4:PROG
-5:CODE
-6:INSTR
-7:DECL
-8:TYPE
-9:type 'num'
-10:NAME
-11:variable 'one'
-12:CODE_
-13:CODE
-14:INSTR
-15:ASSIGN
-16:VARIABLE
-17:variable 'one'
-18:ASSIGN_
-19:assign 'variable'
-20:VARIABLE
-21:variable 'abc'
-22:CODE_
-23:CODE
-24:INSTR
-25:ASSIGN
-26:VARIABLE
-27:variable 'zero'
-28:ASSIGN_
-29:assign 'numexpr'
-30:NUMEXPR
-31:tok_number_literal '0'
+1:CODE
+2:INSTR
+3:CALL
+4:call 'hello'
+5:PROG_
+6:PROC_DEFS
+7:PROC
+8:proc 'hello'
+9:PROG
+10:CODE
+11:INSTR
+12:DECL
+13:TYPE
+14:type 'num'
+15:NAME
+16:variable 'one'
+17:CODE_
+18:CODE
+19:INSTR
+20:ASSIGN
+21:VARIABLE
+22:variable 'one'
+23:ASSIGN_
+24:assign 'variable'
+25:VARIABLE
+26:variable 'abc'
+27:CODE_
+28:CODE
+29:INSTR
+30:ASSIGN
+31:VARIABLE
+32:variable 'zero'
+33:ASSIGN_
+34:assign 'numexpr'
+35:NUMEXPR
+36:tok_number_literal '0'

@@ -16,6 +16,9 @@ public class Cache
 	{
 		this.filename = filename;
 		this.out = true;
+
+        File cachedir = new File("output");
+        cachedir.mkdir();
 	}
 
 	public void output(boolean out)
@@ -47,7 +50,10 @@ public class Cache
             if(this.out)
             {
                 System.out.println("\tToken List:");
-            	System.out.println(tokens);
+
+                for(int index = 0; index < tokens.size(); index++)
+                    System.out.println((index + 1) + ": " + tokens.get(index).getInput() + " (" + tokens.get(index).getToken() + tokens.get(index).getLocation() + ")");
+
                 System.out.print("\n");
             }
         } 

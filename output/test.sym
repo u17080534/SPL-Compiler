@@ -5,15 +5,15 @@
 4:TYPE
 5:type 'string'
 6:NAME
-7:variable 'WRONG'
+7:variable 'V0'
 8:CODE_
 9:CODE
 10:INSTR
 11:ASSIGN
 12:VARIABLE
-13:variable 'WRONG'
+13:variable 'V0'
 14:ASSIGN_
-15:assign '"WRONG"'
+15:assign '"wrong"'
 16:CODE_
 17:CODE
 18:INSTR
@@ -21,15 +21,15 @@
 20:TYPE
 21:type 'string'
 22:NAME
-23:variable 'CORRECT'
+23:variable 'V1'
 24:CODE_
 25:CODE
 26:INSTR
 27:ASSIGN
 28:VARIABLE
-29:variable 'CORRECT'
+29:variable 'V1'
 30:ASSIGN_
-31:assign '"CORRECT"'
+31:assign '"correct"'
 32:CODE_
 33:CODE
 34:INSTR
@@ -37,147 +37,139 @@
 36:TYPE
 37:type 'bool'
 38:NAME
-39:variable 'EQ'
+39:variable 'V2'
 40:CODE_
 41:CODE
 42:INSTR
 43:ASSIGN
 44:VARIABLE
-45:variable 'EQ'
+45:variable 'V2'
 46:ASSIGN_
 47:assign 'bool'
 48:BOOL
 49:bool 'F'
 50:CODE_
-51:PROC_DEFS
-52:PROC
-53:proc 'Guess'
-54:PROG
-55:CODE
-56:INSTR
-57:COND_LOOP
-58:loop 'while'
-59:BOOL
-60:bool 'not'
-61:BOOL
-62:VARIABLE
-63:variable 'EQ'
-64:PROG
-65:CODE
-66:INSTR
-67:DECL
-68:TYPE
-69:type 'num'
-70:NAME
-71:variable 'answer'
-72:DECL_
-73:DECL
-74:TYPE
-75:type 'num'
-76:NAME
-77:variable 'other'
-78:CODE_
-79:CODE
-80:INSTR
-81:ASSIGN
-82:VARIABLE
-83:variable 'other'
-84:ASSIGN_
-85:assign 'numexpr'
-86:NUMEXPR
-87:tok_number_literal '7'
-88:CODE_
-89:CODE
-90:INSTR
-91:IO
-92:io 'input'
-93:VARIABLE
-94:variable 'answer'
-95:CODE_
-96:CODE
-97:INSTR
-98:ASSIGN
-99:VARIABLE
-100:variable 'EQ'
-101:ASSIGN_
-102:assign 'bool'
-103:BOOL
-104:bool 'eq'
-105:VARIABLE
-106:variable 'answer'
-107:VARIABLE
-108:variable 'other'
-109:CODE_
-110:CODE
-111:INSTR
-112:COND_BRANCH
-113:tok_if 'if'
-114:BOOL
-115:VARIABLE
-116:variable 'EQ'
-117:PROG
-118:CODE
-119:INSTR
-120:IO
-121:io 'output'
-122:VARIABLE
-123:variable 'CORRECT'
-124:COND_BRANCH_
-125:PROG
-126:CODE
-127:INSTR
-128:IO
-129:io 'output'
-130:VARIABLE
-131:variable 'WRONG'
-132:CODE_
-133:PROC_DEFS
-134:PROC
-135:proc 'scope0'
-136:PROG
-137:PROC_DEFS
-138:PROC
-139:proc 'scope1a'
-140:PROG
-141:CODE
-142:INSTR
-143:IO
-144:io 'output'
-145:VARIABLE
-146:variable 'WRONG'
-147:PROC_DEFS_
-148:PROC_DEFS
-149:PROC
-150:proc 'scope1b'
-151:PROG
-152:CODE
-153:INSTR
-154:IO
-155:io 'output'
-156:VARIABLE
-157:variable 'WRONG'
-158:PROC_DEFS_
-159:PROC_DEFS
-160:PROC
-161:proc 'scope1c'
-162:PROG
-163:PROC_DEFS
-164:PROC
-165:proc 'scope2'
-166:PROG
-167:CODE
-168:INSTR
-169:IO
-170:io 'output'
-171:VARIABLE
-172:variable 'WRONG'
-173:PROC_DEFS_
-174:CODE
-175:INSTR
-176:CALL
-177:call 'scope1b'
-178:PROC_DEFS_
-179:CODE
-180:INSTR
-181:CALL
-182:call 'Guess'
+51:CODE
+52:INSTR
+53:CALL
+54:call 'P1'
+55:PROG_
+56:PROC_DEFS
+57:PROC
+58:proc 'P0'
+59:PROG
+60:CODE
+61:INSTR
+62:COND_LOOP
+63:loop 'while'
+64:BOOL
+65:bool 'not'
+66:BOOL
+67:VARIABLE
+68:variable 'V2'
+69:CODE
+70:INSTR
+71:DECL
+72:TYPE
+73:type 'num'
+74:NAME
+75:variable 'V3'
+76:DECL_
+77:DECL
+78:TYPE
+79:type 'num'
+80:NAME
+81:variable 'V4'
+82:CODE_
+83:CODE
+84:INSTR
+85:ASSIGN
+86:VARIABLE
+87:variable 'V4'
+88:ASSIGN_
+89:assign 'numexpr'
+90:NUMEXPR
+91:tok_number_literal '7'
+92:CODE_
+93:CODE
+94:INSTR
+95:IO
+96:io 'input'
+97:VARIABLE
+98:variable 'V3'
+99:CODE_
+100:CODE
+101:INSTR
+102:ASSIGN
+103:VARIABLE
+104:variable 'V2'
+105:ASSIGN_
+106:assign 'bool'
+107:BOOL
+108:bool 'eq'
+109:VARIABLE
+110:variable 'V3'
+111:VARIABLE
+112:variable 'V4'
+113:CODE_
+114:CODE
+115:INSTR
+116:COND_BRANCH
+117:tok_if 'if'
+118:BOOL
+119:VARIABLE
+120:variable 'V2'
+121:CODE
+122:INSTR
+123:IO
+124:io 'output'
+125:VARIABLE
+126:variable 'V1'
+127:COND_BRANCH_
+128:CODE
+129:INSTR
+130:IO
+131:io 'output'
+132:VARIABLE
+133:variable 'V0'
+134:PROC_DEFS_
+135:PROC_DEFS
+136:PROC
+137:proc 'P1'
+138:PROG
+139:CODE
+140:INSTR
+141:DECL
+142:TYPE
+143:type 'string'
+144:NAME
+145:variable 'V5'
+146:CODE_
+147:CODE
+148:INSTR
+149:ASSIGN
+150:VARIABLE
+151:variable 'V5'
+152:ASSIGN_
+153:assign '"hello"'
+154:CODE_
+155:CODE
+156:INSTR
+157:CALL
+158:call 'P2'
+159:CODE_
+160:CODE
+161:INSTR
+162:CALL
+163:call 'P0'
+164:PROG_
+165:PROC_DEFS
+166:PROC
+167:proc 'P2'
+168:PROG
+169:CODE
+170:INSTR
+171:IO
+172:io 'output'
+173:VARIABLE
+174:variable 'V5'

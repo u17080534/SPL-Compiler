@@ -1,170 +1,130 @@
 0:PROG
-1:PROC_DEFS
-2:PROC
-3:proc 'checnuber'
-4:PROG
-5:CODE
-6:INSTR
-7:DECL
-8:TYPE
-9:type 'num'
-10:NAME
-11:variable 'zero'
-12:CODE_
-13:CODE
-14:INSTR
-15:ASSIGN
-16:VARIABLE
-17:variable 'zero'
-18:ASSIGN_
-19:assign 'numexpr'
-20:NUMEXPR
-21:tok_number_literal '0'
-22:CODE_
-23:CODE
-24:INSTR
-25:ASSIGN
-26:VARIABLE
-27:variable 'm'
-28:ASSIGN_
-29:assign 'variable'
-30:VARIABLE
-31:variable 'n'
-32:CODE_
-33:CODE
-34:INSTR
-35:COND_BRANCH
-36:tok_if 'if'
-37:BOOL
-38:bool '<'
-39:VARIABLE
-40:variable 'm'
-41:VARIABLE
-42:variable 'zero'
-43:PROG
-44:CODE
-45:INSTR
-46:ASSIGN
-47:VARIABLE
-48:variable 'm'
-49:ASSIGN_
-50:assign 'numexpr'
-51:NUMEXPR
-52:CALC
-53:calc 'mult'
-54:CALC_
+1:CODE
+2:INSTR
+3:CALL
+4:call 'checnuber'
+5:PROG_
+6:PROC_DEFS
+7:PROC
+8:proc 'checnuber'
+9:PROG
+10:CODE
+11:INSTR
+12:DECL
+13:TYPE
+14:type 'num'
+15:NAME
+16:variable 'zero'
+17:CODE_
+18:CODE
+19:INSTR
+20:ASSIGN
+21:VARIABLE
+22:variable 'zero'
+23:ASSIGN_
+24:assign 'numexpr'
+25:NUMEXPR
+26:tok_number_literal '0'
+27:CODE_
+28:CODE
+29:INSTR
+30:ASSIGN
+31:VARIABLE
+32:variable 'm'
+33:ASSIGN_
+34:assign 'variable'
+35:VARIABLE
+36:variable 'n'
+37:CODE_
+38:CODE
+39:INSTR
+40:COND_BRANCH
+41:tok_if 'if'
+42:BOOL
+43:bool '<'
+44:VARIABLE
+45:variable 'm'
+46:VARIABLE
+47:variable 'zero'
+48:CODE
+49:INSTR
+50:ASSIGN
+51:VARIABLE
+52:variable 'm'
+53:ASSIGN_
+54:assign 'numexpr'
 55:NUMEXPR
-56:VARIABLE
-57:variable 'm'
-58:CALC__
+56:CALC
+57:calc 'mult'
+58:CALC_
 59:NUMEXPR
-60:tok_number_literal '-1'
-61:CODE_
-62:CODE
-63:INSTR
-64:COND_LOOP
-65:loop 'while'
-66:BOOL
-67:bool '<'
-68:VARIABLE
-69:variable 'm'
-70:VARIABLE
-71:variable 'zero'
-72:PROG
-73:CODE
-74:INSTR
-75:ASSIGN
-76:VARIABLE
-77:variable 'm'
-78:ASSIGN_
-79:assign 'numexpr'
-80:NUMEXPR
-81:CALC
-82:calc 'sub'
-83:CALC_
-84:NUMEXPR
-85:VARIABLE
-86:variable 'm'
-87:CALC__
-88:NUMEXPR
-89:tok_number_literal '2'
-90:CODE_
-91:CODE
-92:INSTR
-93:COND_BRANCH
-94:tok_if 'if'
-95:BOOL
-96:bool 'eq'
-97:VARIABLE
-98:variable 'm'
-99:VARIABLE
-100:variable 'zero'
-101:PROG
-102:CODE
-103:INSTR
-104:ASSIGN
-105:VARIABLE
-106:variable 'r'
-107:ASSIGN_
-108:assign '"even"'
-109:COND_BRANCH_
-110:PROG
-111:CODE
-112:INSTR
-113:ASSIGN
-114:VARIABLE
-115:variable 'r'
-116:ASSIGN_
-117:assign '"odd"'
-118:CODE_
-119:PROC_DEFS
-120:PROC
-121:proc 'xx'
-122:PROG
-123:CODE
-124:INSTR
-125:IO
-126:io 'output'
-127:VARIABLE
-128:variable 'zero'
-129:PROC_DEFS_
-130:PROC_DEFS
-131:PROC
-132:proc 'yy'
-133:PROG
-134:PROC_DEFS
-135:PROC
-136:proc 'xt'
-137:PROG
-138:CODE
-139:INSTR
-140:IO
-141:io 'output'
-142:VARIABLE
-143:variable 'zero'
-144:PROC_DEFS_
-145:PROC_DEFS
-146:PROC
-147:proc 'pp'
-148:PROG
-149:CODE
-150:INSTR
-151:IO
-152:io 'output'
-153:VARIABLE
-154:variable 'zero'
-155:PROC_DEFS_
-156:PROC_DEFS
-157:PROC
-158:proc 'yh'
-159:PROG
-160:PROC_DEFS
-161:PROC
-162:proc 'pv'
-163:PROG
-164:CODE
-165:INSTR
-166:IO
-167:io 'output'
-168:VARIABLE
-169:variable 'zero'
+60:VARIABLE
+61:variable 'm'
+62:CALC__
+63:NUMEXPR
+64:tok_number_literal '-1'
+65:CODE_
+66:CODE
+67:INSTR
+68:COND_LOOP
+69:loop 'while'
+70:BOOL
+71:bool '<'
+72:VARIABLE
+73:variable 'm'
+74:VARIABLE
+75:variable 'zero'
+76:CODE
+77:INSTR
+78:ASSIGN
+79:VARIABLE
+80:variable 'm'
+81:ASSIGN_
+82:assign 'numexpr'
+83:NUMEXPR
+84:CALC
+85:calc 'sub'
+86:CALC_
+87:NUMEXPR
+88:VARIABLE
+89:variable 'm'
+90:CALC__
+91:NUMEXPR
+92:tok_number_literal '2'
+93:CODE_
+94:CODE
+95:INSTR
+96:COND_BRANCH
+97:tok_if 'if'
+98:BOOL
+99:bool 'eq'
+100:VARIABLE
+101:variable 'm'
+102:VARIABLE
+103:variable 'zero'
+104:CODE
+105:INSTR
+106:ASSIGN
+107:VARIABLE
+108:variable 'r'
+109:ASSIGN_
+110:assign '"even"'
+111:COND_BRANCH_
+112:CODE
+113:INSTR
+114:ASSIGN
+115:VARIABLE
+116:variable 'r'
+117:ASSIGN_
+118:assign '"odd"'
+119:PROG_
+120:PROC_DEFS
+121:PROC
+122:proc 'xx'
+123:PROG
+124:CODE
+125:INSTR
+126:IO
+127:io 'output'
+128:VARIABLE
+129:variable 'zero'

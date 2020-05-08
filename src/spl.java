@@ -61,9 +61,7 @@ public class SPL
 
             if(tokens != null)
                 if(this.parse(tokens))
-                    {
-                    // this.analysis();
-                    }
+                    this.analysis();
 
             File genFile = File.complete_file(this.tree.generation(this.filename));
 
@@ -72,7 +70,6 @@ public class SPL
         catch(Exception ex)
         {
             System.out.println(ex);
-            ex.printStackTrace();
         }
     }
 

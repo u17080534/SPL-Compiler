@@ -1,6 +1,6 @@
-string Tester;
+string tester;
 
 proc bye
 {
-	Tester="JohnIsABuilder";
+	Tester="johnisabuilder";
 }

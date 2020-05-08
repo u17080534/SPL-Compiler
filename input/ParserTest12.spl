@@ -1,3 +1,4 @@
+calc;
 proc calc{
 	num zero;
 	zero= 0;
