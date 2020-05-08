@@ -3,7 +3,6 @@ package syntax.expression;
 import syntax.code.*;
 import lexer.Token;
 import lexer.Token.Tok;
-import analysis.Scoping;
 
 //SPL-COMPILER
 public class TerminalExpression extends Expression 
@@ -94,6 +93,12 @@ public class TerminalExpression extends Expression
 				//ASSIGN
 			case TOK_ASSN:
 				this.alias = "assign";
+				break;
+			case TOK_S:
+				this.alias = "string_literal";
+				break;
+			case TOK_N:
+				this.alias = "number_literal";
 				break;
 		}
 

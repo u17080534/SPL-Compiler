@@ -119,10 +119,8 @@ public class UnitTest
             "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis [if - tok_if[1,1]]",//1
             "Syntax Error: Instruction is expected at start of program or new procedure [{ - tok_open_brace[21,8]]",//2
             "",//3
-            "Syntax Error: Expected Closing Brace\n" +
-                "\tHint: You may be missing a semicolon (;) between instructions [zero - tok_identifier[3,10]]",//4
-            "Syntax Error: Expected Closing Brace\n" +
-            "\tHint: You may be missing a semicolon (;) between instructions [zero - tok_identifier[4,6]]",//5
+            "Syntax Error: Instruction missing semicolon (;) as it has tokens following it [zero - tok_identifier[3,10]]",//4
+            "Syntax Error: Instruction missing semicolon (;) as it has tokens following it [zero - tok_identifier[4,6]]",//5
             "Syntax Error: Invalid Conditional Syntax: Expected Opening Parenthesis [if - tok_if[6,6]]",//6
             "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis [m - tok_identifier[6,10]]",//7
             "Syntax Error: Invalid Conditional Syntax: Expected Closing Parenthesis [) - tok_close_paren[8,20]]",//8

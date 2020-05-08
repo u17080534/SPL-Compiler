@@ -18,6 +18,7 @@ public class bool_ extends Expression
 	public Line trans(File absFile)
 	{
 		//System.out.println(this.expr);       
+		// This will assign two new variables to this expression that BOOL will use with and/or
 		return new Line("");   
 	} 
 }

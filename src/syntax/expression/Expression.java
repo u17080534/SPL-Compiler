@@ -167,7 +167,7 @@ public abstract class Expression
 	@Override 
 	public String toString() 
 	{
-		return this.id + " " + this.expr;
+		return this.id + " " + this.expr + " " + this.symbol.getType();
 	}
 
 	public static String getValue(String expr)

@@ -52,9 +52,6 @@ public class Grammar
 			this.lookahead = this.tokenstream.get(++this.index).getToken();
 		else
 			this.lookahead = Token.Tok.NULL;
-
-		// System.out.println(current);
-		// System.out.println(this.lookahead);
 	}
 
 	private Token.Tok look(int ahead)
@@ -114,14 +111,16 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_SEMI)
 			{
 				this.readToken();
-				Expression e1 = PROC_DEFS();
-				return new prog_(e1);
+				return PROC_DEFS();
+				// Expression e1 = PROC_DEFS();
+				// return new prog_(e1);
 			}
 
-			else if(this.lookahead == Token.Tok.TOK_PROC)
+			else if(this.lookahead != Token.Tok.TOK_CB && this.lookahead != Token.Tok.NULL)
 				throw new SyntaxException(this.current, "Instruction missing semicolon (;) as it has tokens following it");
 			
-			return new prog_();
+			// return new prog_();
+			return null;
 		}
 		catch(Exception error)
 		{
@@ -154,11 +153,13 @@ public class Grammar
 
 			if(this.lookahead == Token.Tok.TOK_PROC)
 			{
-				Expression e = PROC_DEFS();
-				return new proc_defs_(e);
+				return PROC_DEFS();
+				// Expression e = PROC_DEFS();
+				// return new proc_defs_(e);
 			}
 			
-			return new proc_defs_();
+			// return new proc_defs_();
+			return null;
 		}
 		catch(Exception ex)
 		{
@@ -206,7 +207,10 @@ public class Grammar
 			throw ex;
 		}
 
-		throw new SyntaxException(this.current, "Final instruction in code block has a trailing semicolon (;)");
+		if(this.lookahead == Token.Tok.NULL || this.lookahead == Token.Tok.TOK_CB)
+			throw new SyntaxException(this.current, "Final instruction in code block has a trailing semicolon (;)");
+
+		throw new SyntaxException(this.current, "Unknown instruction found");
 	}
 
 	// CODE → INSTR CODE'
@@ -233,11 +237,12 @@ public class Grammar
 			{
 				// this.readToken();
 				
-				if(this.look(1) == Token.Tok.TOK_HALT || this.look(1) == Token.Tok.TOK_NUM || this.look(1) == Token.Tok.TOK_STRING || this.look(1) == Token.Tok.TOK_BOOL || this.look(1) == Token.Tok.TOK_INPUT || this.look(1) == Token.Tok.TOK_OUTPUT || this.look(1) == Token.Tok.TOK_IF || this.look(1) == Token.Tok.TOK_WHILE || this.look(1) == Token.Tok.TOK_ID)
+				if(this.look(1) == Token.Tok.TOK_HALT || this.look(1) == Token.Tok.TOK_NUM || this.look(1) == Token.Tok.TOK_STRING || this.look(1) == Token.Tok.TOK_BOOL || this.look(1) == Token.Tok.TOK_INPUT || this.look(1) == Token.Tok.TOK_OUTPUT || this.look(1) == Token.Tok.TOK_IF || this.look(1) == Token.Tok.TOK_WHILE || this.look(1) == Token.Tok.TOK_FOR || this.look(1) == Token.Tok.TOK_ID)
 				{
 					this.readToken();
-					Expression e = CODE();
-					return new code_(e);
+					return CODE();
+					// Expression e = CODE();
+					// return new code_(e);
 				}
 			}
 
@@ -275,11 +280,10 @@ public class Grammar
 				if(this.look(1) == Token.Tok.TOK_NUM || this.look(1) == Token.Tok.TOK_STRING || this.look(1) == Token.Tok.TOK_BOOL)
 				{
 					this.readToken();
-					Expression e1 = DECL();
-					return new decl_(e1);
+					return DECL();
+					// Expression e1 = DECL();
+					// return new decl_(e1);
 				}
-				
-				// else is another instruction
 			}
 
 			return new decl_();
@@ -317,7 +321,7 @@ public class Grammar
 								{
 									this.readToken();
 									Expression e3 = COND_BRANCH_();
-									return new cond_branch(new TerminalExpression(tok, tok.getInput()), e1, e2, e3);
+									return new cond_branch(e1, e2, e3);
 								}
 								throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 							}
@@ -353,15 +357,17 @@ public class Grammar
 					if(this.lookahead == Token.Tok.TOK_CB)
 					{
 						this.readToken();
-						return new cond_branch_(e);
+						return e;
+						// return new cond_branch_(e);
 					}
+
 					throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
 				}
 				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Brace");
 			}
 
-			return new cond_branch_();
-			// return null;
+			// return new cond_branch_();
+			return null;
 		}
 		catch(Exception ex)
 		{
@@ -671,7 +677,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid boolean expression given");
 	}
 
-	// BOOL' → BOOL , BOOL"
+	// BOOL' → BOOL , BOOL )
 	private Expression BOOL_() throws SyntaxException
 	{
 		try
@@ -681,36 +687,20 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_COMM)
 			{
 				this.readToken();
-				Expression e2 = BOOL__();
-				return new bool_(e1, e2);
+				Expression e2 = BOOL();
+				if(this.lookahead == Token.Tok.TOK_CP)
+				{
+					this.readToken();
+					return new bool_(e1, e2);
+				}
+				throw new SyntaxException(this.current, "Invalid Boolean Syntax: Expected Closing Parenthesis");
 			}
-
 			throw new SyntaxException(this.current, "Invalid Boolean Syntax: Expected Token (,)");
 		}
 		catch(Exception ex)
 		{
 			throw ex;
 		}
-	}
-
-	// BOOL" → BOOL )
-	private Expression BOOL__() throws SyntaxException
-	{
-		try
-		{
-			Expression e = BOOL();
-			if(this.lookahead == Token.Tok.TOK_CP)
-			{
-				this.readToken();
-				return new bool__(e);
-			}
-		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
-
-		throw new SyntaxException(this.current, "Invalid Boolean Syntax: Expected Closing Parenthesis");
 	}
 
 	// CALC → add ( CALC' | → sub ( CALC' | mult ( CALC'
@@ -766,7 +756,7 @@ public class Grammar
 		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax");
 	}
 
-	// CALC' → NUMEXPR , CALC"
+	// CALC' → NUMEXPR , NUMEXPR )
 	private Expression CALC_() throws SyntaxException
 	{
 		try
@@ -776,8 +766,12 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_COMM)
 			{
 				this.readToken();
-				Expression e2 = CALC__();
-				return new calc_(e1, e2);
+				Expression e2 = NUMEXPR();
+				if(this.lookahead == Token.Tok.TOK_CP)
+				{
+					this.readToken();
+					return new calc_(e1, e2);
+				}
 			}
 		}
 		catch(Exception ex)
@@ -786,27 +780,6 @@ public class Grammar
 		}
 
 		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Missing parameter in operation\n\tHint: A comma (,) may be missing");
-	}
-
-	// CALC" → NUMEXPR )
-	private Expression CALC__() throws SyntaxException
-	{
-		try
-		{
-			Expression e = NUMEXPR();
-
-			if(this.lookahead == Token.Tok.TOK_CP)
-			{
-				this.readToken();
-				return new calc__(e);
-			}
-		}
-		catch(Exception ex)
-		{
-			throw ex;
-		}
-
-		throw new SyntaxException(this.current, "Invalid Arithmetic Syntax: Expected Closing Parenthesis");
 	}
 
 	// ASSIGN → VARIABLE = ASSIGN'
@@ -838,8 +811,8 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_S)
 			{
 				this.readToken();
-				Token tok = new Token(this.current, Token.Tok.TOK_ASSN);
-				return new assign_(new TerminalExpression(tok, tok.getInput()));
+				// Token tok = new Token(this.current, Token.Tok.TOK_ASSN);
+				return new assign_(new TerminalExpression(this.current, this.current.getInput()));
 			}
 			else if(this.lookahead == Token.Tok.TOK_ID)
 			{
