@@ -29,6 +29,10 @@ public class Symbol
 		return this.expr.getExpr();
 	}
 
+	public Expression getActualExpression(){
+		return this.expr;
+	}
+
 	public void setExpression(String expression)
 	{
 		this.expr.setExpr(expression);

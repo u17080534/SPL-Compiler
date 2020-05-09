@@ -96,6 +96,10 @@ public abstract class Expression
 		return this.descendents.get(index);
 	}
 
+	public Vector<Expression> getActualDescendents(){
+		return descendents;
+	}
+
 	public Symbol getSymbol()
 	{
 		return this.symbol;
