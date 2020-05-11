@@ -53,7 +53,7 @@ public class SPL
 
     public void compile(boolean debug)
     {
-        this.cache.output(debug);
+        this.output(debug);
 
         try
         {
@@ -117,11 +117,25 @@ public class SPL
         return false;
     }
 
-    public void analysis() throws UsageException
+    public void analysis() throws AnalysisException
     {
         try
         {
-            Scoping.check(this.tree, this.table);
+            this.checkScope();
+            this.checkValues();
+        }
+        catch(AnalysisException ex)
+        {
+            throw ex;
+        }
+
+    }
+
+    public void checkScope() throws UsageException
+    {
+        try
+        {
+            ScopeCheck.check(this.tree, this.table);
             this.cache.export(this.table);
             this.cache.export(this.tree);
         }
@@ -130,7 +144,26 @@ public class SPL
             throw ex;
         }
     }
+
+    public void checkValues() throws ValueException
+    {
+        try
+        {
+            ValueCheck.check(this.table);
+            this.cache.export(this.table);
+            this.cache.export(this.tree);
+        }
+        catch(ValueException ex)
+        {
+            throw ex;
+        }
+    }
   
+    public void output(boolean out)
+    {
+        this.cache.output(out);
+    }
+
     @Override 
     public String toString() 
     {

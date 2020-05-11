@@ -1,8 +1,38 @@
+w;
+num h;
 
-num a;
-num b;
+proc g {
+  output(f);
+  input(u)  
+}
 
-a = add(2, sub(4, 1));
-b = mult(a, 5);
+proc z {
+  num j;
+  output(h)  
+}
 
-output(b)
+proc f {
+  h = 24506396;
+  output(s)  
+}
+
+proc i {
+  string u;
+  input(h)  
+}
+
+proc g {
+  halt;
+  input(i)  
+}
+
+proc b {
+  output(z);
+  output(f)  
+}
+
+proc g {
+  bool b;
+  d  
+}
+

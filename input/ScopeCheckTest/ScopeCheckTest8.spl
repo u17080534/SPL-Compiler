@@ -1,0 +1,19 @@
+num n1s0;
+num n2s0;
+
+proc test
+{
+	num n1s1;
+	num n2s1;
+	bool eqv;
+	eqv = T;
+	
+	while(eqv)
+	{
+		num numwhile;
+		numwhile = 0
+	};
+
+	numwhile = 1;
+	output(numwhile)
+}

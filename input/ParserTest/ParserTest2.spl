@@ -26,6 +26,7 @@ proc yy{
 		output (r)
 	} 
 	proc yh{
+	pv;
 		proc pv{
 			output (r)
 		}

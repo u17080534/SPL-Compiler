@@ -109,8 +109,9 @@ public class Cache
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             Vector<Symbol> symbols = table.list();
+            
             for(int index = 0; index < symbols.size(); index++)
-                bufferedWriter.write(symbols.get(index) + "\n");
+                bufferedWriter.write(symbols.get(index).getSymbol() + "\n");
 
             bufferedWriter.close();
 

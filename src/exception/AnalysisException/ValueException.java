@@ -3,7 +3,7 @@ package exception;
 import symtable.Symbol;
 
 //SPL-COMPILER
-public class ValueException extends Exception
+public class ValueException extends AnalysisException
 {
 	private Symbol sym;
 
@@ -14,11 +14,11 @@ public class ValueException extends Exception
 
     public ValueException(Symbol sym, String message)
     {
-        super(message +  sym.getExpression() + " at " + sym.getLocation());
-    	this.sym = sym;
+        super(sym, message);
     }
 
-    @Override public String toString() 
+    @Override 
+    public String toString() 
 	{ 
 		String str = this.getMessage();
 		return "Value Exception: " + str;

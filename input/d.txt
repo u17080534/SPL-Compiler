@@ -1,27 +1,16 @@
-num n;
-num zero;
-zero = 0;
-
-while (T) {
-  input(n);
-  if (or((n < zero), eq(n, zero))) then {
-    halt
-  } else {
-    fib
-  }
-};
-
-proc fib {
-  num a;
-  num b;
-  a = 1;
-  b = 1;
-  while ((n > zero)) {
-    num temp;
-    temp = a;
-    a = add(a, b);
-    b = temp;
-    n = sub(n, 1)
+output(ee);
+string mm;
+halt;
+while (and(or(or(tt, and(F, (ii > hh))), dd), bb)) {
+  while (or((ll > uu), T)) {
+    while (or(tt, (hh < ss))) {
+      halt;
+      bool yy
+    };
+    bool dd
   };
-  output(b)
-}
+  rr;
+  input(qq)
+};
+xx 
+

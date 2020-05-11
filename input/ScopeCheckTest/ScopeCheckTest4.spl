@@ -1,0 +1,32 @@
+num n1s0;
+num n2s0;
+string verbose;
+verbose = "caller";
+test;
+
+proc test
+{
+	test;
+	num n1s1;
+	n1s1 = n1s0;
+	num n1s0;
+	n1s1 = n1s0;
+
+	proc test
+	{
+		test;
+		num n1s1;
+		n1s1 = n1s0;
+		num n1s0;
+		n1s1 = n1s0;
+
+		proc test
+		{
+			num n1s1;
+			n1s1 = n1s0;
+			num n1s0;
+			n1s1 = n1s0;
+			output(verbose)
+		}
+	}
+}

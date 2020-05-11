@@ -1,17 +1,10 @@
-string w;
-string l;
+for (suu = 0; ll < aa; nn = add(bb, 1)) {
+  output(yy);
+  for (jj = 0; zz < dd; oo = add(tt, 1)) {
+    halt;
+    num jj
+  };
+  halt
+};
+bool mm
 
-num guess;
-num rand;
-
-input(guess);
-rand = 9;
-
-w = "winner";
-l = "loser";
-
-if (eq(guess, rand)) then {
-  output(w)
-} else {
-  output(l)
-}

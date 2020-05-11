@@ -1,31 +1,676 @@
-num rax;
-num rbx;
-num rcx;
-num zero;
-zero = 0;
+num uu;
+bool oo;
+input(dd);
+input(vv);
 
-while (T) {
-  input(rbx);
-  input(rcx);
-  if (or(or((rbx < zero), (rcx < zero)), or(eq(rbx, zero), eq(rcx, zero)))) then {
-    halt
-  };
-  div;
-  output(rax)
-};
+proc rr {
+  string ee;
+  string qq;
+  nn;
+  halt;
+  halt;
+  hh;
+  string vv  
+}
 
-
-proc div {
-  if (not eq(rbx, rcx)) then {
-    rax = 0;
-    while ((rbx > zero)) {
-      rax = add(rax, 1);
-      rbx = sub(rbx, rcx)
+proc ww {
+  rr;
+  num oo;
+  bool ll;
+  for (pp = 0; oo < ff; bb = add(xx, 1)) {
+    ww = and(eq(aa, oo), eq(gg, dd));
+    if (or((ii > gg), (ii < ss))) then {
+      input(ii);
+      input(vv);
+      output(dd);
+      while (or(and((aa < rr), or(and(and((xx < zz), and(dd, not(and(T, not (uu > zz))))), eq(zz, rr)), (ww > uu))), eq(ww, ff))) {
+        bool rr;
+        num jj
+      }
     };
-    if ((rbx < zero)) then {
-      rax = sub(rax, 1)
+    bool dd;
+    output(kk)
+  };
+  output(ll);
+  aa = 72;
+  if (dd) then {
+    input(ww);
+    num ss;
+    num xx;
+    input(ff);
+    output(nn)
+  } else {
+    while ((nn < vv)) {
+      halt;
+      if (yy) then {
+        jj = eq(ee, vv);
+        qq = or(not or(not or(F, gg), or(T, not F)), rr);
+        if (F) then {
+          halt;
+          for (ii = 0; zz < rr; nn = add(nn, 1)) {
+            if ((ll > tt)) then {
+              halt;
+              num ii
+            } else {
+              halt;
+              input(ee)
+            };
+            string oo
+          };
+          num ll
+        } else {
+          while (and(eq(mm, tt), F)) {
+            oo = not and(T, (pp > xx));
+            rr = sub(mult(tt, ee), bb)
+          };
+          num cc
+        }
+      }
+    };
+    ww;
+    input(mm)
+  }  
+}
+
+proc qq {
+  kk = 666;
+  halt;
+  mm;
+  halt;
+  input(nn);
+  halt;
+  ww = 89102  
+}
+
+proc ll {
+  output(oo);
+  if (T) then {
+    num jj;
+    num nn;
+    aa = mult(32, cc);
+    if (F) then {
+      input(vv);
+      halt;
+      ff = F;
+      ww;
+      while (ll) {
+        halt;
+        for (dd = 0; ll < dd; ii = add(ll, 1)) {
+          if ((ss < xx)) then {
+            halt;
+            halt;
+            num ll
+          };
+          while (or(or(pp, or(F, (nn < ee))), (ss < bb))) {
+            ii;
+            vv
+          };
+          string hh;
+          bool kk
+        };
+        while ((zz < ee)) {
+          if (T) then {
+            num nn;
+            output(ii);
+            jj = sub(pp, add(sub(978446, mult(ii, add(897, ee))), rr))
+          };
+          num uu;
+          ss = "iq9f5pz"
+        };
+        aa = xx;
+        yy
+      };
+      for (qq = 0; bb < jj; mm = add(ww, 1)) {
+        while (T) {
+          if (T) then {
+            halt;
+            ss;
+            qq
+          };
+          halt
+        };
+        halt;
+        bool aa
+      }
+    } else {
+      if (F) then {
+        halt;
+        dd = sub(add(cc, add(6064, 96187)), qq);
+        halt;
+        for (cc = 0; rr < ff; xx = add(aa, 1)) {
+          input(rr);
+          if (not and(T, eq(mm, gg))) then {
+            input(vv);
+            if (mm) then {
+              num aa;
+              output(jj)
+            }
+          } else {
+            input(hh);
+            num hh
+          };
+          string ww
+        }
+      };
+      ee = "ss 0s1ob"
     }
   } else {
-    rax = 1
-  }
+    string tt;
+    input(uu);
+    ee;
+    if (not (dd < pp)) then {
+      halt;
+      for (ii = 0; kk < pp; vv = add(ll, 1)) {
+        input(tt);
+        xx;
+        if (or(and(and(T, F), or(T, or(not and(or(not and(and(F, (aa > gg)), and(ll, and(T, not (aa > oo)))), and(aa, not and(and(T, not and(F, F)), T))), pp), eq(jj, pp)))), bb)) then {
+          kk = "6tip";
+          halt;
+          num yy;
+          ee
+        }
+      };
+      input(kk);
+      string tt;
+      input(qq);
+      tt
+    } else {
+      if (or(and(and((uu < ss), and(or(not eq(cc, ww), (ii < zz)), and(ii, eq(ss, jj)))), (hh < tt)), and(eq(tt, jj), T))) then {
+        for (vv = 0; pp < yy; ff = add(yy, 1)) {
+          yy = or(not T, zz);
+          input(yy);
+          yy;
+          halt
+        };
+        while ((ss > xx)) {
+          rr;
+          cc;
+          input(oo);
+          halt
+        };
+        string oo;
+        if (F) then {
+          ff;
+          nn = "r67r3";
+          dd;
+          halt
+        } else {
+          for (dd = 0; dd < ss; ee = add(yy, 1)) {
+            for (vv = 0; ww < jj; aa = add(kk, 1)) {
+              bool hh;
+              input(rr)
+            };
+            pp;
+            if (aa) then {
+              bb = (aa < rr);
+              hh = T
+            } else {
+              tt = 2863;
+              halt
+            }
+          };
+          while (eq(kk, ww)) {
+            while (or(not or(eq(mm, xx), T), and(and(eq(rr, mm), or(or((ee < tt), F), gg)), and(F, T)))) {
+              num ff;
+              mm = zz
+            };
+            num oo;
+            uu = "2u"
+          };
+          output(ff);
+          input(kk)
+        };
+        for (ff = 0; tt < ff; ss = add(mm, 1)) {
+          string bb;
+          jj;
+          for (bb = 0; aa < ff; xx = add(yy, 1)) {
+            string jj;
+            if (and((cc > uu), or(or(and(and(T, or(not (tt > ww), or(and(eq(ff, aa), and(F, and(and(not (xx > ll), and((dd < hh), T)), (ee < nn)))), (cc > ii)))), (uu > ff)), (yy < kk)), nn))) then {
+              halt;
+              string tt
+            };
+            output(ww)
+          };
+          if (dd) then {
+            input(ff);
+            ii;
+            string qq
+          } else {
+            bool cc;
+            if ((pp > mm)) then {
+              num ww;
+              yy = "qeev"
+            };
+            if ((vv > hh)) then {
+              jj;
+              vv
+            } else {
+              hh;
+              nn
+            }
+          }
+        }
+      } else {
+        for (nn = 0; pp < rr; ee = add(ll, 1)) {
+          bool gg;
+          halt;
+          if (T) then {
+            num ff;
+            uu
+          } else {
+            string oo;
+            num cc;
+            bool vv
+          }
+        };
+        vv;
+        rr = "g9ex";
+        hh;
+        while (T) {
+          zz;
+          output(ss);
+          input(dd);
+          if (dd) then {
+            if (bb) then {
+              string aa;
+              ll = ww
+            } else {
+              kk;
+              dd
+            };
+            halt
+          } else {
+            output(aa);
+            aa = ii;
+            while (ff) {
+              input(hh);
+              oo
+            }
+          }
+        }
+      };
+      hh
+    };
+    num zz;
+    halt;
+    output(tt)
+  };
+  halt;
+  num ll;
+  output(qq);
+  bool ss;
+  while (T) {
+    halt;
+    halt
+  };
+  bool nn  
 }
+
+proc gg {
+  zz;
+  if ((ii < yy)) then {
+    output(bb);
+    xx = kk;
+    output(rr);
+    if (or(and(uu, F), hh)) then {
+      if (eq(hh, qq)) then {
+        mm = not eq(yy, ss);
+        num yy;
+        halt;
+        while (aa) {
+          for (oo = 0; vv < cc; yy = add(ll, 1)) {
+            bb;
+            while (or(T, not or(T, (hh < jj)))) {
+              input(tt);
+              halt
+            };
+            mm
+          };
+          output(ll);
+          halt;
+          halt
+        }
+      } else {
+        for (gg = 0; ss < dd; ll = add(vv, 1)) {
+          if (not not eq(ii, uu)) then {
+            if (F) then {
+              output(kk);
+              halt
+            };
+            uu = 3;
+            for (ll = 0; ff < cc; rr = add(uu, 1)) {
+              input(mm);
+              qq = ff
+            }
+          };
+          input(pp);
+          if (F) then {
+            output(yy);
+            halt;
+            if ((ee < ll)) then {
+              halt;
+              vv
+            }
+          } else {
+            input(ee);
+            mm = bb
+          }
+        };
+        while (and((qq > kk), (xx < xx))) {
+          if (F) then {
+            gg;
+            if ((aa < nn)) then {
+              halt;
+              input(tt)
+            }
+          } else {
+            vv;
+            output(dd);
+            output(pp)
+          };
+          xx = "b3vt1rn";
+          output(zz)
+        }
+      };
+      if (T) then {
+        input(oo);
+        bool ii;
+        ll;
+        while (eq(ee, rr)) {
+          string ww;
+          jj;
+          rr;
+          vv
+        }
+      } else {
+        if ((pp > ww)) then {
+          ss = zz;
+          hh;
+          num ll
+        };
+        for (aa = 0; gg < gg; ff = add(hh, 1)) {
+          mm;
+          ff = add(jj, add(add(add(tt, cc), 3753159), 796));
+          if ((ss < kk)) then {
+            if (and(and(eq(jj, nn), not F), or((ff < dd), F))) then {
+              zz;
+              input(qq)
+            };
+            output(kk)
+          } else {
+            halt;
+            uu
+          }
+        }
+      };
+      while (eq(oo, ww)) {
+        zz = or(T, T);
+        if (eq(cc, ss)) then {
+          hh = add(jj, mult(aa, sub(9930, ww)));
+          if (kk) then {
+            halt;
+            ff = mm
+          } else {
+            uu = add(6898, ss);
+            string cc;
+            bool hh
+          }
+        }
+      };
+      if (qq) then {
+        gg = 900472;
+        for (cc = 0; ss < jj; cc = add(dd, 1)) {
+          if (or(F, T)) then {
+            output(uu);
+            if (or(F, (rr < gg))) then {
+              input(uu);
+              gg = yy
+            }
+          } else {
+            ii;
+            if ((cc > oo)) then {
+              halt;
+              qq = "v0"
+            } else {
+              bool vv;
+              gg
+            }
+          };
+          output(uu)
+        };
+        nn;
+        mm;
+        output(qq)
+      };
+      if ((bb > ss)) then {
+        string kk;
+        qq;
+        string pp
+      } else {
+        while (T) {
+          string tt;
+          halt;
+          for (kk = 0; tt < zz; ww = add(ll, 1)) {
+            halt;
+            halt
+          };
+          if (eq(qq, xx)) then {
+            input(bb);
+            uu = 5142562
+          }
+        };
+        input(ee);
+        gg = sub(add(61, mult(29, mult(ff, sub(mult(cc, add(add(6316926, 18085745), yy)), sub(sub(76, xx), 77))))), add(vv, rr))
+      };
+      halt
+    };
+    if (zz) then {
+      bool cc;
+      tt = mult(11297, 6471726);
+      halt;
+      string aa
+    };
+    output(cc)
+  };
+  halt;
+  if (and(F, or(eq(rr, xx), eq(nn, tt)))) then {
+    halt;
+    num ee;
+    while (F) {
+      input(cc);
+      ii = not (ll > ss)
+    };
+    bb;
+    bb = "9le"
+  } else {
+    output(yy);
+    for (xx = 0; zz < ii; ee = add(bb, 1)) {
+      if (ll) then {
+        bool tt;
+        for (nn = 0; ff < hh; ll = add(nn, 1)) {
+          kk;
+          bool kk;
+          halt
+        };
+        string dd
+      };
+      output(nn)
+    };
+    dd;
+    nn = sub(ll, qq);
+    input(aa)
+  };
+  while (and((tt < yy), T)) {
+    bool ss;
+    string ff;
+    output(hh);
+    ss
+  };
+  string pp  
+}
+
+proc uu {
+  if (and(not qq, (xx > gg))) then {
+    bool bb;
+    for (oo = 0; rr < rr; bb = add(ss, 1)) {
+      ff;
+      bb = not eq(cc, mm);
+      if ((dd > ee)) then {
+        output(ii);
+        ii = add(sub(352, ff), ff);
+        num tt;
+        output(cc)
+      };
+      for (oo = 0; vv < uu; kk = add(oo, 1)) {
+        halt;
+        nn;
+        while (T) {
+          while (T) {
+            num oo;
+            if (T) then {
+              output(pp);
+              halt
+            }
+          };
+          halt
+        };
+        qq = ll;
+        if ((dd > xx)) then {
+          for (nn = 0; nn < uu; oo = add(xx, 1)) {
+            num qq;
+            while (and(F, or(eq(nn, xx), (oo < ss)))) {
+              halt;
+              string ee
+            }
+          };
+          num gg;
+          if ((nn < ff)) then {
+            nn = "5n7fsld";
+            input(rr)
+          } else {
+            while ((aa > rr)) {
+              num rr;
+              output(pp)
+            };
+            for (tt = 0; ww < nn; ss = add(kk, 1)) {
+              qq = 96560;
+              string qq
+            };
+            halt
+          };
+          if ((zz > yy)) then {
+            ss;
+            zz = mult(uu, mult(ff, 6517))
+          } else {
+            pp;
+            qq;
+            gg = T
+          }
+        } else {
+          for (cc = 0; dd < jj; ee = add(oo, 1)) {
+            vv = "dd";
+            bool dd
+          };
+          if (eq(ll, kk)) then {
+            if (and((jj > pp), not and(and(F, F), ee))) then {
+              hh;
+              cc
+            } else {
+              aa = mult(ss, 9536161);
+              halt
+            };
+            ff
+          };
+          num tt
+        }
+      };
+      rr;
+      input(hh)
+    };
+    if (or(F, (nn > pp))) then {
+      output(uu);
+      output(tt)
+    } else {
+      output(jj);
+      xx = 358;
+      ll = "";
+      halt
+    };
+    kk;
+    output(ll);
+    output(qq);
+    yy = 74
+  } else {
+    input(ff);
+    halt;
+    halt;
+    output(aa);
+    output(bb);
+    bool ff;
+    oo = sub(5789315, ii)
+  };
+  for (zz = 0; rr < uu; jj = add(nn, 1)) {
+    output(bb);
+    input(ss);
+    cc = "";
+    halt;
+    num vv;
+    input(bb)
+  };
+  if (F) then {
+    bool ll;
+    dd;
+    ii = mult(oo, 83355519)
+  };
+  input(gg);
+  uu = tt;
+  ff  
+}
+
+proc oo {
+  ee;
+  yy = "597x";
+  ww;
+  halt;
+  while (T) {
+    oo;
+    input(ii);
+    bool dd;
+    while (T) {
+      for (rr = 0; ff < oo; vv = add(ii, 1)) {
+        for (ww = 0; zz < aa; uu = add(tt, 1)) {
+          if (eq(pp, ll)) then {
+            if ((ss > xx)) then {
+              dd;
+              ff = "4r"
+            } else {
+              halt;
+              gg = 46602
+            };
+            mm = F;
+            if ((ss > mm)) then {
+              cc = tt;
+              halt
+            }
+          };
+          if (eq(jj, kk)) then {
+            bool hh;
+            bool mm
+          } else {
+            halt;
+            ll = add(mult(tt, 1), ee);
+            halt;
+            bb = not(aa)
+          };
+          halt;
+          jj
+        };
+        cc
+      };
+      oo
+    };
+    cc
+  };
+  input(ee)  
+}
+

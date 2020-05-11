@@ -1,0 +1,10 @@
+num n1s0;
+num n2s0;
+
+proc test
+{
+	num n1s1;
+	n1s0 = 3;
+	undef = 0;
+	n2s0 = 99
+}

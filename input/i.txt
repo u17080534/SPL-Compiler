@@ -1,1 +1,10 @@
- input halt if output num or sub proc add eq and output sub num output while num eq mult or input num or mult F if T or mult if then else output input else eq string while while not and mult or T if sub for for for mult mult sub if and then for bool string halt else for mult then not mult sub proc output if or and output add output bool and and string for string if else sub proc and add and or for input T eq while string halt while or input for proc and or F num eq eq not while not F else F output add for F num num while string for num T else input num halt then string proc T else proc while output bool mult add output or if num for while or halt num sub eq else then halt T T eq halt string output and mult sub and output if else mult while if T F T mult mult string add sub output eq eq halt input halt num sub not F for for num while sub proc add input while else F mult mult input halt or else while for else and mult T then and not sub sub or proc F T input or mult and then bool else then output else halt or then not sub not halt if string F and sub or else if string or output and and string if mult output bool else input input while and else string or proc bool input not not halt halt or then sub T add halt or F output while while input for string then or bool sub if sub sub mult eq if string add then string or add then not num if string then halt mult halt not and proc and while num bool string then else num halt mult F F or else T add mult for proc string if or string if output output T while then halt num sub while output bool input input proc add if and input for else T input while or and sub F T not input if mult mult halt sub eq add for if then or eq else output string add T if else eq num output F F if or while output then
+c;
+
+if (T) then {
+  x = 0;
+  
+  if (T) then {
+    num y
+} else {
+  num x
+}

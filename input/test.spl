@@ -1,17 +1,38 @@
 string wrong;
-wrong = "wrong";
 string correct;
-correct = "correct";
 bool eqv;
+wrong = "wrong";
+correct = "correct";
 eqv = F;
 hello;
 
+num i;
+num a;
+
+for (i = 0; i < a; i = add(i, 1)) 
+{
+    output (correct);
+
+    for (i = 0; i < a; i = add(i, 1)) 
+    {
+       output (correct)
+    }
+};
+
+num other;
+
 proc guess
 {
-    while(not eqv)
+    num x;
+    num other;
+    num answer;
+
+    x = 9;
+    x = add(sub(mult(1,x),8),sub(8, mult(1,x)));
+
+    while(not or(and(not eqv, eq(answer, other)), or(eqv, not eq(answer, other))))
     {
-        num answer;
-        num other;
+        
         other = 7;
 
         input (answer);

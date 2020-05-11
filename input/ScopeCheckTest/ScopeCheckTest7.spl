@@ -1,0 +1,16 @@
+bool eqv;
+eqv = T;
+
+while(eqv)
+{
+	num numtest
+};
+
+if(eqv) then
+{
+	string numtest
+}
+else
+{
+	string numtest
+}

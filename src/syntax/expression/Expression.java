@@ -5,6 +5,7 @@ import syntax.code.*;
 import syntax.code.*;
 import java.util.*;
 import symtable.Symbol;
+import parser.*;
 
 public abstract class Expression
 {   
@@ -12,6 +13,7 @@ public abstract class Expression
 	protected int id;
 	protected int level;
 	protected String expr;
+	protected String location;
 	protected Vector<Expression> descendents;
 	protected Symbol symbol;
 
@@ -28,6 +30,7 @@ public abstract class Expression
 		this.level(0);
 
 		this.symbol = new Symbol(this);
+		this.location = Grammar.location();
 	}
 
 	/**
@@ -96,10 +99,6 @@ public abstract class Expression
 		return this.descendents.get(index);
 	}
 
-	public Vector<Expression> getActualDescendents(){
-		return descendents;
-	}
-
 	public Symbol getSymbol()
 	{
 		return this.symbol;
@@ -146,7 +145,22 @@ public abstract class Expression
 
 	public String getLocation()
 	{
-		return "";
+		return this.location;
+	}
+
+	public int getScope()
+	{
+		return this.symbol.getScope();
+	}
+
+	public void setScope(int scope)
+	{
+		this.symbol.setScope(scope);
+	}
+
+	public Vector<Expression> getDescendents()
+	{
+		return this.descendents;
 	}
 
 	public String print(String ind, boolean last) 
@@ -171,7 +185,7 @@ public abstract class Expression
 	@Override 
 	public String toString() 
 	{
-		return this.id + " " + this.expr + " " + this.symbol.getType();
+		return this.id + " " + this.expr + " " + this.symbol.getType();// + " [" + this.symbol.getScope() + " " + this.symbol.getProc() + "]";
 	}
 
 	public static String getValue(String expr)

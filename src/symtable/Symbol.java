@@ -17,6 +17,8 @@ public class Symbol
 		this.type = "";
 		this.expr = expr;
 		this.altered = false;
+
+		this.scope = -1;
 	}
 
 	public int getID()
@@ -29,7 +31,8 @@ public class Symbol
 		return this.expr.getExpr();
 	}
 
-	public Expression getActualExpression(){
+	public Expression getActualExpression()
+	{
 		return this.expr;
 	}
 
@@ -82,6 +85,21 @@ public class Symbol
 	public boolean isRenamed()
 	{
 		return this.altered;
+	}
+
+	public boolean equals(Symbol other)
+	{
+		return this.getID() == other.getID();
+	}
+
+	public String getSymbol()
+	{
+		String str = this.expr.getID() + ":" + this.expr.getExpr();
+		
+		if(this.scope != -1)
+			str = this.scope + "-" + str;
+
+		return str;
 	}
 
 	@Override

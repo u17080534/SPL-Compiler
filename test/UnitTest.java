@@ -5,6 +5,7 @@ import parser.*;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 
 public class UnitTest
@@ -22,30 +23,30 @@ public class UnitTest
         System.out.println("\nEXITING TESTING ENVIRONMENT...");
     } 
 
-    @Test
+    @Ignore
 	public void testLexer() 
     { 
 		System.out.println("\tLEXER UNIT TESTING...\n");
         
         String[] args = {
-            "input/LexerTest1.spl",
-            "input/LexerTest2.spl", 
-            "input/LexerTest3.spl", 
-            "input/LexerTest4.spl", 
-            "input/LexerTest5.spl", 
-            "input/LexerTest6.spl", 
-            "input/LexerTest7.spl",
-            "input/LexerTest8.spl",
-            "input/LexerTest9.spl",
-            "input/LexerTest10.spl",//error
-            "input/LexerTest11.spl",
-            "input/LexerTest12.spl",
-            "input/LexerTest13.spl", //Test that all keywords are recognized
-            "input/LexerTest14.spl", //Test that all operators and seperators are recognized
-            "input/LexerTest15.spl",
-            "input/LexerTest16.spl",
-            "input/LexerTest17.spl",
-            "input/LexerTest18.spl"
+            "input/LexerTest/LexerTest1.spl",
+            "input/LexerTest/LexerTest2.spl", 
+            "input/LexerTest/LexerTest3.spl", 
+            "input/LexerTest/LexerTest4.spl", 
+            "input/LexerTest/LexerTest5.spl", 
+            "input/LexerTest/LexerTest6.spl", 
+            "input/LexerTest/LexerTest7.spl",
+            "input/LexerTest/LexerTest8.spl",
+            "input/LexerTest/LexerTest9.spl",
+            "input/LexerTest/LexerTest10.spl",
+            "input/LexerTest/LexerTest11.spl",
+            "input/LexerTest/LexerTest12.spl",
+            "input/LexerTest/LexerTest13.spl", //Test that all keywords are recognized
+            "input/LexerTest/LexerTest14.spl", //Test that all operators and seperators are recognized
+            "input/LexerTest/LexerTest15.spl",
+            "input/LexerTest/LexerTest16.spl",
+            "input/LexerTest/LexerTest17.spl",
+            "input/LexerTest/LexerTest18.spl"
         };
 
         String[] results = {
@@ -92,27 +93,27 @@ public class UnitTest
         System.out.println("\tLEXER UNIT TESTING COMPLETE...\n");
     } 
 
-    @Test
+    @Ignore
     public void testParser() 
     { 
         System.out.println("\tPARSER UNIT TESTING...\n");
         
         String[] args = {
-            "input/ParserTest1.spl",
-            "input/ParserTest2.spl",
-            "input/ParserTest3.spl",
-            "input/ParserTest4.spl",
-            "input/ParserTest5.spl",
-            "input/ParserTest6.spl",
-            "input/ParserTest7.spl",
-            "input/ParserTest8.spl",
-            "input/ParserTest9.spl",
-            "input/ParserTest10.spl",
-            "input/ParserTest11.spl",
-            "input/ParserTest12.spl",
-            "input/ParserTest13.spl", //error
-            "input/ParserTest15.spl",
-            "input/ParserTest16.spl"
+            "input/ParserTest/ParserTest1.spl",
+            "input/ParserTest/ParserTest2.spl",
+            "input/ParserTest/ParserTest3.spl",
+            "input/ParserTest/ParserTest4.spl",
+            "input/ParserTest/ParserTest5.spl",
+            "input/ParserTest/ParserTest6.spl",
+            "input/ParserTest/ParserTest7.spl",
+            "input/ParserTest/ParserTest8.spl",
+            "input/ParserTest/ParserTest9.spl",
+            "input/ParserTest/ParserTest10.spl",
+            "input/ParserTest/ParserTest11.spl",
+            "input/ParserTest/ParserTest12.spl",
+            "input/ParserTest/ParserTest13.spl", //error
+            "input/ParserTest/ParserTest15.spl",
+            "input/ParserTest/ParserTest16.spl"
         };
 
         String[] results = {
@@ -155,5 +156,59 @@ public class UnitTest
         }
         
         System.out.println("\tPARSER UNIT TESTING COMPLETE...\n");
+    } 
+
+    @Test
+    public void testScopeCheck() 
+    { 
+        System.out.println("\tSCOPE CHECKING UNIT TESTING...\n");
+        
+        String[] args = {
+            "input/ScopeCheckTest/ScopeCheckTest1.spl",
+            "input/ScopeCheckTest/ScopeCheckTest2.spl",
+            "input/ScopeCheckTest/ScopeCheckTest3.spl",
+            "input/ScopeCheckTest/ScopeCheckTest4.spl",
+            "input/ScopeCheckTest/ScopeCheckTest5.spl",
+            "input/ScopeCheckTest/ScopeCheckTest6.spl",
+            "input/ScopeCheckTest/ScopeCheckTest7.spl",
+            "input/ScopeCheckTest/ScopeCheckTest8.spl",
+            "input/ScopeCheckTest/ScopeCheckTest9.spl"
+        };
+
+        String[] results = {
+            "Usage Exception: There are undefined usages/calls: [59:variable 'n1s1'][15,6]",//1
+            "Usage Exception: Identifier is used more than once within same scope [28:variable 'n1s1'][7,10]",//2
+            "Usage Exception: There are undefined usages/calls: [37:variable 'undef'][8,6]",//3
+            "",//4
+            "",//5
+            "Usage Exception: There are undefined usages/calls: [62:call 'innertest'][20,6]",//6
+            "Usage Exception: Identifier is used more than once within same scope [50:variable 'numtest'][15,13]",//7
+            "", //8          
+            "" //9          
+        };
+
+        for(int index = 0; index < args.length; index++)
+        {
+            String result = "";
+            try
+            {
+                SPL compiler = new SPL(args[index]); 
+                System.out.println(compiler);
+                compiler.output(true);
+                compiler.parse(compiler.tokenize());
+                compiler.checkScope();
+            }
+            catch(Exception e)
+            {
+                result = e.toString();
+            }
+
+            if(result != "")
+                System.out.println("\t" + result + "\n");
+
+            assertEquals(result, results[index]);
+        }
+        
+        System.out.println("\tSCOPE CHECKING UNIT TESTING COMPLETE...\n");
     } 
 }

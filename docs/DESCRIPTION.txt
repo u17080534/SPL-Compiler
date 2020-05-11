@@ -40,7 +40,7 @@
 				- Documentation: DFA.pdf.
 
 		JORDAN MANAS 	- Planning: NFA+DFA Design & Conversions.
-				- Programming: SPL Class Implementation; Lexer Class Implementation; Token Class Implementation; Exception Classes Implementation; Cache Class Implementation; Unit-Testing Class Setup.
+				- Programming: SPL Class Implementation; Lexer Class Implementation; Unit-Testing Class Setup.
 				- Documentation: Finite Automata.pdf; SPL Regular Expressions.txt; README.md; DESCRIPTION.txt.
 
 		PATRIC EDWARDS	- Planning: NFA+DFA Design & Conversions.
@@ -51,8 +51,7 @@
 	The Parser & AST implementation is as follows:
 
 		Changes to the given Grammar:
-			- All ambiguous cases of expression derivation route were changed to have only a single route of derivation, when a lookahead would not have been sufficient in resolving the ambiguite. For example: the BOOL and NUMEXPR rules were changed significantly to remove ambiguity.
-			- The rules for handling instructions and procs were modified as to make sense of the way semicolons are used.
+			- All ambiguous cases of expression derivation route were changed to have only a single route of derivation, when a lookahead would not have been sufficient in resolving the ambiguite. For example: the ASSIGN, BOOL and CALC rules were changed to remove ambiguity.
 
 		The Parser is implemented as an LL(1) Parser. The expressions are evaluated using left-to-right derivation (i.e. inputs are read from left to right), and a look ahead of 1 position is used when evaluating tokens.
 
@@ -69,15 +68,7 @@
 		BYRON TOMKINSON	- Planning: Grammar Design.
 
 		JORDAN MANAS 	- Planning: Grammar Design.
-				- Programming: AST Class Implementation; Expression Classes Implementation; Parser Class Implementation; Grammar Class Implementation; SymbolTable Class Implementation.
+				- Programming: AST Class Implementation; Expression Classes Implementation; Parser Class Implementation.
 				- Documentation: Grammar.txt.
 
 		PATRIC EDWARDS	- Programming: Unit-Testing Class Implementation.
-
-02 - SCOPE CHECKING
-
-03 - TYPE CHECKING
-
-04 - VALUE CHECKING
-
-05 - CODE GENERATION

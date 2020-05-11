@@ -18,6 +18,8 @@ public class Grammar
 	//!Tok stream - may be looked ahead up to any point < size
 	private List<Token> tokenstream;
 
+	private static String current_loc = "";
+
 	public Grammar()
 	{
 		this.index = 0;
@@ -47,6 +49,7 @@ public class Grammar
 	private void readToken()
 	{
 		current = this.tokenstream.get(this.index);
+		current_loc = current.getLocation();
 
 		if(this.index + 1 < this.tokenstream.size())
 			this.lookahead = this.tokenstream.get(++this.index).getToken();
@@ -86,7 +89,7 @@ public class Grammar
 
 		try
 		{
-			if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_ID)
+			if(this.lookahead == Token.Tok.TOK_HALT || this.lookahead == Token.Tok.TOK_NUM || this.lookahead == Token.Tok.TOK_STRING || this.lookahead == Token.Tok.TOK_BOOL || this.lookahead == Token.Tok.TOK_INPUT || this.lookahead == Token.Tok.TOK_OUTPUT || this.lookahead == Token.Tok.TOK_IF || this.lookahead == Token.Tok.TOK_WHILE || this.lookahead == Token.Tok.TOK_FOR || this.lookahead == Token.Tok.TOK_ID)
 			{
 				Expression e1 = CODE();
 				Expression e2 = PROG_();
@@ -1004,5 +1007,10 @@ public class Grammar
 		}
 
 		throw new SyntaxException(this.current, "Invalid Identifier Used");
+	}
+
+	public static String location()
+	{
+		return current_loc;
 	}
 } 

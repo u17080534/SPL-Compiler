@@ -1,0 +1,21 @@
+num n1s0;
+num n2s0;
+test;
+
+proc test
+{
+	num n1s1;
+	num n2s1;
+	testalt;
+
+	proc innertest
+	{
+		num inner
+	}
+}
+
+proc testalt
+{
+	num inneralt;
+	innertest
+}

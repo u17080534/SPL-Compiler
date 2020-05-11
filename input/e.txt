@@ -1,35 +1,74 @@
+p = and((t < p), eq(w, x));
+halt;
+p;
+halt;
+input(p);
+num n
 
-string result;
+proc u {
+  halt;
+  halt;
+  if (eq(g, b)) then {
+    halt;
+    if (not f) then {
+      for (q = 0; k < h; r = add(d, 1)) {
+        if (and(and(T, (t > a)), and((w > e), q))) then {
+          input(l);
+          w = 93108
+        };
+        if (t) then {
+          input(k);
+          output(r)
+        };
+        f = ""
+      };
+      bool e;
+      bool e;
+      string c
+    };
+    output(d);
+    halt;
+    if (F) then {
+      while (not and((b > x), k)) {
+        halt;
+        if ((o > e)) then {
+          g;
+          e = "6ah"
+        }
+      };
+      input(p)
+    }
+  };
+  output(o)  
+}
 
-num zero;
-num a;
-num b;
+proc w {
+  z;
+  if (k) then {
+    halt;
+    string f;
+    while (T) {
+      f;
+      n
+    };
+    for (b = 0; n < c; w = add(r, 1)) {
+      num i;
+      halt;
+      halt
+    };
+    halt
+  }  
+}
 
-zero = 0;
-a = 1;
-b = 2;
+proc f {
+  halt;
+  bool x;
+  q;
+  if (and((e < j), (p < r))) then {
+    j;
+    input(z);
+    halt;
+    p
+  }  
+}
 
-num two;
-two = 2;
-
-num p;
-num q;
-
-p = mult(a, two);
-q = mult(b, two);
-
-if ( and(eq(p, b), eq(q, a)) ) then {
-  result = "a eq b"
-} else {
-  bool x; 
-  x = or((a < b), (a > b));
-  bool y; 
-  y = and((a < b), (a > b));
-  if (eq(x, y)) then {
-    result = "x eq y"
-  } else {
-    result = "x xor y"
-  }
-};
-
-output(result)

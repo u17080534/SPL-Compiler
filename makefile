@@ -20,7 +20,7 @@ BUILDFLAGS = -g -d build
 
 TESTFLAGS = -d build
 
-RM = rm # Linux
+# RM = rm # Linux
 RM = del # Windows
 
 default: portable
@@ -36,7 +36,9 @@ portable: spl
 
 spl:
 	$(JC) $(BUILDFLAGS) \
-	src/exception/*.java \
+	src/exception/LexerException/*.java \
+	src/exception/SyntaxException/*.java \
+	src/exception/AnalysisException/*.java \
 	src/lexer/*.java \
 	src/parser/*.java \
 	src/symtable/*.java \
@@ -50,7 +52,9 @@ spl:
 unit-test:
 	$(JC) $(BUILDFLAGS) -cp extern/junit-platform-console-standalone-1.6.2.jar \
 	test/UnitTest.java \
-	src/exception/*.java \
+	src/exception/LexerException/*.java \
+	src/exception/SyntaxException/*.java \
+	src/exception/AnalysisException/*.java \
 	src/lexer/*.java \
 	src/parser/*.java \
 	src/symtable/*.java \

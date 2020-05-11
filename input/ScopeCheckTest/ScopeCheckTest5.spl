@@ -1,0 +1,7 @@
+
+num numtest;
+string numtest;
+
+numtest = 0;
+numtest = "eish"
+

@@ -10,21 +10,16 @@ import symtable.*;
 import exception.UsageException;
 import syntax.expression.Expression;
 
-public class variableValueCheck
+public class ValueCheck
 {
-	
 	//check first 3 in spec
 	//display final variable value table
-
-
 		//0 - no value
 		//1 - value
 		//2 - if pairing
 		//4 - maybe a value from if statement
 		//3 - maybe a value from while loop
 		//5 - maybe a value from a for loop
-
-
 
 	private static Map<String,Integer> variableMap = new HashMap<String, Integer>();
 	private static Map<String,Integer> assignmentInScope = new HashMap<String, Integer>();
@@ -39,17 +34,14 @@ public class variableValueCheck
 	private static Vector<Symbol> warnings = new Vector<>();
 	private static Vector<Symbol> declarationWarnings = new Vector<>();
 
-	public static void check(SymbolTable table) throws  ValueException {
-
-
+	public static void check(SymbolTable table) throws ValueException 
+	{
 		int firstIfScope = -1;
 		System.out.println("Variable value test: ");
-
 
 		Vector<Symbol> symbols = table.list();
 
 		for(int i = 0; i < symbols.size(); i++)  {
-
 
 			variableMap.entrySet().forEach(entry->{
 
@@ -58,11 +50,6 @@ public class variableValueCheck
 				}
 
 			});
-
-
-
-
-
 
 			if(symbols.get(i).getExpression().contains("variable '")){
 
@@ -99,10 +86,8 @@ public class variableValueCheck
 						else if(symbols.get(i-3).getExpression().contains("loop 'while'")){
 							needsValueMessage.put(symbols.get(i), "cannot be undefined in while statement condition");
 						}
-
 					}
 				}
-
 			}
 			else if(symbols.get(i).getExpression().equals("COND_BRANCH")){        //if statements. (1 depth)
 
@@ -115,32 +100,27 @@ public class variableValueCheck
 					}
 				}
 				
-
 				//start rest of if:
 
-
-				if(symbols.get(i).getActualExpression().getActualDescendents().get(1).getActualDescendents().get(0).getExpr().contains("bool 'T'")){
+				if(symbols.get(i).getActualExpression().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'T'")){
 					//System.out.println("Do the if part only");
-
 					continue;
-
 				}
-				else if(symbols.get(i).getActualExpression().getActualDescendents().get(1).getActualDescendents().get(0).getExpr().contains("bool 'F'")){
+				else if(symbols.get(i).getActualExpression().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'F'")){
 					//System.out.println("Do the else part only");
 
 					Expression PROG1 = null;
-					for(int p = 0; p < symbols.get(i).getActualExpression().getActualDescendents().size(); p++){
-						if(symbols.get(i).getActualExpression().getActualDescendents().get(p).getExpr().contains("PROG")){
-							PROG1 = symbols.get(i).getActualExpression().getActualDescendents().get(p);
+					for(int p = 0; p < symbols.get(i).getActualExpression().getDescendents().size(); p++){
+						if(symbols.get(i).getActualExpression().getDescendents().get(p).getExpr().contains("PROG")){
+							PROG1 = symbols.get(i).getActualExpression().getDescendents().get(p);
 							break;
 						}
 					}
 
 					if(PROG1 != null){ // skip PROG1 (first part of if statement)
 						PROG1symbols.clear();
-						recursivePROG1(PROG1.getActualDescendents());
+						recursivePROG1(PROG1.getDescendents());
 						i = PROG1symbols.get(PROG1symbols.size() - 1).getID() + 1;
-
 					}
 					continue;
 				}
@@ -148,12 +128,12 @@ public class variableValueCheck
 					//System.out.println("Do both parts");
 					Expression PROG1 = null;
 					Expression PROG2 = null;
-					for(int p = 0; p < symbols.get(i).getActualExpression().getActualDescendents().size(); p++){
-						if(symbols.get(i).getActualExpression().getActualDescendents().get(p).getExpr().contains("PROG")){
-							PROG1 = symbols.get(i).getActualExpression().getActualDescendents().get(p);
+					for(int p = 0; p < symbols.get(i).getActualExpression().getDescendents().size(); p++){
+						if(symbols.get(i).getActualExpression().getDescendents().get(p).getExpr().contains("PROG")){
+							PROG1 = symbols.get(i).getActualExpression().getDescendents().get(p);
 						}
-						if (symbols.get(i).getActualExpression().getActualDescendents().get(p).getExpr().contains("COND_BRANCH_")) {
-							PROG2 = symbols.get(i).getActualExpression().getActualDescendents().get(3).getActualDescendents().get(0);
+						if (symbols.get(i).getActualExpression().getDescendents().get(p).getExpr().contains("COND_BRANCH_")) {
+							PROG2 = symbols.get(i).getActualExpression().getDescendents().get(3).getDescendents().get(0);
 							break;
 						}
 					}
@@ -162,24 +142,17 @@ public class variableValueCheck
 
 						PROG1symbols.clear();
 
-						recursivePROG1(PROG1.getActualDescendents());
+						recursivePROG1(PROG1.getDescendents());
 
 						firstIfScope = PROG1symbols.get(0).getScope();
 
 						for(int s = 0; s < PROG1symbols.size(); s++){
-							//DEAL WITH VARIABLES
-
-
-							
+							//DEAL WITH VARIABLES	
 							if(PROG1symbols.get(s).getExpression().contains("variable '")){
-
-
-								
 								//if we haven't seen this variable before, initialize it with a 0.
 								if(!variableMap.containsKey(PROG1symbols.get(s).getExpression())){
 									variableMap.put(PROG1symbols.get(s).getExpression(),0);
 								}
-
 
 								if(PROG1symbols.get(s-2).getExpression().contains("ASSIGN")){			// =
 
@@ -194,12 +167,9 @@ public class variableValueCheck
 											assignmentInScope.put(PROG1symbols.get(s).getExpression(), PROG1symbols.get(s).getScope());
 											warnings.add(PROG1symbols.get(s));
 										}
-
 									}
-
 								}
 								else if(PROG1symbols.get(s-2).getExpression().contains("input")){   		// input()
-
 									if(variableMap.get(PROG1symbols.get(s).getExpression()) != 1){
 										if(PROG1symbols.get(s).getScope() == firstIfScope){
 											variableMap.put(PROG1symbols.get(s).getExpression(),2);
@@ -211,9 +181,7 @@ public class variableValueCheck
 											assignmentInScope.put(PROG1symbols.get(s).getExpression(), PROG1symbols.get(s).getScope());
 											warnings.add(PROG1symbols.get(s));
 										}
-
 									}
-
 								}
 								else if(PROG1symbols.get(s-3).getExpression().contains("TYPE")){			//type
 									variableMap.put(PROG1symbols.get(s).getExpression(),0);
@@ -235,10 +203,8 @@ public class variableValueCheck
 										else if(PROG1symbols.get(s-3).getExpression().contains("loop 'while'")){
 											needsValueMessage.put(PROG1symbols.get(s), "cannot be undefined in while statement condition");
 										}
-
 									}
 								}
-
 							}
 							else if(PROG1symbols.get(s).getExpression().contains("loop 'for")){		//for loop in branches
 								if(PROG1symbols.get(s+2).getExpression().contains("variable")){
@@ -246,13 +212,12 @@ public class variableValueCheck
 								}
 							}
 						}
-
-
 						i = PROG1symbols.get(PROG1symbols.size()-1).getID();
 					}
+
 					if(PROG2 != null){
 						PROG2symbols.clear();
-						recursivePROG2(PROG2.getActualDescendents());
+						recursivePROG2(PROG2.getDescendents());
 
 						for(int s = 0; s < PROG2symbols.size(); s++){
 							//DEAL WITH VARIABLES
@@ -264,8 +229,6 @@ public class variableValueCheck
 								}
 
 								if(PROG2symbols.get(s-2).getExpression().contains("ASSIGN")){			// =
-
-
 									if(PROG2symbols.get(s).getScope() == firstIfScope){
 										if(variableMap.get(PROG2symbols.get(s).getExpression()) == 2){
 											if(assignmentInScope.get(PROG2symbols.get(s).getExpression()) == PROG2symbols.get(s).getScope()){
@@ -283,26 +246,20 @@ public class variableValueCheck
 										}
 										else{
 											if(variableMap.get(PROG2symbols.get(s).getExpression()) != 1){
-
 												variableMap.put(PROG2symbols.get(s).getExpression(),4);
 												assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
 												warnings.add(PROG2symbols.get(s));
-
 											}
 										}
 									}else{
 										if(variableMap.get(PROG2symbols.get(s).getExpression()) != 1){
-
 											variableMap.put(PROG2symbols.get(s).getExpression(),4);
 											assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
 											warnings.add(PROG2symbols.get(s));
-
 										}
 									}
-
 								}
 								else if(PROG2symbols.get(s-2).getExpression().contains("input")){   		// input()
-
 									if(PROG2symbols.get(s).getScope() == firstIfScope){
 										if(variableMap.get(PROG2symbols.get(s).getExpression()) == 2){
 											if(assignmentInScope.get(PROG2symbols.get(s).getExpression()) == PROG2symbols.get(s).getScope()){
@@ -316,7 +273,6 @@ public class variableValueCheck
 														warnings.removeElement(warnings.get(w));
 													}
 												}
-
 											}
 										}
 										else{
@@ -359,31 +315,25 @@ public class variableValueCheck
 										else if(PROG2symbols.get(s-3).getExpression().contains("loop 'while'")){
 											needsValueMessage.put(PROG2symbols.get(s), "cannot be undefined in while statement condition");
 										}
-
 									}
 								}
-
 							}
 							else if(PROG2symbols.get(s).getExpression().contains("loop 'for")){		//for loop in branches
 								if(PROG2symbols.get(s+2).getExpression().contains("variable")){
 									variableMap.put(PROG2symbols.get(s+2).getExpression(),1);
 								}
 							}
-
 						}
 
 						i = PROG2symbols.get(PROG2symbols.size()-1).getID();
-
-
 					}
-
 				}
 			}
 			else if(symbols.get(i).getExpression().equals("COND_BRANCH_")){
 				Expression PROG2 = null;
-				if(symbols.get(i).getActualExpression().getActualDescendents() != null){
+				if(symbols.get(i).getActualExpression().getDescendents() != null){
 					PROG2symbols.clear();
-					recursivePROG2(symbols.get(i).getActualExpression().getActualDescendents());
+					recursivePROG2(symbols.get(i).getActualExpression().getDescendents());
 					i = PROG2symbols.get(PROG2symbols.size()-1).getID();
 				}
 				continue;
@@ -396,15 +346,13 @@ public class variableValueCheck
 				else if(symbols.get(i+3).getExpression().contains("bool 'F")){
 					//don't process while loop, get end of while and continue
 					WHILEsymbols.clear();
-					recursiveWhile(symbols.get(i).getActualExpression().getActualDescendents());
+					recursiveWhile(symbols.get(i).getActualExpression().getDescendents());
 					i = WHILEsymbols.get(WHILEsymbols.size()-1).getID();
 					continue;
 				}
 				else{
 					WHILEsymbols.clear();
-					recursiveWhile(symbols.get(i).getActualExpression().getActualDescendents());
-
-
+					recursiveWhile(symbols.get(i).getActualExpression().getDescendents());
 
 					for(int s = 0; s < WHILEsymbols.size(); s++){
 
@@ -464,7 +412,6 @@ public class variableValueCheck
 							}
 						}
 
-
 					}
 
 					i = WHILEsymbols.get(WHILEsymbols.size()-1).getID();
@@ -476,7 +423,7 @@ public class variableValueCheck
 			else if(symbols.get(i).getExpression().contains("COND_LOOP") && symbols.get(i+1).getExpression().contains("loop 'for")){
 
 				FORsymbols.clear();
-				recursiveFor(symbols.get(i).getActualExpression().getActualDescendents());
+				recursiveFor(symbols.get(i).getActualExpression().getDescendents());
 
 
 				if(FORsymbols.get(2).getExpression().contains("variable")){ //assign value to this var
@@ -560,10 +507,6 @@ public class variableValueCheck
 
 		//done
 
-
-
-
-
 		for (Symbol symbol : declarationWarnings) {
 			System.out.println("WARNING: "  + symbol.getExpression() + " might not be declared at " + symbol.getLocation());
 
@@ -571,24 +514,17 @@ public class variableValueCheck
 
 		for (Symbol symbol : warnings) {
 			System.out.println("WARNING: " + symbol.getExpression() + " might not be assigned a value at " + symbol.getLocation());
-
 		}
 
 		for (Symbol symbol : needsValue) {
 			//throw new ValueException(symbol, "Variable needs value: ");
-
 			// OR
-
 			String msg = "undefined";
 			if(needsValueMessage.containsKey(symbol)){
 				msg = needsValueMessage.get(symbol);
 			}
 			System.out.println("VALUE ERROR: " + symbol.getExpression() + " " + msg + " at " + symbol.getLocation());
 		}
-
-
-
-
 	}
 
 	private static void recursivePROG1(Vector<Expression> code){
@@ -598,7 +534,7 @@ public class variableValueCheck
 			PROG1symbols.add(expression.getSymbol());
 
 			if (!expression.isTerminal()) {
-				recursivePROG1(expression.getActualDescendents());
+				recursivePROG1(expression.getDescendents());
 			}
 		}
 	}
@@ -610,7 +546,7 @@ public class variableValueCheck
 			PROG2symbols.add(expression.getSymbol());
 
 			if (!expression.isTerminal()) {
-				recursivePROG2(expression.getActualDescendents());
+				recursivePROG2(expression.getDescendents());
 			}
 		}
 	}
@@ -623,7 +559,7 @@ public class variableValueCheck
 			WHILEsymbols.add(expression.getSymbol());
 
 			if (!expression.isTerminal()) {
-				recursiveWhile(expression.getActualDescendents());
+				recursiveWhile(expression.getDescendents());
 			}
 		}
 
@@ -637,7 +573,7 @@ public class variableValueCheck
 			FORsymbols.add(expression.getSymbol());
 
 			if (!expression.isTerminal()) {
-				recursiveFor(expression.getActualDescendents());
+				recursiveFor(expression.getDescendents());
 			}
 		}
 

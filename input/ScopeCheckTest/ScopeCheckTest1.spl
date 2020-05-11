@@ -1,0 +1,16 @@
+num n1s0;
+num n2s0;
+
+proc test
+{
+	num n1s1;
+	num n2s1;
+	n1s1 = n1s0;
+	n2s1 = n2s0
+}
+
+proc eaea
+{
+	test;
+	n1s1 = n1s0
+}

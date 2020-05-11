@@ -18,25 +18,25 @@ DECL 		→ TYPE NAME DECL'
 
 DECL' 		→ ; DECL | ϵ
 
-IO 			→ input ( VAR ) | output ( VAR )
+CALC 		→ add ( CALC' | sub ( CALC' | mult ( CALC'
+
+CALC' 		→ NUMEXPR , NUMEXPR )
+
+BOOL 		→ T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
+
+BOOL' 		→ BOOL , BOOL )
+
+ASSIGN 		→ VAR = ASSIGN'
+
+ASSIGN' 	→ stringLiteral | VAR | NUMEXPR | BOOL
 
 COND_BRANCH → if ( BOOL ) then { CODE } COND_BRANCH'
 
 COND_BRANCH'→ else { CODE } | ϵ
 
+IO 			→ input ( VAR ) | output ( VAR )
+
 COND_LOOP 	→ while ( BOOL ) { CODE } | for ( VAR = 0; VAR < VAR ; VAR = add ( VAR , 1 ) ) { CODE }
-
-CALC 		→ add ( CALC' | sub ( CALC' | mult ( CALC'
-
-CALC' 		→ NUMEXPR , CALC"
-
-CALC" 		→ NUMEXPR )
-
-BOOL 		→ T | F | VAR | eq ( VAR , VAR ) | ( VAR < VAR ) | ( VAR > VAR ) | not BOOL | and ( BOOL' | or ( BOOL'
-
-BOOL' 		→ BOOL , BOOL"
-
-BOOL" 		→ BOOL )
 
 INSTR 		→ halt | DECL | IO | CALL | ASSIGN  | COND_BRANCH | COND_LOOP
 
@@ -49,7 +49,3 @@ CALL 		→ userDefinedIdentifier
 NAME 		→ userDefinedIdentifier
 
 VARIABLE	→ userDefinedIdentifier
-
-ASSIGN 		→ VAR = ASSIGN'
-
-ASSIGN' 	→ stringLiteral | VAR | NUMEXPR | BOOL

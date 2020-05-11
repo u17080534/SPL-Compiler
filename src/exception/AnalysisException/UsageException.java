@@ -3,10 +3,8 @@ package exception;
 import symtable.Symbol;
 
 //SPL-COMPILER
-public class UsageException extends Exception 
+public class UsageException extends AnalysisException 
 {
-	private Symbol sym;
-
     public UsageException(String message)
     {
         super(message);
@@ -14,11 +12,11 @@ public class UsageException extends Exception
 
     public UsageException(Symbol sym, String message)
     {
-        super(message + " Symbol=[" + sym + "]" + sym.getLocation());
-    	this.sym = sym;
+        super(sym, message);
     }
 
-    @Override public String toString() 
+    @Override 
+    public String toString() 
 	{ 
 		String str = this.getMessage();
 		return "Usage Exception: " + str;
