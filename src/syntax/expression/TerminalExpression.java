@@ -114,6 +114,13 @@ public class TerminalExpression extends Expression
 		this.value = Expression.getValue(expr);
 	}
 
+	@Override
+	public void setType(String type)
+	{
+		this.symbol.setType(type);
+		this.parent.setType(type);
+	}
+
 	public String getLocation()
 	{
 		return this.token.getLocation();

@@ -31,7 +31,7 @@ public class Symbol
 		return this.expr.getExpr();
 	}
 
-	public Expression getActualExpression()
+	public Expression getExpr()
 	{
 		return this.expr;
 	}
@@ -97,7 +97,7 @@ public class Symbol
 		String str = this.expr.getID() + ":" + this.expr.getExpr();
 		
 		if(this.scope != -1)
-			str = this.scope + "-" + str;
+			str = "[" + this.scope + "] " + str;
 
 		return str;
 	}

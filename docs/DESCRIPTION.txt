@@ -72,3 +72,32 @@
 				- Documentation: Grammar.txt.
 
 		PATRIC EDWARDS	- Programming: Unit-Testing Class Implementation.
+
+02 - SCOPE CHECKING
+
+	The scope checking algorithm is as follows:
+
+		1. Build variable / proc declaration and usage lists and order them by scope and ID.
+
+		2. Check for any delcarations with the same name, scope and type, if any occur throw an error.
+
+		3. Assign aliases (Vn & Pn) for each declaration / definition 
+
+		4. Find every usage of a variable
+			(i) Scan the list of declarations (in backward direction) where the symbols are of less or equal scope and occurs chronologically before the usage
+			(ii) If a matching declaration is found
+				Rename current variable to declaration alias
+			(iii) If not found
+				Rename variable to U
+
+		5. Find every call/usage of a procedure
+			(i) Scan the list of declarations/definitions (in backward direction) where the symbols are of less or equal scope
+			(ii) If definition is found
+				Rename current call/usage to definition alias
+			(iii) If not found
+				Rename call to U
+
+		6.  Rename all the delcaration symbols to their aliases
+
+		CONTRIBUTIONS:	JORDAN MANAS
+

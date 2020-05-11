@@ -12,19 +12,24 @@ public abstract class Expression
 	public static int exprCount = 0;
 	protected int id;
 	protected int level;
-	protected String expr;
 	protected String location;
-	protected Vector<Expression> descendents;
+	protected String expr;
 	protected Symbol symbol;
+	protected Expression parent;
+	protected Vector<Expression> descendents;
 
 	public Expression(Expression... descendents)
 	{
+		this.parent = null;
 		this.expr = "";
 		this.descendents = new Vector<Expression>();
 
 		for (Expression desc : descendents)
 			if(desc != null)
+			{
+				desc.setParent(this);
 				this.descendents.add(desc);
+			}
 
 		this.id();
 		this.level(0);
@@ -114,6 +119,11 @@ public abstract class Expression
 		return this.symbol.getType();
 	}
 
+	public void setType(String type)
+	{
+		this.symbol.setType(type);
+	}
+
 	public String getExpression()
 	{
 		String str = this.id + ":";
@@ -158,6 +168,16 @@ public abstract class Expression
 		this.symbol.setScope(scope);
 	}
 
+	public Expression getParent()
+	{
+		return this.parent;
+	}
+
+	public void setParent(Expression parent)
+	{
+		this.parent = parent;
+	}
+
 	public Vector<Expression> getDescendents()
 	{
 		return this.descendents;
@@ -185,7 +205,7 @@ public abstract class Expression
 	@Override 
 	public String toString() 
 	{
-		return this.id + " " + this.expr + " " + this.symbol.getType();// + " [" + this.symbol.getScope() + " " + this.symbol.getProc() + "]";
+		return this.id + " " + this.expr; //+ "\t" + this.symbol.getType();
 	}
 
 	public static String getValue(String expr)

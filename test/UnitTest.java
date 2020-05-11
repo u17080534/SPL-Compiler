@@ -172,7 +172,8 @@ public class UnitTest
             "input/ScopeCheckTest/ScopeCheckTest6.spl",
             "input/ScopeCheckTest/ScopeCheckTest7.spl",
             "input/ScopeCheckTest/ScopeCheckTest8.spl",
-            "input/ScopeCheckTest/ScopeCheckTest9.spl"
+            "input/ScopeCheckTest/ScopeCheckTest9.spl",
+            "input/ScopeCheckTest/ScopeCheckTest10.spl"
         };
 
         String[] results = {
@@ -184,7 +185,8 @@ public class UnitTest
             "Usage Exception: There are undefined usages/calls: [62:call 'innertest'][20,6]",//6
             "Usage Exception: Identifier is used more than once within same scope [50:variable 'numtest'][15,13]",//7
             "", //8          
-            "" //9          
+            "", //9          
+            ""  //10          
         };
 
         for(int index = 0; index < args.length; index++)

@@ -43,8 +43,10 @@ public class SymbolTable
 
 		for(int index = 0; index < this.symbols.size(); index++)
 		{
-			str += this.symbols.get(index).toString();
+			str += this.symbols.get(index).getSymbol();
+
 			if(index < this.symbols.size() - 1)
+			{
 				if((index+1) % 5 == 0)
 					str += "\n";
 				else
@@ -54,6 +56,7 @@ public class SymbolTable
 					for(int s = 0; s < no_spaces; s++)
 						str += " ";
 				}
+			}
 		}
 
 		return str;

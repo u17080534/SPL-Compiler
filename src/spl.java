@@ -63,9 +63,8 @@ public class SPL
                 if(this.parse(tokens))
                     this.analysis();
 
-            File genFile = File.complete_file(this.tree.generation(this.filename));
-
-            this.cache.export(genFile);
+            // File genFile = File.complete_file(this.tree.generation(this.filename));
+            // this.cache.export(genFile);
         }
         catch(Exception ex)
         {
@@ -122,7 +121,6 @@ public class SPL
         try
         {
             this.checkScope();
-            this.checkValues();
         }
         catch(AnalysisException ex)
         {
@@ -136,8 +134,8 @@ public class SPL
         try
         {
             ScopeCheck.check(this.tree, this.table);
-            this.cache.export(this.table);
             this.cache.export(this.tree);
+            this.cache.export(this.table);
         }
         catch(UsageException ex)
         {
@@ -150,8 +148,8 @@ public class SPL
         try
         {
             ValueCheck.check(this.table);
-            this.cache.export(this.table);
             this.cache.export(this.tree);
+            this.cache.export(this.table);
         }
         catch(ValueException ex)
         {

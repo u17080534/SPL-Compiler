@@ -1,0 +1,24 @@
+num n;
+output (n);
+string n;
+output (n);
+n;
+
+n = "t";
+n = 0;
+
+proc n
+{
+	num n;
+	output (n);
+	string n;
+	output (n);
+
+	proc call
+	{
+		num n;
+		output (n);
+		string variable;
+		output (variable)
+	}
+}

@@ -48,7 +48,7 @@ public class ScopeCheck
 				if(index > 0 && terminals.get(index - 1).getExpression().indexOf("type") == 0)
 				{
 					declarations.add(terminals.get(index));
-					terminals.get(index).setType(Character.toUpperCase(Expression.getValue(terminals.get(index - 1).getExpression()).charAt(0)) + "");
+					terminals.get(index).getExpr().setType(Character.toUpperCase(Expression.getValue(terminals.get(index - 1).getExpression()).charAt(0)) + "");
 				}
 				else
 					usages.add(terminals.get(index));
@@ -58,7 +58,7 @@ public class ScopeCheck
 			else if(terminals.get(index).getExpression().indexOf("proc") == 0)
 			{
 				declarations.add(terminals.get(index));
-				terminals.get(index).setType("P");
+				terminals.get(index).getExpr().setType("P");
 			}
 		}
 
@@ -169,7 +169,7 @@ public class ScopeCheck
 						if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() < usage.getID())
 						{
 							declared = true;
-							usage.setType(decl.getType());
+							usage.getExpr().setType(decl.getType());
 						}
 					}
 					else if(usage.getExpression().indexOf("call") == 0)
@@ -177,7 +177,7 @@ public class ScopeCheck
 						if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() != usage.getID())
 						{
 							declared = true;
-							usage.setType(decl.getType());
+							usage.getExpr().setType(decl.getType());
 						}
 					}
 				}
@@ -201,8 +201,8 @@ public class ScopeCheck
 			{
 				Symbol decl = declarations.get(index_decl);
 
-				//Same Identifier
-				if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() != usage.getID())
+				//Same Identifier & Type
+				if(Expression.getValue(decl.getExpression()).equals(Expression.getValue(usage.getExpression())) && decl.getID() != usage.getID() && usage.getType().equals(decl.getType()))
 				{
 					if(usage.getExpression().indexOf("variable") == 0) //Variable Usage
 					{
@@ -214,7 +214,8 @@ public class ScopeCheck
 					else if(usage.getExpression().indexOf("call") == 0) //Proc Usage
 					{
 						if(decl.getScope() - usage.getScope() < 0 || (decl.getScope() == usage.getScope() && usage.getProc().equals(decl.getProc())))
-							usage.setExpression("call '" + Expression.getValue(aliases.get(index_decl)) + "'");
+							// usage.setExpression("call '" + Expression.getValue(aliases.get(index_decl)) + "'");
+							usage.setExpression(aliases.get(index_decl));
 					}
 				}
 			}			

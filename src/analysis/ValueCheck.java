@@ -41,7 +41,8 @@ public class ValueCheck
 
 		Vector<Symbol> symbols = table.list();
 
-		for(int i = 0; i < symbols.size(); i++)  {
+		for(int i = 0; i < symbols.size(); i++)  
+		{
 
 			variableMap.entrySet().forEach(entry->{
 
@@ -102,17 +103,17 @@ public class ValueCheck
 				
 				//start rest of if:
 
-				if(symbols.get(i).getActualExpression().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'T'")){
+				if(symbols.get(i).getExpr().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'T'")){
 					//System.out.println("Do the if part only");
 					continue;
 				}
-				else if(symbols.get(i).getActualExpression().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'F'")){
+				else if(symbols.get(i).getExpr().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'F'")){
 					//System.out.println("Do the else part only");
 
 					Expression PROG1 = null;
-					for(int p = 0; p < symbols.get(i).getActualExpression().getDescendents().size(); p++){
-						if(symbols.get(i).getActualExpression().getDescendents().get(p).getExpr().contains("PROG")){
-							PROG1 = symbols.get(i).getActualExpression().getDescendents().get(p);
+					for(int p = 0; p < symbols.get(i).getExpr().getDescendents().size(); p++){
+						if(symbols.get(i).getExpr().getDescendents().get(p).getExpr().contains("PROG")){
+							PROG1 = symbols.get(i).getExpr().getDescendents().get(p);
 							break;
 						}
 					}
@@ -128,12 +129,12 @@ public class ValueCheck
 					//System.out.println("Do both parts");
 					Expression PROG1 = null;
 					Expression PROG2 = null;
-					for(int p = 0; p < symbols.get(i).getActualExpression().getDescendents().size(); p++){
-						if(symbols.get(i).getActualExpression().getDescendents().get(p).getExpr().contains("PROG")){
-							PROG1 = symbols.get(i).getActualExpression().getDescendents().get(p);
+					for(int p = 0; p < symbols.get(i).getExpr().getDescendents().size(); p++){
+						if(symbols.get(i).getExpr().getDescendents().get(p).getExpr().contains("PROG")){
+							PROG1 = symbols.get(i).getExpr().getDescendents().get(p);
 						}
-						if (symbols.get(i).getActualExpression().getDescendents().get(p).getExpr().contains("COND_BRANCH_")) {
-							PROG2 = symbols.get(i).getActualExpression().getDescendents().get(3).getDescendents().get(0);
+						if (symbols.get(i).getExpr().getDescendents().get(p).getExpr().contains("COND_BRANCH_")) {
+							PROG2 = symbols.get(i).getExpr().getDescendents().get(3).getDescendents().get(0);
 							break;
 						}
 					}
@@ -331,9 +332,9 @@ public class ValueCheck
 			}
 			else if(symbols.get(i).getExpression().equals("COND_BRANCH_")){
 				Expression PROG2 = null;
-				if(symbols.get(i).getActualExpression().getDescendents() != null){
+				if(symbols.get(i).getExpr().getDescendents() != null){
 					PROG2symbols.clear();
-					recursivePROG2(symbols.get(i).getActualExpression().getDescendents());
+					recursivePROG2(symbols.get(i).getExpr().getDescendents());
 					i = PROG2symbols.get(PROG2symbols.size()-1).getID();
 				}
 				continue;
@@ -346,13 +347,13 @@ public class ValueCheck
 				else if(symbols.get(i+3).getExpression().contains("bool 'F")){
 					//don't process while loop, get end of while and continue
 					WHILEsymbols.clear();
-					recursiveWhile(symbols.get(i).getActualExpression().getDescendents());
+					recursiveWhile(symbols.get(i).getExpr().getDescendents());
 					i = WHILEsymbols.get(WHILEsymbols.size()-1).getID();
 					continue;
 				}
 				else{
 					WHILEsymbols.clear();
-					recursiveWhile(symbols.get(i).getActualExpression().getDescendents());
+					recursiveWhile(symbols.get(i).getExpr().getDescendents());
 
 					for(int s = 0; s < WHILEsymbols.size(); s++){
 
@@ -423,7 +424,7 @@ public class ValueCheck
 			else if(symbols.get(i).getExpression().contains("COND_LOOP") && symbols.get(i+1).getExpression().contains("loop 'for")){
 
 				FORsymbols.clear();
-				recursiveFor(symbols.get(i).getActualExpression().getDescendents());
+				recursiveFor(symbols.get(i).getExpr().getDescendents());
 
 
 				if(FORsymbols.get(2).getExpression().contains("variable")){ //assign value to this var
