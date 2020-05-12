@@ -9,15 +9,14 @@ public class Symbol
 	private int scope;
 	private String proc;
 	private String type;
-	private boolean altered;
+	private String alias;
 
 	public Symbol(Expression expr)
 	{
 		this.proc = "";
 		this.type = "";
 		this.expr = expr;
-		this.altered = false;
-
+		this.alias = this.expr.getID() + " " + this.expr.getExpr();
 		this.scope = -1;
 	}
 
@@ -39,7 +38,6 @@ public class Symbol
 	public void setExpression(String expression)
 	{
 		this.expr.setExpr(expression);
-		this.altered = true;
 	}
 
 	public int getScope()
@@ -72,6 +70,11 @@ public class Symbol
 		this.type = type;
 	}
 
+	public String getAlias()
+	{
+		return this.alias;
+	}
+
 	public String getLocation()
 	{
 		return this.expr.getLocation();
@@ -80,11 +83,6 @@ public class Symbol
 	public boolean isTerminal()
 	{
 		return this.expr.isTerminal();
-	}
-
-	public boolean isRenamed()
-	{
-		return this.altered;
 	}
 
 	public boolean equals(Symbol other)
@@ -105,6 +103,6 @@ public class Symbol
 	@Override
 	public String toString()
 	{
-		return this.expr.getID() + ":" + this.expr.getExpr();
+		return this.expr.getID() + ":" + this.alias;
 	}
 }

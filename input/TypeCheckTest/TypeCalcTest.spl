@@ -1,0 +1,74 @@
+string WRONG;
+string hold;
+WRONG = "WRONG";
+string CORRECT;
+CORRECT = "CORRECT";
+bool EQ;
+num one;
+EQ = F;
+bool FQ;
+
+proc Guess
+{
+    FQ=T;
+    	
+    while(EQ)
+    {
+    		
+    	num x;
+    	num y;
+    	num q;
+    	
+   
+    	
+    	for(x=0;x<y;x=add(x,1)){
+    	   output (x)
+    	};
+    	
+    
+    	
+        num answer;
+        num other;
+      
+            	
+     	answer=add(ot,answer);  
+        
+        other = 7;
+	one=1;
+
+
+        EQ = eq(answer, other);
+
+        if(EQ) then
+        {
+            output (other)
+        }
+        else
+        {
+            output (WRONG)
+        }
+    };
+
+    proc scope0
+    { 
+        proc scope1a
+        {
+            output (WRONG)
+        } 
+        proc scope1b
+        {
+            output (WRONG)
+        } 
+        proc scope1c
+        {
+            proc scope2
+            {
+                output (WRONG)
+            }
+        }
+
+        scope1
+    }
+}
+
+Guess

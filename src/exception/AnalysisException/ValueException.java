@@ -5,8 +5,6 @@ import symtable.Symbol;
 //SPL-COMPILER
 public class ValueException extends AnalysisException
 {
-	private Symbol sym;
-
     public ValueException(String message)
     {
         super(message);

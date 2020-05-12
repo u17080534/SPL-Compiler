@@ -68,7 +68,8 @@ public class SPL
         }
         catch(Exception ex)
         {
-            System.out.println(ex);
+            // System.out.println(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -121,6 +122,8 @@ public class SPL
         try
         {
             this.checkScope();
+            this.checkType();
+            // this.checkValues();
         }
         catch(AnalysisException ex)
         {
@@ -138,6 +141,20 @@ public class SPL
             this.cache.export(this.table);
         }
         catch(UsageException ex)
+        {
+            throw ex;
+        }
+    }
+
+    public void checkType() throws TypeException
+    {
+        try
+        {
+            TypeCheck.check(this.tree, this.table);
+            this.cache.export(this.tree);
+            this.cache.export(this.table);
+        }
+        catch(TypeException ex)
         {
             throw ex;
         }

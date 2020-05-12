@@ -1,0 +1,13 @@
+
+string other;
+string WRONG;
+
+        if(One) then
+        {
+            output (other)
+        }
+        else
+        {
+            output (WRONG)
+        }
+
