@@ -158,7 +158,7 @@ public class UnitTest
         System.out.println("\tPARSER UNIT TESTING COMPLETE...\n");
     } 
 
-    @Test
+    @Ignore
     public void testScopeCheck() 
     { 
         System.out.println("\tSCOPE CHECKING UNIT TESTING...\n");
@@ -212,5 +212,84 @@ public class UnitTest
         }
         
         System.out.println("\tSCOPE CHECKING UNIT TESTING COMPLETE...\n");
+    } 
+
+    @Test
+    public void testTypeCheck() 
+    { 
+        System.out.println("\tTYPE CHECK UNIT TESTING...\n");
+        
+        String[] args = {
+            //IO calls
+            "input/TypeCheckTest/TypetestIO1.spl",
+            //Proc calls
+            "input/TypeCheckTest/TypetestProc1.spl",
+            //Var=non string literal
+            "input/TypeCheckTest/TypetestString1.spl",
+            //Vars of diff types
+           "input/TypeCheckTest/TypetestVarsDifftypes.spl",
+            //NumExpr to num
+            "input/TypeCheckTest/TypeTestNumExper.spl",
+           //Assign bool to bool var
+           "input/TypeCheckTest/TypeTestBool.spl",
+           //Calc Tests
+            "input/TypeCheckTest/TypeCalcTest.spl",
+           //Type IF Tests
+           "input/TypeCheckTest/TypeIftest.spl",
+           //Type While Test
+           "input/TypeCheckTest/TypeWhile.spl",
+           //Type For Test
+           "input/TypeCheckTest/TypeFor.spl",
+
+        };
+
+        String[] results = {
+            //IO calls
+            "Type Exception: Var must be of type num,bool or string: variable 'ans'",
+            //Proc Calls
+            "Type Exception: Incorrect proc call: 'scope1' is not a valid proc",
+            //Var=non string literal
+            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'CORRECT' T:string",
+            //Vars of diff types
+            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'x' T:num",
+            //NumExpr to num
+            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'x' T:num",
+            //Assign bool to bool var
+            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'FQ' T:bool",
+            //Calc Tests
+            "Type Exception: Expected (numexpr,numexpr) received: ('ot','answer' T:num)",
+            //Type If Test
+            "Type Exception: Expected bool condition but received One",
+            //Type While Test
+            "Type Exception: While loop expected bool condition but received one",
+            //Type For Test
+            "Type Exception: For loop syntax expected is: for(numexpr,numxpr>numxpr;add(numxpr,numxpr) received: for('other' T:string=0;'x' T:num<||>'y';add('x' T:num,'x' T:num))"
+
+        };
+
+        for(int index = 0; index < args.length; index++)
+        {
+        
+            String result = "";
+            try
+            {
+                SPL compiler = new SPL(args[index]);
+                System.out.println(compiler);
+                compiler.parse(compiler.tokenize());
+                compiler.checkScope();
+                compiler.checkType();
+            }
+            catch(Exception e)
+            {
+                result = e.toString();
+            }
+
+            if(result != "")
+                System.out.println("\t" + result + "\n");
+
+            assertEquals(result, results[index]);
+        }
+        
+        System.out.println("\tTYPE CHECK UNIT TESTING COMPLETE...\n");
     } 
 }

@@ -33,8 +33,8 @@ public abstract class Expression
 		this.id();
 		this.level(0);
 
-		this.symbol = new Symbol(this);
 		this.location = Grammar.location();
+		this.symbol = new Symbol(this);
 	}
 
 	/**
@@ -204,7 +204,7 @@ public abstract class Expression
 	@Override 
 	public String toString() 
 	{
-		return this.id + " " + this.expr; //+ "\t" + this.symbol.getType();
+		return this.id + " " + this.expr + "\t" + this.symbol.getType();
 	}
 
 	public static String getValue(String expr)
