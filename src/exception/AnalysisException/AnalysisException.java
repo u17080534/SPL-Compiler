@@ -14,7 +14,7 @@ public class AnalysisException extends Exception
 
     public AnalysisException(Symbol sym, String message)
     {
-        super(message + " [" + sym + "]" + sym.getLocation());
+        super(message + " [" + sym.getAlias() + "]" + sym.getLocation());
     }
 
     @Override 

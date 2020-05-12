@@ -41,7 +41,8 @@ public class ValueCheck
 
 
 	public static void check(SymbolTable table) throws ValueException
-	{System.out.println("Variable value test: ");
+	{
+		//System.out.println("Variable value test: ");
 		Vector<Symbol> symbols = table.list();
 		boolean doElse;
 
@@ -130,10 +131,10 @@ public class ValueCheck
 								needsValueMessage.put(symbols.get(i), "needs a value when being assigned to something else");
 							}
 							else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("BOOL")){
-								needsValueMessage.put(symbols.get(i), "cannot be undefined in BOOL condition");
+								needsValueMessage.put(symbols.get(i), "undefined in BOOL condition");
 							}
 							else if(symbols.get(i-3).getExpression().contains("loop 'while'")){
-								needsValueMessage.put(symbols.get(i), "cannot be undefined in while statement condition");
+								needsValueMessage.put(symbols.get(i), "undefined in while statement condition");
 							}
 
 						}
@@ -182,7 +183,7 @@ public class ValueCheck
 
 						if(variableMap.get(BOOLsymbols.get(n).getExpression()) == 0){
 							needsValue.add(BOOLsymbols.get(n));
-							needsValueMessage.put(BOOLsymbols.get(n), "cannot be undefined in if statement condition");
+							needsValueMessage.put(BOOLsymbols.get(n), "undefined in if statement condition");
 						}
 					}
 
@@ -296,10 +297,10 @@ public class ValueCheck
 										needsValueMessage.put(PROG1symbols.get(n), "needs a value when being assigned to something else");
 									}
 									else if(PROG1symbols.get(n).getExpr().getParent().getParent().getExpr().contains("BOOL")){
-										needsValueMessage.put(PROG1symbols.get(n), "cannot be undefined in BOOL condition");
+										needsValueMessage.put(PROG1symbols.get(n), "undefined in BOOL condition");
 									}
 									else if(PROG1symbols.get(n-3).getExpression().contains("loop 'while'")){
-										needsValueMessage.put(PROG1symbols.get(n), "cannot be undefined in while statement condition");
+										needsValueMessage.put(PROG1symbols.get(n), "undefined in while statement condition");
 									}
 
 								}
@@ -380,7 +381,7 @@ public class ValueCheck
 											needsValueMessage.put(PROG2symbols.get(n), "needs a value when being assigned to something else");
 										}
 										else if(PROG2symbols.get(n).getExpr().getParent().getParent().getExpr().contains("BOOL")){
-											needsValueMessage.put(PROG2symbols.get(n), "cannot be undefined in BOOL condition");
+											needsValueMessage.put(PROG2symbols.get(n), "undefined in BOOL condition");
 										}
 
 									}
@@ -426,7 +427,7 @@ public class ValueCheck
 
 								if(variableMap.get(BOOLsymbols.get(n).getExpression()) == 0){
 									needsValue.add(BOOLsymbols.get(n));
-									needsValueMessage.put(BOOLsymbols.get(n), "cannot be undefined in while statement condition");
+									needsValueMessage.put(BOOLsymbols.get(n), "undefined in while statement condition");
 								}
 							}
 
@@ -454,7 +455,7 @@ public class ValueCheck
 										if(variableMap.get(WHILEsymbols.get(n+7).getExpression()) == 0){
 
 											needsValue.add(WHILEsymbols.get(n+7));
-											needsValueMessage.put(WHILEsymbols.get(n+7), "cannot be undefined when used in a for loop");
+											needsValueMessage.put(WHILEsymbols.get(n+7), "undefined when used in a for loop");
 										}
 									}
 								}
@@ -518,10 +519,10 @@ public class ValueCheck
 											needsValueMessage.put(WHILEsymbols.get(n), "needs a value when being assigned to something else");
 										}
 										else if(WHILEsymbols.get(n).getExpr().getParent().getParent().getExpr().contains("BOOL")){
-											needsValueMessage.put(WHILEsymbols.get(n), "cannot be undefined in BOOL condition");
+											needsValueMessage.put(WHILEsymbols.get(n), "undefined in BOOL condition");
 										}
 										else if(WHILEsymbols.get(n-3).getExpression().contains("loop 'while'")){
-											needsValueMessage.put(WHILEsymbols.get(n), "cannot be undefined in while statement condition");
+											needsValueMessage.put(WHILEsymbols.get(n), "undefined in while statement condition");
 										}
 
 									}
@@ -550,7 +551,7 @@ public class ValueCheck
 							if(variableMap.get(symbols.get(i+7).getExpression()) == 0){
 
 								needsValue.add(symbols.get(i+7));
-								needsValueMessage.put(symbols.get(i+7), "cannot be undefined when used in a for loop");
+								needsValueMessage.put(symbols.get(i+7), "undefined when used in a for loop");
 							}
 						}
 
@@ -577,7 +578,7 @@ public class ValueCheck
 											if(variableMap.get(FORsymbols.get(n+7).getExpression()) == 0){
 
 												needsValue.add(FORsymbols.get(n+7));
-												needsValueMessage.put(FORsymbols.get(n+7), "cannot be undefined when used in a for loop");
+												needsValueMessage.put(FORsymbols.get(n+7), "undefined when used in a for loop");
 											}
 										}
 									}
@@ -641,10 +642,10 @@ public class ValueCheck
 												needsValueMessage.put(FORsymbols.get(n), "needs a value when being assigned to something else");
 											}
 											else if(FORsymbols.get(n).getExpr().getParent().getParent().getExpr().contains("BOOL")){
-												needsValueMessage.put(FORsymbols.get(n), "cannot be undefined in BOOL condition");
+												needsValueMessage.put(FORsymbols.get(n), "undefined in BOOL condition");
 											}
 											else if(FORsymbols.get(n-3).getExpression().contains("loop 'while'")){
-												needsValueMessage.put(FORsymbols.get(n), "cannot be undefined in while statement condition");
+												needsValueMessage.put(FORsymbols.get(n), "undefined in while statement condition");
 											}
 
 										}
@@ -676,24 +677,30 @@ public class ValueCheck
 		});*/
 
 
-		for (Symbol symbol : declarationWarnings) {
-			System.out.println("WARNING: "  + symbol.getExpression() + " might not be declared at " + symbol.getLocation());
+		for (Symbol symbol : declarationWarnings)
+			System.out.println("Value Warning: Variable might not be declared [" + symbol.getAlias() + "]" + symbol.getLocation());
 
-		}
+		for (Symbol symbol : warnings) 
+			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
 
-		for (Symbol symbol : warnings) {
-			System.out.println("WARNING: " + symbol.getExpression() + " might not be assigned a value at " + symbol.getLocation());
-		}
+		String valueErrors = "";
 
-		for (Symbol symbol : needsValue) {
+		for (Symbol symbol : needsValue) 
+		{
 			//throw new ValueException(symbol, "Variable needs value: ");
+
 			// OR
+
 			String msg = "undefined";
-			if(needsValueMessage.containsKey(symbol)){
+
+			if(needsValueMessage.containsKey(symbol))
 				msg = needsValueMessage.get(symbol);
-			}
-			System.out.println("VALUE ERROR: " + symbol.getExpression() + " " + msg + " at " + symbol.getLocation());
+
+			valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation() + "; ";
 		}
+
+		if(!valueErrors.equals(""))
+			throw new ValueException(valueErrors);
 	}
 
 	private static void recursivePROG1(Vector<Expression> code){
