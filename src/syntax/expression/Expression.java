@@ -1,11 +1,10 @@
 package syntax.expression;
 
+import parser.*;
+import symtable.Symbol;
 import syntax.code.*;
 
-import syntax.code.*;
-import java.util.*;
-import symtable.Symbol;
-import parser.*;
+import java.util.Vector;
 
 public abstract class Expression
 {   

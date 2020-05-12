@@ -9,11 +9,11 @@ hello;
 num i;
 num a;
 
-for (i = 0; i < a; i = add(i, 1)) 
+for (i = 0; i < a; i = add(i, 1))
 {
     output (correct);
 
-    for (i = 0; i < a; i = add(i, 1)) 
+    for (i = 0; i < a; i = add(i, 1))
     {
        output (correct)
     }
@@ -32,21 +32,34 @@ proc guess
 
     while(not or(and(not eqv, eq(answer, other)), or(eqv, not eq(answer, other))))
     {
-        
+
         other = 7;
 
         input (answer);
 
-        eqv = eq(answer, other);
+        eqv = eq(answer, other)
 
-        if(eqv) then
+
+    };
+
+    if(eqv) then
+    {
+        num s;
+        num t;
+        t = s;
+        if(eq(answer, other)) then
         {
-            output (correct)
-        }
-        else
-        {
-            output (wrong)
-        }
+          answer = 4;
+          output (correct)
+        };
+
+        output (answer)
+    }
+    else
+    {
+
+        output (wrong);
+        answer = 5
     }
 }
 
