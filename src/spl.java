@@ -60,8 +60,10 @@ public class SPL
             List<Token> tokens = this.tokenize();
 
             if(tokens != null)
-                if(this.parse(tokens))
+                if(this.parse(tokens)){
                     this.analysis();
+                }
+
 
             // File genFile = File.complete_file(this.tree.generation(this.filename));
             // this.cache.export(genFile);
@@ -123,7 +125,7 @@ public class SPL
         {
             this.checkScope();
             this.checkType();
-            // this.checkValues();
+            // this.checkValues()
         }
         catch(AnalysisException ex)
         {
@@ -165,8 +167,8 @@ public class SPL
         try
         {
             ValueCheck.check(this.table);
-            this.cache.export(this.tree);
-            this.cache.export(this.table);
+            //this.cache.export(this.tree);
+            //this.cache.export(this.table);
         }
         catch(ValueException ex)
         {

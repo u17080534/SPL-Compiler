@@ -1,14 +1,16 @@
 package analysis;
 
-import java.awt.datatransfer.SystemFlavorMap;
-import java.util.*;
-
-import exception.EmptyStreamException;
 import exception.ValueException;
-import syntax.*;
-import symtable.*;
-import exception.UsageException;
+import symtable.Symbol;
+import symtable.SymbolTable;
 import syntax.expression.Expression;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+
+
+
 
 public class ValueCheck
 {
@@ -34,16 +36,17 @@ public class ValueCheck
 	private static Vector<Symbol> warnings = new Vector<>();
 	private static Vector<Symbol> declarationWarnings = new Vector<>();
 
-	public static void check(SymbolTable table) throws ValueException 
+	public static void check(SymbolTable table) throws ValueException
 	{
-		int firstIfScope = -1;
 		System.out.println("Variable value test: ");
-
 		Vector<Symbol> symbols = table.list();
+		boolean doElse = false;
 
-		for(int i = 0; i < symbols.size(); i++)  
+
+		for(int i = 0; i < symbols.size(); i++)
 		{
 
+			doElse = false;
 			variableMap.entrySet().forEach(entry->{
 
 				if(entry.getValue() == 2){
@@ -52,461 +55,201 @@ public class ValueCheck
 
 			});
 
-			if(symbols.get(i).getExpression().contains("variable '")){
 
-				//if we haven't seen this variable before, initialize it with a 0.
-				if(!variableMap.containsKey(symbols.get(i).getExpression())){
-					variableMap.put(symbols.get(i).getExpression(),0);
-				}
 
-				if(symbols.get(i-2).getExpression().contains("ASSIGN")){			// =
-					variableMap.put(symbols.get(i).getExpression(),1);
-					assignmentInScope.put(symbols.get(i).getExpression(), symbols.get(i).getScope());
-				}
-				else if(symbols.get(i-2).getExpression().contains("input")){   		// input()
-					variableMap.put(symbols.get(i).getExpression(),1);
-					assignmentInScope.put(symbols.get(i).getExpression(), symbols.get(i).getScope());
-				}
-				else if(symbols.get(i-3).getExpression().contains("TYPE")){			//type
-					variableMap.put(symbols.get(i).getExpression(),0);
-				}
-				else{
-					if(variableMap.get(symbols.get(i).getExpression()) == 0){
 
-						needsValue.add(symbols.get(i));
+			if(symbols.get(i).getExpression().contains("COND_BRANCH")){
 
-						if(symbols.get(i-2).getExpression().contains("io 'output'")){
-							needsValueMessage.put(symbols.get(i), "needs a value to be outputted to the screen");
-						}
-						else if(symbols.get(i-2).getExpression().contains("assign '")){
-						    needsValueMessage.put(symbols.get(i), "needs a value when being assigned to something else");
-						}
-						else if(symbols.get(i-3).getExpression().contains("tok_if")){
-							needsValueMessage.put(symbols.get(i), "cannot be undefined in if statement condition");
-						}
-						else if(symbols.get(i-3).getExpression().contains("loop 'while'")){
-							needsValueMessage.put(symbols.get(i), "cannot be undefined in while statement condition");
-						}
-					}
-				}
-			}
-			else if(symbols.get(i).getExpression().equals("COND_BRANCH")){        //if statements. (1 depth)
 
-				//check variable in if:
+				//check variable in BOOL
 
-				if(symbols.get(i+4).getExpression().contains("variable '")){
-					if(variableMap.get(symbols.get(i+4).getExpression()) == 0){
-						needsValue.add(symbols.get(i+4));
-						needsValueMessage.put(symbols.get(i+4), "cannot be undefined in if statement condition");
-					}
-				}
-				
-				//start rest of if:
 
-				if(symbols.get(i).getExpr().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'T'")){
-					//System.out.println("Do the if part only");
-					continue;
-				}
-				else if(symbols.get(i).getExpr().getDescendents().get(1).getDescendents().get(0).getExpr().contains("bool 'F'")){
-					//System.out.println("Do the else part only");
+				//check PROG1
+				if(symbols.get(i).getExpr().getDescendents().get(1).getExpr().contains("CODE")){
 
-					Expression PROG1 = null;
-					for(int p = 0; p < symbols.get(i).getExpr().getDescendents().size(); p++){
-						if(symbols.get(i).getExpr().getDescendents().get(p).getExpr().contains("PROG")){
-							PROG1 = symbols.get(i).getExpr().getDescendents().get(p);
-							break;
-						}
+					if(symbols.get(i).getExpr().getDescendents().size() > 2){
+						doElse = true;
 					}
 
-					if(PROG1 != null){ // skip PROG1 (first part of if statement)
-						PROG1symbols.clear();
-						recursivePROG1(PROG1.getDescendents());
-						i = PROG1symbols.get(PROG1symbols.size() - 1).getID() + 1;
-					}
-					continue;
-				}
-				else{
-					//System.out.println("Do both parts");
-					Expression PROG1 = null;
-					Expression PROG2 = null;
-					for(int p = 0; p < symbols.get(i).getExpr().getDescendents().size(); p++){
-						if(symbols.get(i).getExpr().getDescendents().get(p).getExpr().contains("PROG")){
-							PROG1 = symbols.get(i).getExpr().getDescendents().get(p);
-						}
-						if (symbols.get(i).getExpr().getDescendents().get(p).getExpr().contains("COND_BRANCH_")) {
-							PROG2 = symbols.get(i).getExpr().getDescendents().get(3).getDescendents().get(0);
-							break;
-						}
-					}
-					//now we possibly have PROG1 and possibly PROG2
-					if(PROG1 != null){
 
-						PROG1symbols.clear();
+					PROG1symbols.clear();
+					recursivePROG1(symbols.get(i).getExpr().getDescendents().get(1).getDescendents());
 
-						recursivePROG1(PROG1.getDescendents());
 
-						firstIfScope = PROG1symbols.get(0).getScope();
+					//check this code for assignments:
+					for(int n = 0; n < PROG1symbols.size(); n++){
 
-						for(int s = 0; s < PROG1symbols.size(); s++){
-							//DEAL WITH VARIABLES	
-							if(PROG1symbols.get(s).getExpression().contains("variable '")){
-								//if we haven't seen this variable before, initialize it with a 0.
-								if(!variableMap.containsKey(PROG1symbols.get(s).getExpression())){
-									variableMap.put(PROG1symbols.get(s).getExpression(),0);
-								}
+						if(PROG1symbols.get(n).getExpression().contains("variable '")){
 
-								if(PROG1symbols.get(s-2).getExpression().contains("ASSIGN")){			// =
 
-									if(variableMap.get(PROG1symbols.get(s).getExpression()) != 1){
-										if(PROG1symbols.get(s).getScope() == firstIfScope){
-											variableMap.put(PROG1symbols.get(s).getExpression(),2);
-											assignmentInScope.put(PROG1symbols.get(s).getExpression(), PROG1symbols.get(s).getScope());
-											warnings.add(PROG1symbols.get(s));
-										}
-										else{
-											variableMap.put(PROG1symbols.get(s).getExpression(),4);
-											assignmentInScope.put(PROG1symbols.get(s).getExpression(), PROG1symbols.get(s).getScope());
-											warnings.add(PROG1symbols.get(s));
-										}
+							//if we haven't seen this variable before, initialize it with a 0.
+							if(!variableMap.containsKey(PROG1symbols.get(n).getExpression())){
+								variableMap.put(PROG1symbols.get(n).getExpression(),0);
+							}
+
+
+							if(PROG1symbols.get(n).getExpr().getParent().getParent().getExpr().equals("ASSIGN")){			// =
+
+								if(PROG1symbols.get(n).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getExpr().contains("VARIABLE")){
+									if(variableMap.get(PROG1symbols.get(n).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getDescendents().get(0).getExpr()) == 0){
+										variableMap.put(PROG1symbols.get(n).getExpression(), 0);
+									}
+									else if(variableMap.get(PROG1symbols.get(n).getExpression()) != 1){
+										variableMap.put(PROG1symbols.get(n).getExpression(), 2);
+										warnings.add(PROG1symbols.get(n));
 									}
 								}
-								else if(PROG1symbols.get(s-2).getExpression().contains("input")){   		// input()
-									if(variableMap.get(PROG1symbols.get(s).getExpression()) != 1){
-										if(PROG1symbols.get(s).getScope() == firstIfScope){
-											variableMap.put(PROG1symbols.get(s).getExpression(),2);
-											assignmentInScope.put(PROG1symbols.get(s).getExpression(), PROG1symbols.get(s).getScope());
-											warnings.add(PROG1symbols.get(s));
-										}
-										else{
-											variableMap.put(PROG1symbols.get(s).getExpression(),4);
-											assignmentInScope.put(PROG1symbols.get(s).getExpression(), PROG1symbols.get(s).getScope());
-											warnings.add(PROG1symbols.get(s));
-										}
-									}
+								else if(variableMap.get(PROG1symbols.get(n).getExpression()) != 1){
+									variableMap.put(PROG1symbols.get(n).getExpression(), 2);
+									warnings.add(PROG1symbols.get(n));
 								}
-								else if(PROG1symbols.get(s-3).getExpression().contains("TYPE")){			//type
-									variableMap.put(PROG1symbols.get(s).getExpression(),0);
+
+							}
+							else if(PROG1symbols.get(n).getExpr().getParent().getParent().getDescendents().get(0).getExpr().contains("input")){   		// input()
+
+								if(variableMap.get(PROG1symbols.get(n).getExpression()) != 1){
+									variableMap.put(PROG1symbols.get(n).getExpression(), 2);
+									warnings.add(PROG1symbols.get(n));
 								}
-								else{
-									if(variableMap.get(PROG1symbols.get(s).getExpression()) == 0){
 
-										needsValue.add(PROG1symbols.get(s));
+							}
+							else if(PROG1symbols.get(n).getExpr().getParent().getParent().getExpr().contains("DECL")){			//type
+								variableMap.put(PROG1symbols.get(n).getExpression(),0);
+							}
+							else{
+								if(variableMap.get(PROG1symbols.get(n).getExpression()) == 0){
 
-										if(PROG1symbols.get(s-2).getExpression().contains("io 'output'")){
-											needsValueMessage.put(PROG1symbols.get(s), "needs a value to be outputted to the screen");
-										}
-										else if(PROG1symbols.get(s-2).getExpression().contains("assign '")){
-											needsValueMessage.put(PROG1symbols.get(s), "needs a value when being assigned to something else");
-										}
-										else if(PROG1symbols.get(s-3).getExpression().contains("tok_if")){
-											needsValueMessage.put(PROG1symbols.get(s), "cannot be undefined in if statement condition");
-										}
-										else if(PROG1symbols.get(s-3).getExpression().contains("loop 'while'")){
-											needsValueMessage.put(PROG1symbols.get(s), "cannot be undefined in while statement condition");
-										}
+									needsValue.add(PROG1symbols.get(n));
+
+									if(PROG1symbols.get(n-2).getExpression().contains("io 'output'")){
+										needsValueMessage.put(PROG1symbols.get(n), "needs a value to be outputted to the screen");
 									}
+									else if(PROG1symbols.get(n-2).getExpression().contains("assign '")){
+										needsValueMessage.put(PROG1symbols.get(n), "needs a value when being assigned to something else");
+									}
+									else if(PROG1symbols.get(n-3).getExpression().contains("tok_if")){
+										needsValueMessage.put(PROG1symbols.get(n), "cannot be undefined in if statement condition");
+									}
+									else if(PROG1symbols.get(n-3).getExpression().contains("loop 'while'")){
+										needsValueMessage.put(PROG1symbols.get(n), "cannot be undefined in while statement condition");
+									}
+
 								}
 							}
-							else if(PROG1symbols.get(s).getExpression().contains("loop 'for")){		//for loop in branches
-								if(PROG1symbols.get(s+2).getExpression().contains("variable")){
-									variableMap.put(PROG1symbols.get(s+2).getExpression(),1);
-								}
-							}
-						}
-						i = PROG1symbols.get(PROG1symbols.size()-1).getID();
-					}
 
-					if(PROG2 != null){
+						}
+					}
+					i = PROG1symbols.get(PROG1symbols.size()-1).getID();
+					//check PROG2
+					if(doElse){
+						i++;
 						PROG2symbols.clear();
-						recursivePROG2(PROG2.getDescendents());
+						recursivePROG2(symbols.get(i).getExpr().getDescendents());
 
-						for(int s = 0; s < PROG2symbols.size(); s++){
-							//DEAL WITH VARIABLES
-							if(PROG2symbols.get(s).getExpression().contains("variable '")){
+						for(int n = 0; n < PROG2symbols.size(); n++){
+
+							if(PROG2symbols.get(n).getExpression().contains("variable '")){
 
 								//if we haven't seen this variable before, initialize it with a 0.
-								if(!variableMap.containsKey(PROG2symbols.get(s).getExpression())){
-									variableMap.put(PROG2symbols.get(s).getExpression(),0);
+								if(!variableMap.containsKey(PROG2symbols.get(n).getExpression())){
+									variableMap.put(PROG2symbols.get(n).getExpression(),0);
 								}
 
-								if(PROG2symbols.get(s-2).getExpression().contains("ASSIGN")){			// =
-									if(PROG2symbols.get(s).getScope() == firstIfScope){
-										if(variableMap.get(PROG2symbols.get(s).getExpression()) == 2){
-											if(assignmentInScope.get(PROG2symbols.get(s).getExpression()) == PROG2symbols.get(s).getScope()){
-												//if the variable was previously assigned a 2 in the same scope first if scope
-												variableMap.put(PROG2symbols.get(s).getExpression(),1);
-												assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
+								if(PROG2symbols.get(n).getExpr().getParent().getParent().getExpr().equals("ASSIGN")){			// =
 
-												//remove from warnings vector
-												for(int w = 0; w < warnings.size(); w++){
-													if (warnings.get(w).getExpression().equals(PROG2symbols.get(s).getExpression())){
-														warnings.removeElement(warnings.get(w));
-													}
+									if(variableMap.get(PROG2symbols.get(n).getExpression()) != 1){
+										if(variableMap.get(PROG2symbols.get(n).getExpression()) == 2){
+											variableMap.put(PROG2symbols.get(n).getExpression(), 1);
+
+											//remove from warnings
+											for(int w = 0; w < warnings.size(); w++){
+												if (warnings.get(w).getExpression().equals(PROG2symbols.get(n).getExpression())){
+													warnings.removeElement(warnings.get(w));
 												}
 											}
+
 										}
 										else{
-											if(variableMap.get(PROG2symbols.get(s).getExpression()) != 1){
-												variableMap.put(PROG2symbols.get(s).getExpression(),4);
-												assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
-												warnings.add(PROG2symbols.get(s));
-											}
-										}
-									}else{
-										if(variableMap.get(PROG2symbols.get(s).getExpression()) != 1){
-											variableMap.put(PROG2symbols.get(s).getExpression(),4);
-											assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
-											warnings.add(PROG2symbols.get(s));
-										}
-									}
-								}
-								else if(PROG2symbols.get(s-2).getExpression().contains("input")){   		// input()
-									if(PROG2symbols.get(s).getScope() == firstIfScope){
-										if(variableMap.get(PROG2symbols.get(s).getExpression()) == 2){
-											if(assignmentInScope.get(PROG2symbols.get(s).getExpression()) == PROG2symbols.get(s).getScope()){
-												//if the variable was previously assigned a 2 in the same scope first if scope
-												variableMap.put(PROG2symbols.get(s).getExpression(),1);
-												assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
-
-												//remove from warnings vector
-												for(int w = 0; w < warnings.size(); w++){
-													if (warnings.get(w).getExpression().equals(PROG2symbols.get(s).getExpression())){
-														warnings.removeElement(warnings.get(w));
-													}
-												}
-											}
-										}
-										else{
-											if(variableMap.get(PROG2symbols.get(s).getExpression()) != 1){
-
-												variableMap.put(PROG2symbols.get(s).getExpression(),4);
-												assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
-												warnings.add(PROG2symbols.get(s));
-
-											}
-										}
-									}else{
-										if(variableMap.get(PROG2symbols.get(s).getExpression()) != 1){
-
-											variableMap.put(PROG2symbols.get(s).getExpression(),4);
-											assignmentInScope.put(PROG2symbols.get(s).getExpression(), PROG2symbols.get(s).getScope());
-											warnings.add(PROG2symbols.get(s));
-
+											variableMap.put(PROG2symbols.get(n).getExpression(), 2);
+											warnings.add(PROG2symbols.get(n));
 										}
 									}
 
 								}
-								else if(PROG2symbols.get(s-3).getExpression().contains("TYPE")){			//type
-									variableMap.put(PROG2symbols.get(s).getExpression(),0);
+								else if(PROG2symbols.get(n).getExpr().getParent().getParent().getDescendents().get(0).getExpr().contains("input")){   		// input()
+
+									if(variableMap.get(PROG2symbols.get(n).getExpression()) != 1){
+										if(variableMap.get(PROG2symbols.get(n).getExpression()) == 2){
+											variableMap.put(PROG2symbols.get(n).getExpression(), 1);
+
+											//remove from warnings
+											for(int w = 0; w < warnings.size(); w++){
+												if (warnings.get(w).getExpression().equals(PROG2symbols.get(n).getExpression())){
+													warnings.removeElement(warnings.get(w));
+												}
+											}
+
+										}
+										else{
+											variableMap.put(PROG2symbols.get(n).getExpression(), 2);
+											warnings.add(PROG2symbols.get(n));
+										}
+									}
+
+								}
+								else if(PROG2symbols.get(n).getExpr().getParent().getParent().getExpr().contains("DECL")){			//type
+									variableMap.put(PROG2symbols.get(n).getExpression(),0);
 								}
 								else{
-									if(variableMap.get(PROG2symbols.get(s).getExpression()) == 0){
+									if(variableMap.get(PROG2symbols.get(n).getExpression()) == 0){
 
-										needsValue.add(PROG2symbols.get(s));
+										needsValue.add(PROG2symbols.get(n));
 
-										if(PROG2symbols.get(s-2).getExpression().contains("io 'output'")){
-											needsValueMessage.put(PROG2symbols.get(s), "needs a value to be outputted to the screen");
+										if(PROG2symbols.get(n-2).getExpression().contains("io 'output'")){
+											needsValueMessage.put(PROG2symbols.get(n), "needs a value to be outputted to the screen");
 										}
-										else if(PROG2symbols.get(s-2).getExpression().contains("assign '")){
-											needsValueMessage.put(PROG2symbols.get(s), "needs a value when being assigned to something else");
+										else if(PROG2symbols.get(n-2).getExpression().contains("assign '")){
+											needsValueMessage.put(PROG2symbols.get(n), "needs a value when being assigned to something else");
 										}
-										else if(PROG2symbols.get(s-3).getExpression().contains("tok_if")){
-											needsValueMessage.put(PROG2symbols.get(s), "cannot be undefined in if statement condition");
+										else if(PROG2symbols.get(n).getExpr().getParent().getParent().getExpr().contains("BOOL")){
+											needsValueMessage.put(PROG2symbols.get(n), "cannot be undefined in BOOL condition");
 										}
-										else if(PROG2symbols.get(s-3).getExpression().contains("loop 'while'")){
-											needsValueMessage.put(PROG2symbols.get(s), "cannot be undefined in while statement condition");
-										}
+
 									}
 								}
+
 							}
-							else if(PROG2symbols.get(s).getExpression().contains("loop 'for")){		//for loop in branches
-								if(PROG2symbols.get(s+2).getExpression().contains("variable")){
-									variableMap.put(PROG2symbols.get(s+2).getExpression(),1);
-								}
-							}
+
+
 						}
 
 						i = PROG2symbols.get(PROG2symbols.size()-1).getID();
 					}
 				}
-			}
-			else if(symbols.get(i).getExpression().equals("COND_BRANCH_")){
-				Expression PROG2 = null;
-				if(symbols.get(i).getExpr().getDescendents() != null){
-					PROG2symbols.clear();
-					recursivePROG2(symbols.get(i).getExpr().getDescendents());
-					i = PROG2symbols.get(PROG2symbols.size()-1).getID();
-				}
-				continue;
-			}
-			else if(symbols.get(i).getExpression().contains("COND_LOOP") && symbols.get(i+1).getExpression().contains("loop 'while")){       //while statements.
 
-				if(symbols.get(i+3).getExpression().contains("bool 'T")){
-					continue;
-				}
-				else if(symbols.get(i+3).getExpression().contains("bool 'F")){
-					//don't process while loop, get end of while and continue
-					WHILEsymbols.clear();
-					recursiveWhile(symbols.get(i).getExpr().getDescendents());
-					i = WHILEsymbols.get(WHILEsymbols.size()-1).getID();
-					continue;
-				}
-				else{
-					WHILEsymbols.clear();
-					recursiveWhile(symbols.get(i).getExpr().getDescendents());
-
-					for(int s = 0; s < WHILEsymbols.size(); s++){
-
-						if(WHILEsymbols.get(s).getExpression().contains("variable '")){
-
-							//if we haven't seen this variable before, initialize it with a 0.
-							if(!variableMap.containsKey(WHILEsymbols.get(s).getExpression())){
-								variableMap.put(WHILEsymbols.get(s).getExpression(),0);
-							}
-
-							if(WHILEsymbols.get(s-2).getExpression().contains("ASSIGN")){			// =
-
-								if(variableMap.get(WHILEsymbols.get(s).getExpression()) != 1){
-									variableMap.put(WHILEsymbols.get(s).getExpression(),3);
-									assignmentInScope.put(WHILEsymbols.get(s).getExpression(), WHILEsymbols.get(s).getScope());
-									warnings.add(WHILEsymbols.get(s));
-								}
-
-							}
-							else if(WHILEsymbols.get(s-2).getExpression().contains("input")){   		// input()
-
-								if(variableMap.get(WHILEsymbols.get(s).getExpression()) != 1){
-									variableMap.put(WHILEsymbols.get(s).getExpression(),3);
-									assignmentInScope.put(WHILEsymbols.get(s).getExpression(), WHILEsymbols.get(s).getScope());
-									warnings.add(WHILEsymbols.get(s));
-								}
-
-							}
-							else if(WHILEsymbols.get(s-3).getExpression().contains("TYPE")){			//type
-								variableMap.put(WHILEsymbols.get(s).getExpression(),0);
-								declarationWarnings.add(WHILEsymbols.get(s));
-							}
-							else{
-								if(variableMap.get(WHILEsymbols.get(s).getExpression()) == 0){
-
-									needsValue.add(WHILEsymbols.get(s));
-
-									if(WHILEsymbols.get(s-2).getExpression().contains("io 'output'")){
-										needsValueMessage.put(WHILEsymbols.get(s), "needs a value to be outputted to the screen");
-									}
-									else if(WHILEsymbols.get(s-2).getExpression().contains("assign '")){
-										needsValueMessage.put(WHILEsymbols.get(s), "needs a value when being assigned to something else");
-									}
-									else if(WHILEsymbols.get(s-3).getExpression().contains("tok_if")){
-										needsValueMessage.put(WHILEsymbols.get(s), "cannot be undefined in if statement condition");
-									}
-									else if(WHILEsymbols.get(s-3).getExpression().contains("loop 'while'")){
-										needsValueMessage.put(WHILEsymbols.get(s), "cannot be undefined in while statement condition");
-									}
-
-								}
-							}
-						}
-						else if(WHILEsymbols.get(s).getExpression().contains("loop 'for")){		//for loop in branches
-							if(WHILEsymbols.get(s+2).getExpression().contains("variable")){
-								variableMap.put(WHILEsymbols.get(s+2).getExpression(),1);
-							}
-						}
-
-					}
-
-					i = WHILEsymbols.get(WHILEsymbols.size()-1).getID();
-				}
 
 
 
 			}
-			else if(symbols.get(i).getExpression().contains("COND_LOOP") && symbols.get(i+1).getExpression().contains("loop 'for")){
+			else if(symbols.get(i).getExpression().contains("COND_LOOP")){
 
-				FORsymbols.clear();
-				recursiveFor(symbols.get(i).getExpr().getDescendents());
-
-
-				if(FORsymbols.get(2).getExpression().contains("variable")){ //assign value to this var
-					variableMap.put(FORsymbols.get(2).getExpression(), 1);
-					assignmentInScope.put(FORsymbols.get(2).getExpression(), FORsymbols.get(2).getScope());
-				}
-
-				if(FORsymbols.get(6).getExpression().contains("variable")){ //check if variable used in for has a value
-					if(variableMap.get(FORsymbols.get(6).getExpression()) == 0){
-						needsValue.add(FORsymbols.get(6));
-						needsValueMessage.put(FORsymbols.get(6), " cannot be undefined in for loop");
-					}
-				}
-
-				if(FORsymbols.size() > 7){
-					for(int s = 7; s < FORsymbols.size(); s++){
-
-						if(FORsymbols.get(s).getExpression().contains("variable '")){
-
-							//if we haven't seen this variable before, initialize it with a 0.
-							if(!variableMap.containsKey(FORsymbols.get(s).getExpression())){
-								variableMap.put(FORsymbols.get(s).getExpression(),0);
-							}
-
-							if(FORsymbols.get(s-2).getExpression().contains("ASSIGN")){			// =
-
-								if(variableMap.get(FORsymbols.get(s).getExpression()) != 1){
-									variableMap.put(FORsymbols.get(s).getExpression(),5);
-									assignmentInScope.put(FORsymbols.get(s).getExpression(), FORsymbols.get(s).getScope());
-									warnings.add(FORsymbols.get(s));
-								}
-
-							}
-							else if(FORsymbols.get(s-2).getExpression().contains("input")){   		// input()
-
-								if(variableMap.get(FORsymbols.get(s).getExpression()) != 1){
-									variableMap.put(FORsymbols.get(s).getExpression(),5);
-									assignmentInScope.put(FORsymbols.get(s).getExpression(), FORsymbols.get(s).getScope());
-									warnings.add(FORsymbols.get(s));
-								}
-
-							}
-							else if(FORsymbols.get(s-3).getExpression().contains("TYPE")){			//type
-								variableMap.put(FORsymbols.get(s).getExpression(),0);
-								declarationWarnings.add(FORsymbols.get(s));
-							}
-							else{
-								if(variableMap.get(FORsymbols.get(s).getExpression()) == 0){
-
-									needsValue.add(FORsymbols.get(s));
-
-									if(FORsymbols.get(s-2).getExpression().contains("io 'output'")){
-										needsValueMessage.put(FORsymbols.get(s), "needs a value to be outputted to the screen");
-									}
-									else if(FORsymbols.get(s-2).getExpression().contains("assign '")){
-										needsValueMessage.put(FORsymbols.get(s), "needs a value when being assigned to something else");
-									}
-									else if(FORsymbols.get(s-3).getExpression().contains("tok_if")){
-										needsValueMessage.put(FORsymbols.get(s), "cannot be undefined in if statement condition");
-									}
-									else if(FORsymbols.get(s-3).getExpression().contains("loop 'while'")){
-										needsValueMessage.put(FORsymbols.get(s), "cannot be undefined in while statement condition");
-									}
-
-								}
-							}
-						}
-						else if(FORsymbols.get(s).getExpression().contains("loop 'for")){		//for loop in for loop
-							if(FORsymbols.get(s+2).getExpression().contains("variable")){
-								variableMap.put(FORsymbols.get(s+2).getExpression(),1);
-							}
-						}
-
-					}
-				}
-
-				i = FORsymbols.get(FORsymbols.size()-1).getID();
 			}
+
 
 		}
 
+
+
+
+
 		//done
+
+		variableMap.entrySet().forEach(entry->{
+
+			System.out.println(entry.getKey() + " " + entry.getValue());
+
+		});
+
 
 		for (Symbol symbol : declarationWarnings) {
 			System.out.println("WARNING: "  + symbol.getExpression() + " might not be declared at " + symbol.getLocation());
