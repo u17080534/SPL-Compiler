@@ -9,6 +9,7 @@ hello;
 num i;
 num a;
 
+
 for (i = 0; i < a; i = add(i, 1))
 {
     output (correct);
@@ -27,40 +28,47 @@ proc guess
     num other;
     num answer;
 
+
+
     x = 9;
     x = add(sub(mult(1,x),8),sub(8, mult(1,x)));
 
-    while(not or(and(not eqv, eq(answer, other)), or(eqv, not eq(answer, other))))
+    while(T)
     {
 
-        other = 7;
+      if(eqv) then
+      {
 
-        input (answer);
 
-        eqv = eq(answer, other)
+          num s;
+          num t;
+          t = other;
+          output(t);
 
+          if(eq(answer, other)) then
+          {
+            answer = 5;
+            output (correct)
+            }
+          else{
+            answer = 3
+          };
+
+          output (answer)
+      }
+      else
+      {
+
+          output (wrong);
+          answer = 5
+      };
+
+        other = 7
 
     };
 
-    if(eqv) then
-    {
-        num s;
-        num t;
-        t = s;
-        if(eq(answer, other)) then
-        {
-          answer = 4;
-          output (correct)
-        };
 
-        output (answer)
-    }
-    else
-    {
-
-        output (wrong);
-        answer = 5
-    }
+    output(answer)
 }
 
 proc hello
