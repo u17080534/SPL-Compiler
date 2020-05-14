@@ -54,7 +54,7 @@ public class TypeCheck {
                         // System.out.println(find);
                         for (int x = 0; x < symbols.size(); x++) {
                             if (symbols.get(x).toString().indexOf(find) != -1) {
-                                symbols.get(x).setType("string");
+                                symbols.get(x).setType("S");
                             }
                         }
                     }
@@ -76,7 +76,7 @@ public class TypeCheck {
                         //  System.out.println(find);
                         for (int x = 0; x < symbols.size(); x++) {
                             if (symbols.get(x).toString().indexOf(find) != -1 || symbols.get(x).toString().indexOf("bool") != -1) {
-                                symbols.get(x).setType("bool");
+                                symbols.get(x).setType("B");
                             }
                         }
                     }
@@ -97,7 +97,7 @@ public class TypeCheck {
                         //System.out.println(find);
                         for (int x = 0; x < symbols.size(); x++) {
                             if (symbols.get(x).toString().indexOf(find) != -1 || symbols.get(x).toString().indexOf("numexpr") != -1) {
-                                symbols.get(x).setType("num");
+                                symbols.get(x).setType("N");
                             }
                         }
                         Nums.add(symbols.get(i + 2));
@@ -115,7 +115,7 @@ public class TypeCheck {
                     find = save.substring(save.indexOf("'") + 1, save.length() - 1);
                     for (int x = 0; x < symbols.size(); x++) {
                         if (symbols.get(x).toString().indexOf(find) != -1) {
-                            symbols.get(x).setType("proc");
+                            symbols.get(x).setType("P");
                         }
                     }
                 }
