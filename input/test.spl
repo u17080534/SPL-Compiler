@@ -5,10 +5,11 @@ wrong = "wrong";
 correct = "correct";
 eqv = F;
 eqv = "correct";
-hello;
 
 num i;
 num a;
+
+a = "x";
 
 
 for (i = 0; i < a; i = add(i, 1))
@@ -22,65 +23,4 @@ for (i = 0; i < a; i = add(i, 1))
 };
 
 num other;
-
-proc guess
-{
-    num x;
-    num other;
-    num answer;
-
-
-
-    x = 9;
-    x = add(sub(mult(1,x),8),sub(8, mult(1,x)));
-
-    while(T)
-    {
-
-      if(eqv) then
-      {
-
-
-          num s;
-          num t;
-          t = other;
-          output(t);
-
-          if(eq(answer, other)) then
-          {
-            answer = 5;
-            output (correct)
-            }
-          else{
-            answer = 3
-          };
-
-          output (answer)
-      }
-      else
-      {
-
-          output (wrong);
-          answer = 5
-      };
-
-        other = 7
-
-    };
-
-
-    output(answer)
-}
-
-proc hello
-{
-    string h;
-    h = "hello";
-    hello2;
-    guess;
-
-    proc hello2
-    {
-        output(h)
-    }
-}
+other = "wrong"

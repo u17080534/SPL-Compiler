@@ -15,8 +15,8 @@ public class Symbol
 	{
 		this.proc = "";
 		this.type = "";
+		this.alias = "";
 		this.expr = expr;
-		this.alias = "";// this.expr.getID() + " " + this.expr.getExpr();
 		this.scope = -1;
 	}
 
@@ -37,7 +37,7 @@ public class Symbol
 
 	public void setExpression(String expression)
 	{
-		this.alias = this.expr.getID() + " " + this.expr.getExpr();
+		this.alias = this.expr.getExpr();
 		this.expr.setExpr(expression);
 	}
 
@@ -104,6 +104,9 @@ public class Symbol
 	@Override
 	public String toString()
 	{
+		if(this.alias.equals(""))
+			return this.expr.getID() + ":" + this.expr.getExpr();
+
 		return this.expr.getID() + ":" + this.alias;
 	}
 }

@@ -122,8 +122,8 @@ public class SPL
         try
         {
             this.checkScope();
-            // this.checkType();
-            this.checkValues();
+            this.checkType();
+            // this.checkValues();
         }
         catch(AnalysisException ex)
         {
