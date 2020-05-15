@@ -1,0 +1,84 @@
+string wrong;
+string correct;
+bool eqv;
+wrong = "w";
+correct = "c";
+eqv = F;
+hello;
+
+num i;
+num a;
+
+
+for (i = 0; i < a; i = add(i, 1))
+{
+    output (correct);
+
+    for (i = 0; i < a; i = add(i, 1))
+    {
+       output (correct)
+    }
+};
+
+num other;
+
+proc guess
+{
+    num x;
+    num other;
+    num answer;
+
+
+
+    x = 9;
+    x = add(sub(3,4),8);
+
+
+    while(T)
+    {
+
+      if(T) then
+      {
+          num s;
+          num t;
+          t = other;
+          output(t);
+
+          if(T) then
+          {
+            answer = 5;
+            output (answer)
+            }
+          else{
+            answer = 3
+          };
+
+          output (answer)
+      }
+      else
+      {
+
+          output (wrong);
+          answer = 5
+      };
+
+        other = 7
+
+    };
+
+
+    output(answer)
+}
+
+proc hello
+{
+    string h;
+    h = "hello";
+    hello2;
+    guess;
+
+    proc hello2
+    {
+        output(h)
+    }
+}
