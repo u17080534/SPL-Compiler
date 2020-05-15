@@ -221,49 +221,26 @@ public class UnitTest
         
         String[] args = {
             //IO calls
-            "input/TypeCheckTest/TypetestIO1.spl",
-            //Proc calls
-            "input/TypeCheckTest/TypetestProc1.spl",
-            //Var=non string literal
-            "input/TypeCheckTest/TypetestString1.spl",
-            //Vars of diff types
-           "input/TypeCheckTest/TypetestVarsDifftypes.spl",
-            //NumExpr to num
-            "input/TypeCheckTest/TypeTestNumExper.spl",
-           //Assign bool to bool var
-           "input/TypeCheckTest/TypeTestBool.spl",
-           //Calc Tests
-            "input/TypeCheckTest/TypeCalcTest.spl",
-           //Type IF Tests
-           "input/TypeCheckTest/TypeIftest.spl",
-           //Type While Test
-           "input/TypeCheckTest/TypeWhile.spl",
-           //Type For Test
-           "input/TypeCheckTest/TypeFor.spl",
+            "input/TypeCheckTest/TestIO1.spl",
+            // "input/TypeCheckTest/TestAssign.spl",
+            "input/TypeCheckTest/TestAssign2.spl",
+            "input/TypeCheckTest/TestAssign3.spl",
+            "input/TypeCheckTest/TestIF.spl",
+            "input/TypeCheckTest/TestWhile.spl",
+           "input/TypeCheckTest/TestCalc.spl",
+
 
         };
 
         String[] results = {
             //IO calls
-            "Type Exception: Var must be of type num,bool or string: variable 'ans'",
-            //Proc Calls
-            "Type Exception: Incorrect proc call: 'scope1' is not a valid proc",
-            //Var=non string literal
-            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'CORRECT' T:string",
-            //Vars of diff types
-            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'x' T:num",
-            //NumExpr to num
-            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'x' T:num",
-            //Assign bool to bool var
-            "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to variable 'FQ' T:bool",
-            //Calc Tests
-            "Type Exception: Expected (numexpr,numexpr) received: ('ot','answer' T:num)",
-            //Type If Test
-            "Type Exception: Expected bool condition but received One",
-            //Type While Test
-            "Type Exception: While loop expected bool condition but received one",
-            //Type For Test
-            "Type Exception: For loop syntax expected is: for(numexpr,numxpr>numxpr;add(numxpr,numxpr) received: for('other' T:string=0;'x' T:num<||>'y';add('x' T:num,'x' T:num))"
+             "Type Exception: IO call, Var must be of type num,bool or string: 211 variable 'guess' T:proc",
+            //"Type Exception: Assignment must match type of var: string_literal 'guess' cannot be assigned to 153 variable 'x' T:N",
+             "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to 153 variable 'x' T:N",
+             "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to 153 variable 'correct' T:S",
+             "Type Exception: Expected bool condition but received answer' T:N",
+             "Type Exception: While loop expected bool condition but received 154:VARIABLE T:P",
+             "",
 
         };
 
