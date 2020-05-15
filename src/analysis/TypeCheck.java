@@ -32,9 +32,18 @@ public class TypeCheck {
 
         //find all variable declerations
         String search;
+        String output;
+        System.out.println("SYMBOL TABLE");
         for (int i = 0; i < symbols.size(); i++) {
             search = symbols.get(i).toString();
-            System.out.println(symbols.get(i));
+            output=symbols.get(i).toString();
+            if(output.indexOf("T:")!=-1){
+                output=output.substring(0,output.indexOf("T:")-1)+"  "+output.substring(output.indexOf("T:")+2,output.length());
+                System.out.println(output);
+            }else{
+                System.out.println(symbols.get(i));
+            }
+
 
             String find, save;
             if (search.indexOf("type") != -1) {
@@ -53,9 +62,12 @@ public class TypeCheck {
                         find = save.substring(save.indexOf("e") + 3, save.length() - 1);
                         // System.out.println(find);
                         for (int x = 0; x < symbols.size(); x++) {
-                            if (symbols.get(x).toString().indexOf(find) != -1) {
-                                symbols.get(x).setType("string");
+                            if(x>2 && symbols.get(x-1).toString().indexOf("string")!=-1){
+                                if (symbols.get(x).toString().indexOf(find) != -1) {
+                                    symbols.get(x).setType("S");
+                                }
                             }
+
                         }
                     }
 
@@ -75,9 +87,12 @@ public class TypeCheck {
                         find = save.substring(save.indexOf("e") + 3, save.length() - 1);
                         //  System.out.println(find);
                         for (int x = 0; x < symbols.size(); x++) {
-                            if (symbols.get(x).toString().indexOf(find) != -1 || symbols.get(x).toString().indexOf("bool") != -1) {
-                                symbols.get(x).setType("bool");
+                            if(x>2 && symbols.get(x-1).toString().indexOf("bool")!=-1){
+                                if (symbols.get(x).toString().indexOf(find) != -1 || symbols.get(x).toString().indexOf("B") != -1) {
+                                    symbols.get(x).setType("B");
+                                }
                             }
+
                         }
                     }
 
@@ -91,14 +106,20 @@ public class TypeCheck {
 
                     save = symbols.get(i + 2).toString();
 
+
                     if (save.indexOf("variable") != -1) {
 
-                        find = save.substring(save.indexOf("e") + 3, save.length() - 1);
-                        //System.out.println(find);
+                        find = save.substring(save.indexOf("'") + 1, save.length() -5);
+
+                        //System.out.println("save= "+save);
+                       // System.out.println("Find= "+find);
                         for (int x = 0; x < symbols.size(); x++) {
-                            if (symbols.get(x).toString().indexOf(find) != -1 || symbols.get(x).toString().indexOf("numexpr") != -1) {
-                                symbols.get(x).setType("num");
+                           if(x>2 && symbols.get(x-1).toString().indexOf("num")!=-1){
+                                if (symbols.get(x).toString().indexOf(find) != -1 || symbols.get(x).toString().indexOf("numexpr") != -1) {
+                                    symbols.get(x).setType("N");
+                                }
                             }
+
                         }
                         Nums.add(symbols.get(i + 2));
                     }
@@ -147,8 +168,11 @@ public class TypeCheck {
             String test = IOCalls.get(i).toString();
             BCorrect = Contains(test, Nums, Bools, Strings);
 
-            if (BCorrect == false) {
-                throw new TypeException("Var must be of type num,bool or string: " + test.substring(test.indexOf("v"), test.length()));
+           // System.out.println(test);
+            if (test.indexOf("T:B")!=-1 ||test.indexOf("T:S")!=-1 || test.indexOf("T:N")!=-1) {
+                BCorrect=true;}
+            if(BCorrect==false){
+                throw new TypeException("IO call, Var must be of type num,bool or string: " + test);
             }
         }
         //END IO checks
@@ -171,22 +195,48 @@ public class TypeCheck {
             //Know we are assigning
             if (search.indexOf("variable") != -1 && search1.indexOf("ASSIGN")!=-1 ) {
                 //bool var and bool value
-                if (search.indexOf("T:bool") != -1 && Line.indexOf("T:bool") != -1) {
+                if (search.indexOf("T:B") != -1 && Line.indexOf("bool") != -1) {
+                    bcorrect = true;
+                }
+
+                if (search.indexOf("T:B") != -1 && Line.indexOf("T:B") != -1) {
                     bcorrect = true;
                 }
                 //string var to string var
-                if (search.indexOf("T:string") != -1 && Line.indexOf("T:string") != -1) {
+                if (search.indexOf("T:S") != -1 && Line.indexOf("T:S") != -1) {
                     bcorrect = true;
                 }
 
                 //num var to num var
-                if (search.indexOf("T:num") != -1 && Line.indexOf("T:num") != -1) {
+                if (search.indexOf("T:N") != -1 && Line.indexOf("T:N") != -1) {
+                    bcorrect = true;
+                }
+
+                if (search.indexOf("T:N") != -1 && Line.indexOf("numexpr") != -1) {
                     bcorrect = true;
                 }
 
                 //static string to string var
-                if (search.indexOf("T:string") != -1 && Line.indexOf('"') != -1) {
+                if (search.indexOf("T:S") != -1 && Line.indexOf('"') != -1) {
                     bcorrect = true;
+                }
+
+                if(search.indexOf("T:S")!=-1 && symbols.get(i+2).toString().indexOf("variable")!=-1){
+                    if(symbols.get(i+3).toString().indexOf("T:S")!=-1){
+                        bcorrect=true;
+                    }
+                }
+
+                if(search.indexOf("T:B") !=-1&& symbols.get(i+2).toString().indexOf("variable")!=-1){
+                    if(symbols.get(i+3).toString().indexOf("T:B")!=-1){
+                        bcorrect=true;
+                    }
+                }
+
+                if(search.indexOf("T:N")!=-1 && symbols.get(i+2).toString().indexOf("variable")!=-1){
+                    if(symbols.get(i+3).toString().indexOf("T:N")!=-1){
+                        bcorrect=true;
+                    }
                 }
 
                 //error found
@@ -194,7 +244,7 @@ public class TypeCheck {
                     if (Line.indexOf(":") != -1) {
                         Line = Line.substring(Line.indexOf(":") + 1, Line.length());
                     }
-                    throw new TypeException("Assignment must match type of var: " + Line + " cannot be assigned to " + search.substring(search.indexOf("var"), search.length()));
+                    throw new TypeException("Assignment must match type of var: " + Line + " cannot be assigned to " + search);
                 }
             }
             //check string assignments
@@ -210,26 +260,53 @@ public class TypeCheck {
 
                 now=symbols.get(i).toString();
                 //CHECK IF STATEMENTS
-                if(now.indexOf("tok_if 'if'")!=-1) {
+                if(now.indexOf("COND_BRANCH")!=-1) {
                     bcorrect = false;
-                    if (symbols.get(i + 3).toString().indexOf("bool") != -1) {
+                    if (symbols.get(i + 3).toString().indexOf("B") != -1) {
                         bcorrect = true;
                     }
+
+                    if (symbols.get(i + 2).toString().indexOf("bool 'T'") != -1 ) {
+                        bcorrect = true;
+                    }
+
                     if (!bcorrect) {
-                        throw new TypeException("Expected bool condition but received "+ symbols.get(i + 3).toString().substring(symbols.get(i + 3).toString().indexOf("'")+1,symbols.get(i + 3).toString().length()-1));
+                        throw new TypeException("Expected bool condition but received "+ symbols.get(i + 3).toString().substring(symbols.get(i + 3).toString().indexOf("'")+1,symbols.get(i + 3).toString().length()));
                     }
                 }
                 //CHECKS WHILE LOOPS
 
-                if(now.indexOf("loop 'while'")!=-1) {
+                if(now.indexOf("COND_LOOP")!=-1 && symbols.get(i + 1).toString().indexOf("while")!=-1) {
                     bcorrect=false;
-                    System.out.println(symbols.get(i + 2).toString());
-                    if (symbols.get(i + 2).toString().indexOf("bool") != -1 || symbols.get(i + 3).toString().indexOf("bool") != -1) {
+
+
+                    if (symbols.get(i + 3).toString().indexOf("bool 'T'") != -1 ) {
                         bcorrect = true;
+                        //System.out.println("Enter");
                     }
+
+
+                  /*  boolean bone;
+                    if(symbols.get(i + 3).toString().indexOf("VAR")=-1){
+                        bone=true;
+                    }else{
+                        bone=false;
+                    }*/
+
+                    if ((symbols.get(i + 3).toString().indexOf("B") != -1) && (symbols.get(i + 3).toString().indexOf("VAR")==-1) ) {
+                        bcorrect = true;
+                      //  System.out.println("Enter"+symbols.get(i + 3).toString());
+                    }
+
+                    if (symbols.get(i + 4).toString().indexOf("B") != -1 && symbols.get(i + 3).toString().indexOf("VAR")==-1) {
+                        bcorrect = true;
+
+                    }
+
+
                     if (!bcorrect) {
                         newvar=symbols.get(i + 3).toString();
-                        throw new TypeException("While loop expected bool condition but received "+newvar.substring(newvar.indexOf("'")+1,newvar.length()-1));
+                        throw new TypeException("While loop expected bool condition but received "+newvar.substring(newvar.indexOf("'")+1,newvar.length()));
                     }
 
                 }
@@ -237,24 +314,32 @@ public class TypeCheck {
                 //CHECKS CALC STATEMENTS
                 if(now.indexOf("calc")!=-1) {
                     bcorrect=false;
-                    if (symbols.get(i + 4).toString().indexOf("num") != -1 && symbols.get(i + 8).toString().indexOf("num") != -1) {
+                    if (symbols.get(i + 2).toString().indexOf("NUMEXPR") != -1 && symbols.get(i + 4).toString().indexOf("NUMEXPR") != -1) {
                         bcorrect = true;
                     }
-                    if (!bcorrect) {
-                        newvar=symbols.get(i + 4).toString();
+                    if(symbols.get(i + 2).toString().indexOf("sub")!=-1 || symbols.get(i + 2).toString().indexOf("add")!=-1|| symbols.get(i +2).toString().indexOf("mult")!=-1 && symbols.get(i + 4).toString().indexOf("NUMEXPR") != -1){
+                        bcorrect = true;
+                    }
 
-                        newvar2=symbols.get(i + 8).toString();
-                        System.out.println(newvar2);
-                        throw new TypeException("Expected (numexpr,numexpr) received: ("+newvar.substring(newvar.indexOf("'"),newvar.length())+","+newvar2.substring(newvar2.indexOf("'"),newvar2.length())+")");
+                    if(symbols.get(i + 4).toString().indexOf("sub")!=-1 || symbols.get(i + 4).toString().indexOf("add")!=-1 || symbols.get(i + 4).toString().indexOf("mult")!=-1 && symbols.get(i + 2).toString().indexOf("NUMEXPR") != -1){
+                        bcorrect = true;
+                    }
+
+                    if (!bcorrect) {
+                        newvar=symbols.get(i + 2).toString();
+
+                        newvar2=symbols.get(i + 4).toString();
+                        //System.out.println(newvar2);
+                        throw new TypeException("Expected (numexpr,numexpr) received: ("+newvar+","+newvar2+")");
                     }
                 }
 
                 //CHECKS FOR LOOPS
                 if(now.indexOf("loop 'for'")!=-1) {
                     bcorrect=false;
-                    if (symbols.get(i + 2).toString().indexOf("num") != -1 && symbols.get(i + 4).toString().indexOf("num") != -1){
-                        if (symbols.get(i + 6).toString().indexOf("num") != -1 && symbols.get(i + 8).toString().indexOf("num") != -1){
-                            if (symbols.get(i + 10).toString().indexOf("num") != -1){
+                    if (symbols.get(i + 2).toString().indexOf("N") != -1 && symbols.get(i + 4).toString().indexOf("N") != -1){
+                        if (symbols.get(i + 6).toString().indexOf("N") != -1 && symbols.get(i + 8).toString().indexOf("N") != -1){
+                            if (symbols.get(i + 10).toString().indexOf("N") != -1){
                                 bcorrect=true;
                             }
                         }
@@ -305,7 +390,7 @@ public class TypeCheck {
         //check nums
         for(int i=0;i<Nums.size();i++){
             sNum=Nums.get(i).toString();
-            position=sNum.indexOf("T:num");
+            position=sNum.indexOf("T:N");
 
             if(position!=-1){
                 if(iSearch.indexOf(sNum.substring(5,position))!=-1){
@@ -318,7 +403,7 @@ public class TypeCheck {
         //check bools
         for(int i=0;i<Bools.size();i++){
             sNum=Bools.get(i).toString();
-            position=sNum.indexOf("T:bool");
+            position=sNum.indexOf("T:B");
             if(position!=-1){
                 if(iSearch.indexOf(sNum.substring(5,position))!=-1){
                     bfound= true;
@@ -330,7 +415,7 @@ public class TypeCheck {
         //check Strings
         for(int i=0;i<Strings.size();i++){
             sNum=Strings.get(i).toString();
-            position=sNum.indexOf("T:string");
+            position=sNum.indexOf("T:S");
             if(position!=-1){
                 if(iSearch.indexOf(sNum.substring(5,position))!=-1){
                     bfound= true;
