@@ -262,8 +262,26 @@ public class TypeCheck {
         String now;
         String newvar,newvar2,newvar3,newvar4,newvar5;
         for(int i=0;i<symbols.size();i++){
+		  now=symbols.get(i).toString();
 
-                now=symbols.get(i).toString();
+		//check < or >
+		if(now.indexOf("bool '<'")!=-1 || now.indexOf("bool '>'")!=-1) {
+			if(symbols.get(i+2).toString().indexOf("T:N")==-1 || symbols.get(i+4).toString().indexOf("T:N")==-1){
+				 throw new TypeException("Expected num<num || num>num but received "+symbols.get(i+2).toString()+" <||> "+symbols.get(i+4).toString()); 
+			}
+		}
+		
+		
+		if(now.indexOf("bool 'and'")!=-1 || now.indexOf("bool 'or'")!=-1) {
+			
+			if(symbols.get(i+2).toString().indexOf("B")==-1 || symbols.get(i+4).toString().indexOf("B")==-1){
+				 throw new TypeException("Expected and(bool,bool) || or (bool,bool) but received "+symbols.get(i+2).toString()+" <,> "+symbols.get(i+4).toString()); 
+			}
+		
+		}
+
+
+              
                 //CHECK IF STATEMENTS
                 if(now.indexOf("COND_BRANCH")!=-1) {
                     bcorrect = false;
