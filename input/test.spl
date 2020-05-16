@@ -1,26 +1,18 @@
-string wrong;
-string correct;
-bool eqv;
-wrong = "wrong";
-correct = "correct";
-eqv = F;
-eqv = "correct";
-
-num i;
-num a;
-
-a = "x";
-
-
-for (i = 0; i < a; i = add(i, 1))
-{
-    output (correct);
-
-    for (i = 0; i < a; i = add(i, 1))
-    {
-       output (correct)
-    }
+bool j;
+string rvqf;
+if (not and(eq(j, j), and(and(j, j), j))) then {
+  input(rvqf)
 };
 
-num other;
-other = "wrong"
+
+
+num kmd;
+halt;
+
+kmd = add(kmd, add(kmd, kmd));
+bool tc;
+halt;
+
+proc myproc {
+  num myvariablename
+}

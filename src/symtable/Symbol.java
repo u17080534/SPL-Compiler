@@ -37,7 +37,7 @@ public class Symbol
 
 	public void setExpression(String expression)
 	{
-		this.alias = this.expr.getID() + " " + this.expr.getExpr();
+		this.alias = this.expr.getExpr();
 		this.expr.setExpr(expression);
 	}
 
@@ -73,6 +73,9 @@ public class Symbol
 
 	public String getAlias()
 	{
+		if(this.alias.equals(""))
+			this.alias = this.expr.getExpr();
+
 		return this.alias;
 	}
 
@@ -98,23 +101,36 @@ public class Symbol
 		if(this.scope != -1)
 			str = "[" + this.scope + "] " + str;
 
+
+		if(!this.type.equals(""))
+			str += " " + this.type;
+
 		return str;
+	}
+
+	public String toPrint()
+	{
+		String strAlias = this.expr.getExpr();
+		String strType = "";
+
+		if(!this.alias.equals(""))
+			strAlias = this.alias;
+
+		if(!this.type.equals(""))
+			strType = " " + this.type;
+
+		return  this.expr.getID() + ":" + strAlias + strType;
 	}
 
 	@Override
 	public String toString()
 	{	
-		if(this.alias.equals("")){
-			if(type!=""){
-				return this.expr.getID()+":"+this.expr.getExpr()+" T:"+this.getType();
-			}
-			
-			return this.expr.getID()+":"+this.expr.getExpr();
-			
-		}
+		// String strAlias = this.expr.getExpr();
+		String strType = "";
+
+		if(!this.type.equals(""))
+			strType = " " + this.type;
 	
-		
-		
-		return  this.alias+" T:"+this.getType();
+		return  this.expr.getID() + ":" + this.expr.getExpr() + strType;
 	}
 }

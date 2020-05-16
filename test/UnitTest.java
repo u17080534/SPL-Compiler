@@ -130,7 +130,7 @@ public class UnitTest
             "Syntax Error: Unexpected Token: tok_open_brace - proc identifier expected [proc - tok_proc[1,10]]",//11
             "Syntax Error: Invalid boolean expression given [m - tok_identifier[6,11]]",//12
             "Syntax Error: Expected Closing Brace\n" +
-                "\tHint: You may be missing a semicolon (;) between instructions [} - tok_close_brace[12,6]]",//9,///error/13
+                "\tHin You may be missing a semicolon (;) between instructions [} - tok_close_brace[12,6]]",//9,///error/13
             "Syntax Error: Final instruction in code block has a trailing semicolon (;) [; - tok_semi[4,14]]",//15
             ""//16
         };
@@ -220,43 +220,37 @@ public class UnitTest
         System.out.println("\tTYPE CHECK UNIT TESTING...\n");
         
         String[] args = {
-            //IO calls
-            "input/TypeCheckTest/TestIO1.spl",
-            // "input/TypeCheckTest/TestAssign.spl",
-            "input/TypeCheckTest/TestAssign2.spl",
-            "input/TypeCheckTest/TestAssign3.spl",
-            "input/TypeCheckTest/TestIF.spl",
-            "input/TypeCheckTest/TestWhile.spl",
-           "input/TypeCheckTest/TestCalc.spl",
-            "input/TypeCheckTest/NestedCalc.spl",
-            "input/TypeCheckTest/ANestedCalcCorrect.spl",
-            "input/TypeCheckTest/ANestedFor.spl",
-            "input/TypeCheckTest/ANestedForCorrect.spl",
-            "input/TypeCheckTest/AAssigntest.spl",
-
-
-
+            "input/TypeCheckTest/TypeCheckTest1.spl",
+            "input/TypeCheckTest/TypeCheckTest2.spl",
+            "input/TypeCheckTest/TypeCheckTest3.spl",
+            "input/TypeCheckTest/TypeCheckTest4.spl",
+            "input/TypeCheckTest/TypeCheckTest5.spl",
+            "input/TypeCheckTest/TypeCheckTest6.spl",
+            "input/TypeCheckTest/TypeCheckTest7.spl",
+            "input/TypeCheckTest/TypeCheckTest8.spl",
+            "input/TypeCheckTest/TypeCheckTest9.spl",
+            "input/TypeCheckTest/TypeCheckTest10.spl",
+            "input/TypeCheckTest/TypeCheckTest11.spl",
+            "input/TypeCheckTest/TypeCheckTest12.spl"
         };
 
         String[] results = {
-            //IO calls
-             "Type Exception: IO call, Var must be of type num,bool or string: 211 variable 'guess' T:proc",
-            //"Type Exception: Assignment must match type of var: string_literal 'guess' cannot be assigned to 153 variable 'x' T:N",
-             "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to 153 variable 'x' T:N",
-             "Type Exception: Assignment must match type of var: assign 'variable' cannot be assigned to 153 variable 'correct' T:S",
-             "Type Exception: Expected bool condition but received answer' T:N",
-             "Type Exception: While loop expected bool condition but received 154:VARIABLE T:P",
-             "",
-             "Type Exception: Expected (numexpr,numexpr) received: (76:NUMEXPR,78 variable 'wrong' T:S)",
-             "",
-             "Type Exception: For loop syntax expected is: for(numexpr,numxpr>numxpr;add(numxpr,numxpr) received: for('i' T:N=0;'eqv' T:B<||>'a' T:N;add('i' T:N,'i' T:N))",
-             "",
-             "Type Exception: Assignment must match type of var: assign 'numexpr' cannot be assigned to 84 variable 'eqv' T:B",
+            "Type Exception: Variable must be of type num, bool or string in IO call [variable 'guess'][49,21]", //1
+            "Type Exception: Assignment must match type of variable [variable 'x'][36,4]", //2
+            "Type Exception: Assignment must match type of variable [variable 'x'][36,5]", //3
+            "Type Exception: Assignment must match type of variable [variable 'correct'][36,5]", //4
+            "Type Exception: Boolean type mismatch inside if condition [variable 'answer'][40,10]", //5
+            "Type Exception: Boolean type mismatch inside while loop condition [variable 'guess'][37,11]", //6
+            "Type Exception: Number expression contains symbols that are not of type num [calc 'add'][14,5]", //7
+            "", //8
+            "Type Exception: For loop expression types do no match [variable 'i'][17,10]", //9
+            "", //10
+            "Type Exception: Assignment must match type of variable [variable 'eqv'][14,6]", //11
+            "Type Exception: Boolean expression contains symbols that are not of type bool [bool 'not'][10,5]" //12
         };
 
         for(int index = 0; index < args.length; index++)
         {
-        
             String result = "";
             try
             {

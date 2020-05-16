@@ -9,6 +9,9 @@ hello;
 num i;
 num a;
 
+i = 2;
+
+i = add(i, correct);
 
 for (i = 0; i < a; i = add(i, 1))
 {

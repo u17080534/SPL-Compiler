@@ -4,7 +4,12 @@ bool eqv;
 wrong = "wrong";
 correct = "correct";
 eqv = F;
+bool j;
+j = eqv;
 
+if (not and(eq(j, wrong), and(and(j, j), and(wrong, j)))) then {
+  input(correct)
+};
 
 num i;
 num a;

@@ -1,8 +1,0 @@
-
-string other;
-string WRONG;
-
-   while(one)
-    {
-    	other="cow"
-    }

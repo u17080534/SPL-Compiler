@@ -101,3 +101,22 @@
 
 		CONTRIBUTIONS:	JORDAN MANAS
 
+03 - TYPE CHECKING
+
+	We do not allow variables of same name different type this would result in an error.
+
+	1) From the list of all symbols build lists containing all variables of different types. In other words build a sperate list for string,proc,num and bool variables. 
+
+	2) Find all variables of these types in the program and assign the respective variable types to them.
+
+	3) Find all the IO checks and ensure trough an if statement they are of types bool,string or num.
+
+	4) For the Assignment checks find all variable assignments and ensure that the assignment matches the type of the variable it is being assigned to.
+
+	5) For calculations that could be nested we use recursion to first check the most inner calculation statement and simply throw an error if a non numerical value or variable was found
+
+	6) For If and while loops we simply ensure trough if statements that the value within the condition is of type bool.
+
+	7) For for loops we use if statements to ensure that all the values within is of type boolean we can assume the calc statement within the loop is correct since it was already checked in step 5.
+
+		CONTRIBUTIONS:	PATRIC EDWARDS

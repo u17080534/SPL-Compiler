@@ -23,6 +23,7 @@ public class TerminalExpression extends Expression
 		{
 			case TOK_PROC:
 				this.alias = "proc";
+				this.symbol.setType("P");
 				break;
 				//USAGE
 			case TOK_VAR:
@@ -30,6 +31,7 @@ public class TerminalExpression extends Expression
 				break;
 			case TOK_CALL:
 				this.alias = "call";
+				this.symbol.setType("P");
 				break;
 				//LOOP
 			case TOK_WHILE:
@@ -58,37 +60,48 @@ public class TerminalExpression extends Expression
 				//BOOL
 			case TOK_T:
 				this.alias = "bool";//"True";
+				this.symbol.setType("B");
 				break;
 			case TOK_F:
 				this.alias = "bool";//"False";
+				this.symbol.setType("B");
 				break;
 			case TOK_EQ:
 				this.alias = "bool";//"eq";
+				this.symbol.setType("B");
 				break;
 			case TOK_LT:
 				this.alias = "bool";//"<";
+				this.symbol.setType("B");
 				break;
 			case TOK_GT:
 				this.alias = "bool";//">";
+				this.symbol.setType("B");
 				break;
 			case TOK_NOT:
 				this.alias = "bool";//"not";
+				this.symbol.setType("B");
 				break;
 			case TOK_AND:
 				this.alias = "bool";//"and";
+				this.symbol.setType("B");
 				break;
 			case TOK_OR:
 				this.alias = "bool";//"or";
+				this.symbol.setType("B");
 				break;
 				//CALC
 			case TOK_ADD:
 				this.alias = "calc";//"add";
+				this.symbol.setType("N");
 				break;
 			case TOK_SUB:
 				this.alias = "calc";//"sub";
+				this.symbol.setType("N");
 				break;
 			case TOK_MULT:
 				this.alias = "calc";//"mult";
+				this.symbol.setType("N");
 				break;
 				//ASSIGN
 			case TOK_ASSN:
@@ -96,9 +109,11 @@ public class TerminalExpression extends Expression
 				break;
 			case TOK_S:
 				this.alias = "string_literal";
+				this.symbol.setType("S");
 				break;
 			case TOK_N:
 				this.alias = "number_literal";
+				this.symbol.setType("N");
 				break;
 		}
 
@@ -119,6 +134,12 @@ public class TerminalExpression extends Expression
 	{
 		this.symbol.setType(type);
 		this.parent.setType(type);
+	}
+
+	@Override
+	public String getTerminalType()
+	{
+		return this.symbol.getType();
 	}
 
 	public String getLocation()

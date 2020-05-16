@@ -123,6 +123,19 @@ public abstract class Expression
 		this.symbol.setType(type);
 	}
 
+	public String getTerminalType()
+	{
+		String type = type = this.descendents.get(0).getTerminalType();
+
+		for (int index = 1; index < this.descendents.size(); index++)
+		{
+			if(!type.equals(this.descendents.get(index).getTerminalType()))
+				return "";
+		}
+		this.symbol.setType(type);
+		return type;
+	}
+
 	public String getExpression()
 	{
 		String str = this.id + ":";

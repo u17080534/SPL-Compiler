@@ -14,9 +14,13 @@ public class TypeException extends AnalysisException
         super(sym, message);
     }
 
-    @Override public String toString() 
+    @Override 
+    public String toString() 
 	{ 
 		String str = this.getMessage();
+
+        // str = str.substring(0, str.lastIndexOf("T:")) + str.substring(str.lastIndexOf("T:") + 2, str.length());
+
 		return "Type Exception: " + str;
 	}
 }
