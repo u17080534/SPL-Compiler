@@ -228,6 +228,12 @@ public class UnitTest
             "input/TypeCheckTest/TestIF.spl",
             "input/TypeCheckTest/TestWhile.spl",
            "input/TypeCheckTest/TestCalc.spl",
+            "input/TypeCheckTest/NestedCalc.spl",
+            "input/TypeCheckTest/ANestedCalcCorrect.spl",
+            "input/TypeCheckTest/ANestedFor.spl",
+            "input/TypeCheckTest/ANestedForCorrect.spl",
+            "input/TypeCheckTest/AAssigntest.spl",
+
 
 
         };
@@ -241,7 +247,11 @@ public class UnitTest
              "Type Exception: Expected bool condition but received answer' T:N",
              "Type Exception: While loop expected bool condition but received 154:VARIABLE T:P",
              "",
-
+             "Type Exception: Expected (numexpr,numexpr) received: (76:NUMEXPR,78 variable 'wrong' T:S)",
+             "",
+             "Type Exception: For loop syntax expected is: for(numexpr,numxpr>numxpr;add(numxpr,numxpr) received: for('i' T:N=0;'eqv' T:B<||>'a' T:N;add('i' T:N,'i' T:N))",
+             "",
+             "Type Exception: Assignment must match type of var: assign 'numexpr' cannot be assigned to 84 variable 'eqv' T:B",
         };
 
         for(int index = 0; index < args.length; index++)
