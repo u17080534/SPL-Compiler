@@ -16,6 +16,7 @@ import exception.*;
 //SPL-COMPILER
 public class TypeCheck {
 
+
     public static void check(AbstractSyntaxTree tree, SymbolTable table) throws TypeException {
 
         //vectors
@@ -33,6 +34,7 @@ public class TypeCheck {
         //find all variable declerations
         String search;
         String output;
+        boolean bnested;
         System.out.println("SYMBOL TABLE");
         for (int i = 0; i < symbols.size(); i++) {
             search = symbols.get(i).toString();
@@ -317,12 +319,22 @@ public class TypeCheck {
                     if (symbols.get(i + 2).toString().indexOf("NUMEXPR") != -1 && symbols.get(i + 4).toString().indexOf("NUMEXPR") != -1) {
                         bcorrect = true;
                     }
-                    if(symbols.get(i + 2).toString().indexOf("sub")!=-1 || symbols.get(i + 2).toString().indexOf("add")!=-1|| symbols.get(i +2).toString().indexOf("mult")!=-1 && symbols.get(i + 4).toString().indexOf("NUMEXPR") != -1){
-                        bcorrect = true;
-                    }
+                    if(symbols.get(i + 2).toString().indexOf("sub")!=-1 || symbols.get(i + 2).toString().indexOf("add")!=-1|| symbols.get(i +2).toString().indexOf("mult")!=-1){
+                        bnested=checkCalc(symbols,i+2);
+                        bcorrect=bnested;
+                        if(bnested==false){
 
-                    if(symbols.get(i + 4).toString().indexOf("sub")!=-1 || symbols.get(i + 4).toString().indexOf("add")!=-1 || symbols.get(i + 4).toString().indexOf("mult")!=-1 && symbols.get(i + 2).toString().indexOf("NUMEXPR") != -1){
-                        bcorrect = true;
+                            throw new TypeException("Expected (numexpr,numexpr) but mistake found in "+symbols.get(i + 2).toString());
+                        }
+                    }
+                    bnested=false;
+                    if(symbols.get(i + 4).toString().indexOf("sub")!=-1 || symbols.get(i + 4).toString().indexOf("add")!=-1|| symbols.get(i +4).toString().indexOf("mult")!=-1){
+                        bnested=checkCalc(symbols,i+4);
+                        bcorrect=bnested;
+                        if(bnested==false){
+
+                            throw new TypeException("Expected (numexpr,numexpr) but mistake found in "+symbols.get(i + 4).toString());
+                        }
                     }
 
                     if (!bcorrect) {
@@ -425,6 +437,35 @@ public class TypeCheck {
 
         return bfound;
     }
+
+    public static boolean checkCalc( Vector<Symbol> symbols,int i) throws TypeException {
+        boolean bcor=false;
+        boolean bnested=false;
+
+        if (symbols.get(i + 2).toString().indexOf("NUMEXPR") != -1 && symbols.get(i + 4).toString().indexOf("NUMEXPR") != -1) {
+
+            return true;
+        }
+        if(symbols.get(i + 2).toString().indexOf("sub")!=-1 || symbols.get(i + 2).toString().indexOf("add")!=-1|| symbols.get(i +2).toString().indexOf("mult")!=-1){
+            bnested=checkCalc(symbols,i+2);
+
+            if(bnested==false){
+                throw new TypeException("Expected (numexpr,numexpr) but mistake found in "+symbols.get(i + 2).toString());
+            }
+        }
+        bnested=false;
+        if(symbols.get(i + 4).toString().indexOf("sub")!=-1 || symbols.get(i + 4).toString().indexOf("add")!=-1|| symbols.get(i +4).toString().indexOf("mult")!=-1){
+
+            bnested=checkCalc(symbols,i+4);
+
+            if(bnested==false){
+                throw new TypeException("Expected (numexpr,numexpr) but mistake found in "+symbols.get(i + 4).toString());
+            }
+        }
+
+        return false;
+    };
+
 
     //This Can Be Removed as Cache Class is used to rewrite file
     //Write types to symbol file
