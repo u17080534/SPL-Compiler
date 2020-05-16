@@ -1,0 +1,30 @@
+string wrong;
+string correct;
+bool eqv;
+wrong = "wrong";
+correct = "correct";
+eqv = F;
+
+
+num i;
+num a;
+
+a=i;
+wrong=correct;
+eqv=T;
+
+eqv=1;
+
+i=add(sub(1,2), add(1,2));
+
+for (i = 0; i < a; i = add(i, 1))
+{
+    output (correct);
+
+    for (i = 0; i < a; i = add(i, 1))
+    {
+       output (correct)
+    }
+};
+
+num other
