@@ -35,6 +35,7 @@ public class TypeCheck {
         String search;
         String output;
         boolean bnested;
+        System.out.println("");
         System.out.println("SYMBOL TABLE");
         for (int i = 0; i < symbols.size(); i++) {
             search = symbols.get(i).toString();
@@ -45,8 +46,6 @@ public class TypeCheck {
             }else{
                 System.out.println(symbols.get(i));
             }
-
-
             String find, save;
             if (search.indexOf("type") != -1) {
 
@@ -148,6 +147,10 @@ public class TypeCheck {
 
             }
         }
+
+        System.out.println("END OF SYMBOL TABLE");
+        System.out.println("");
+
 
 
         //IO checks
