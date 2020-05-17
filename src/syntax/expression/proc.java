@@ -16,11 +16,11 @@ public class proc extends Expression
 		this.expr = "PROC";
 	}  
 
+	//CODE GEN FOR INSTR
+	//!address this
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
 		//Label the start of the proc
-
 
 		int index = absFile.getLabel(this.proced.getSymbol().getProc()); //pos of current proc in file
 
@@ -33,7 +33,7 @@ public class proc extends Expression
 
 		//Removes Duplicate RETURNS caused by nested procs without instructions (mostly needed for robustness and handling user inefficiencies)
 		if(absFile.getPointed(-1).toString().indexOf("RETURN") < 0)
-			absFile.add(new Line("RETURN"), true);
+			absFile.add(new Line("RETURN"));
 
 		absFile.label("PROC_DEFS");
 

@@ -17,22 +17,23 @@ public class cond_branch extends Expression
 		this.expr = "COND_BRANCH";
 	}  
 
+	//CODE GEN FOR INSTR
+	//!address this
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
 		/*
 		IF:
-			N   		 	TMPI = <BOOL>
-			N   			TMPI = NOT TMPI
-			N   			IF TMPI THEN GOTO %IF_END+1%
+			N   		 	TMPC = <BOOL>
+			N   			TMPC = NOT TMPC
+			N   			IF TMPC THEN GOTO %IF_END+1%
 			%IF_END%        <CODE>
 		IF-ELSE:
-			N   		 	TMPI = <BOOL>
-			N   			IF TMPI THEN GOTO %IF_ELSE%
+			N   		 	TMPC = <BOOL>
+			N   			IF TMPC THEN GOTO %IF_ELSE%
 			N   			<ELSE>
 			N 				GOTO %IF_END+1%
-			%IF_ELSE%    	TMPI = NOT TMPI
-			N 			   	IF TMPI THEN GOTO %IF_END+1%
+			%IF_ELSE%    	TMPC = NOT TMPC
+			N 			   	IF TMPC THEN GOTO %IF_END+1%
 			%IF_END%        <CODE>
 		*/
 
@@ -44,11 +45,11 @@ public class cond_branch extends Expression
 
 		if(this.cond_branch_Ex != null)
 		{
-			absFile.add(new Line("TMPI = " + this.boolEx.trans(absFile).toString()), true);
+			absFile.add(new Line("TMPC = " + this.boolEx.trans(absFile).toString()));
 
-			absFile.add(new Line("TMPI = NOT TMPI"), true);
+			absFile.add(new Line("TMPC = NOT TMPC"));
 
-			absFile.add(new Line("IF TMPI THEN GOTO %" + lblEnd + "+1%"), true);
+			absFile.add(new Line("IF TMPC THEN GOTO %" + lblEnd + "+1%"));
 
 			codeTrans = this.codeEx.trans(absFile);
 
@@ -56,19 +57,19 @@ public class cond_branch extends Expression
 		}
 		else
 		{
-			absFile.add(new Line("TMPI = " + this.boolEx.trans(absFile).toString()), true);
+			absFile.add(new Line("TMPC = " + this.boolEx.trans(absFile).toString()));
 
-			absFile.add(new Line("IF TMPI THEN GOTO %" + lblElse + "%"), true);
+			absFile.add(new Line("IF TMPC THEN GOTO %" + lblElse + "%"));
 
 			this.cond_branch_Ex.trans(absFile);
 
-			absFile.add(new Line("GOTO %" + lblEnd + "+1%"), true);
+			absFile.add(new Line("GOTO %" + lblEnd + "+1%"));
 
 			absFile.label(lblElse);
 
-			absFile.add(new Line("TMPI = NOT TMPI"), true);
+			absFile.add(new Line("TMPC = NOT TMPC"));
 
-			absFile.add(new Line("IF TMPI THEN GOTO %" + lblEnd + "+1%"), true);
+			absFile.add(new Line("IF TMPC THEN GOTO %" + lblEnd + "+1%"));
 
 			codeTrans = this.codeEx.trans(absFile);
 

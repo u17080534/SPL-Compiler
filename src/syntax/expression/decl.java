@@ -16,19 +16,15 @@ public class decl extends Expression
 		this.decl_Ex = e2; 
 	}  
 
+	//NO CODE GEN FOR INSTR
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		Line l1 = this.typeEx.trans(absFile);
+		this.typeEx.trans(absFile);
 
-		Line l2 = this.nameEx.trans(absFile);
+		this.nameEx.trans(absFile);
 
-		Line l3 = this.decl_Ex.trans(absFile);
-
-		Line line = new Line(l1.toString() + l2.toString());
+		this.decl_Ex.trans(absFile);
 		
-		// Do nothing here because declarations are only needed for static analysis
-
 		return null;   
 	} 
 }

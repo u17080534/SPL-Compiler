@@ -30,9 +30,10 @@ public class cond_loop extends Expression
 		this.expr = "COND_LOOP";
 	}  
 
+	//CODE GEN FOR INSTR
+	//!address this
 	public Line trans(File absFile)
-	{
-		//System.out.println(this.expr);       
+	{     
 		Line codeTrans = null;
 
 		String ty = this.type.trans(absFile).toString();
@@ -40,33 +41,32 @@ public class cond_loop extends Expression
 		if(ty.equals("while")) //while
 		{
 			/*
-			%LOOP_START% 	TMPW = <BOOL>
-			N   			TMPW = NOT TMPW
-			N   			IF TMPW THEN GOTO %LOOP_END+1%
+			%LOOP_START% 	TMPL = <BOOL>
+			N   			TMPL = NOT TMPL
+			N   			IF TMPL THEN GOTO %LOOP_END+1%
 			N               <CODE>
 			%LOOP_END%      GOTO %LOOP_START%
 			*/
 
-			String temp = "TMPW" + this.getID();
+			String temp = "TMPL" + this.getID();
 
 			String lblStart = "LOOP_START" + this.getID();
 
 			String lblEnd = "LOOP_END" + this.getID();
 
 			absFile.label(lblStart);
-			System.out.println("\tLABELS1: \n" + absFile.getLabels());
-			absFile.add(new Line(temp + " = " + this.condEx1.trans(absFile).toString()), true);
 
-			absFile.add(new Line(temp + " = NOT " + temp), true);
+			absFile.add(new Line(temp + " = " + this.condEx1.trans(absFile).toString()));
 
-			absFile.add(new Line("IF " + temp + " THEN GOTO %" + lblEnd + "%"), true);
+			absFile.add(new Line(temp + " = NOT " + temp));
+
+			absFile.add(new Line("IF " + temp + " THEN GOTO %" + lblEnd + "%"));
 
 			codeTrans = this.condEx2.trans(absFile);
 
 			absFile.label(lblEnd);
-			System.out.println("\tLABELS2: \n" + absFile.getLabels());
-			absFile.add(new Line("GOTO %" + lblStart + "%"), true);
-			System.out.println("\tLABELS3: \n" + absFile.getLabels());
+
+			absFile.add(new Line("GOTO %" + lblStart + "%"));
 		}
 		else if(ty.equals("for")) //for
 		{

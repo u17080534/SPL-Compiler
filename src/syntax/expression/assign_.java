@@ -26,19 +26,14 @@ public class assign_ extends Expression
 
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		Line l1 = this.literal.trans(absFile);
-
-		String str = l1.toString();
+		String assn = this.literal.trans(absFile).toString(); //literal
 
 		if(this.ex != null)
 		{
-			Line l2 = this.ex.trans(absFile);
-
-			if(l2 != null)
-				str = l2.toString();
+			assn = this.ex.trans(absFile).toString();
+			absFile.add(new Line("TMPA" + this.getID() + " = " + assn)); //assign to temp var
 		}
 
-		return new Line(str);
+		return new Line(assn);
 	}
 }

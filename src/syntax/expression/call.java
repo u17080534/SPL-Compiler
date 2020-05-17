@@ -14,10 +14,11 @@ public class call extends Expression
 		this.expr = "CALL";
 	}  
 
+	//CODE GEN FOR INSTR
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		//GOSUB %ID%
-		return new Line("GOSUB %" + this.func.trans(absFile).toString() + "%");   
+		absFile.add(new Line("GOSUB %" + this.func.trans(absFile).toString() + "%"));   
+		
+		return null;
 	}
 }

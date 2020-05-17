@@ -26,16 +26,11 @@ public class prog extends Expression
 
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);    
-
-		Line line = null;
-
-		if(this.codeEx != null)
-			line = this.codeEx.trans(absFile);
+		this.codeEx.trans(absFile);
 
 		if(this.prog_Ex_ != null)
 			this.prog_Ex_.trans(absFile);   
  
-		return line;
+		return null;
 	} 
 } 

@@ -37,10 +37,7 @@ public abstract class Expression
 		this.symbol = new Symbol(this);
 	}
 
-	/**
-		Trans Function for BASIC Code Generation
-		Each concrete implementation will manage and return some Line object, and when necessary will add it to the recursively passed File
-	**/
+	// Trans Function for BASIC Code Generation, Each concrete implementation will manage and return some Line object, and when necessary will add it to the recursively passed File
 	public abstract Line trans(File absFile); 
 
 	public void id()

@@ -16,20 +16,23 @@ public class numexpr extends Expression
 		this.expr = "NUMEXPR";
 	}  
 
-	public numexpr(Expression e) 
+	public numexpr(Expression ex) 
 	{ 
-		super(e);
+		super(ex);
 		this.number = null;
-		this.ex = e;  
+		this.ex = ex;  
 		this.expr = "NUMEXPR";
 	}  
 
 	public Line trans(File absFile)
-	{
-		//System.out.println(this.expr);       
+	{			
+		String temp = "TMPN" + this.getID();
+
 		if(this.number != null)    
-			return this.number.trans(absFile);
-		
-		return this.ex.trans(absFile);
+			absFile.add(new Line(temp + " = " + this.number.trans(absFile)));
+		else
+			absFile.add(new Line(temp + " = " + this.ex.trans(absFile)));
+
+		return new Line(temp);
 	}
 }

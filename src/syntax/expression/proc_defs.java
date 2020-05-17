@@ -17,11 +17,11 @@ public class proc_defs extends Expression
 
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		Line line = this.procEx.trans(absFile);
+		this.procEx.trans(absFile);
 		
-		this.proc_defs_Ex.trans(absFile);
+		if(this.proc_defs_Ex != null)
+			this.proc_defs_Ex.trans(absFile);
 
-		return line;      
+		return null;
 	} 
 }

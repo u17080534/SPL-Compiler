@@ -11,9 +11,11 @@ public class halt extends Expression
 		this.expr = "HALT";
 	}  
 
+	//CODE GEN FOR INSTR
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		return new Line("GOTO %END%");   
+		absFile.add(new Line("GOTO %END%"));
+
+		return null;
 	}
 }

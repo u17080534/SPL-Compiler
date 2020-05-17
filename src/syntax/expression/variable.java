@@ -22,11 +22,10 @@ public class variable extends Expression
 
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       	
 		String name = this.variable.trans(absFile).toString();
 
 		//String variables append $
-		if(this.variable.getType().equals("string"))
+		if(this.variable.getType().equals("S"))
 			name += "$";
 
 		return new Line(name);   

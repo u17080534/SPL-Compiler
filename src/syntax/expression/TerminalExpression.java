@@ -142,6 +142,12 @@ public class TerminalExpression extends Expression
 		return this.symbol.getType();
 	}
 
+	@Override
+	public boolean isTerminal()
+	{
+		return true;
+	} 
+
 	public String getLocation()
 	{
 		return this.token.getLocation();
@@ -152,15 +158,8 @@ public class TerminalExpression extends Expression
 		return this.label;
 	}
 
-	@Override
-	public boolean isTerminal()
-	{
-		return true;
-	} 
-
 	public Line trans(File absFile)
-	{
-		//System.out.println(this.expr);       
+	{     
 		return new Line(this.value);
 	}
 } 

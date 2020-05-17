@@ -6,16 +6,17 @@ import java.io.*;
 //SPL-COMPILER
 public class File
 {
+	private int point;
 	private String name;
 	private Vector<Line> lines;
-	private Map<String, Integer> labels;
-	private int point = -1;
+	private Vector<Label> labels;
 
 	public File(String name)
 	{
 		this.name = name;
 		this.lines = new Vector<Line>();
-		this.labels = new HashMap<String, Integer>();
+		this.labels = new Vector<Label>();
+		this.point = 0;
 	}
 
 	public File(File other)
@@ -27,79 +28,24 @@ public class File
 
 	private void number()
 	{
+		int line_count = 0;
 		for(int index = 0; index < this.lines.size(); index++)
-		{
 			if(this.lines.get(index) != null)
 			{
-				String line = this.lines.get(index).toString();
-
-				int pIndex1 = line.indexOf("%");
-				int pIndex2 = line.lastIndexOf("%");
-
-				if(false && pIndex1 >= 0 && pIndex2 >= 0)
-				{
-					String label = line.substring(pIndex1 + 1, pIndex2);
-
-					int diff = 0;
-
-					int dIndex = label.indexOf("+");
-
-					if(dIndex >= 0)
-					{
-						diff = Integer.parseInt(label.substring(dIndex + 1, label.length()));
-						label = label.substring(0, dIndex);
-					}
-
-					if(this.labels.get(label) == null)
-						System.out.println("ERROR LABEL " + label);
-
-					int lineRef = this.labels.get(label) + diff;
-
-					line = line.substring(0, pIndex1) + lineRef;
-
-					this.lines.get(index).setLine(line);
-				}
-
-				this.lines.get(index).setNumber(index);
+				label_line(this.lines.get(index), this.labels);
+				this.lines.get(index).setNumber(line_count++);
 			}
-		}
 	}
 
 	public void add(Line line)
 	{
 		if(line != null)
 		{
-			if(this.point != -1)
-			{
-				for(HashMap.Entry<String, Integer> label : this.labels.entrySet())
-					if(label.getValue() > this.point)
-						label.setValue(label.getValue() + 1);
+			for(Label label : this.labels)
+				if(!label.isAnchor() && label.getLine() > this.point)
+					label.setLine(label.getLine() + 1);
 
-				this.lines.add(this.point, line);
-
-				this.point++;
-			}
-			else
-				this.lines.add(line);
-		}
-	}
-
-	public void add(Line line, boolean forcelbl)
-	{
-		if(line != null)
-		{
-			if(this.point != -1)
-			{
-				for(HashMap.Entry<String, Integer> label : this.labels.entrySet())
-					if(label.getValue() > this.point || (forcelbl && label.getValue() == this.point))
-						label.setValue(label.getValue() + 1);
-
-				this.lines.add(this.point, line);
-
-				this.point++;
-			}
-			else
-				this.lines.add(line);
+			this.lines.add(this.point++, line);
 		}
 	}
 
@@ -107,7 +53,7 @@ public class File
 	public int point()
 	{
 		int tmp = this.point;
-		this.point = -1;
+		this.point = this.lines.size();
 		return tmp;
 	}
 
@@ -121,38 +67,44 @@ public class File
 
 	public void label(String label)
 	{
-		int lblIndex = this.lines.size();
-
-		if(this.point != -1)
-			lblIndex = this.point;
-
-		this.labels.put(label, new Integer(lblIndex));
+		this.labels.add(new Label(label, this.point));
 	}
 
-	public void label(String label, int diff)
+	public void label(String label, boolean anchor)
 	{
-		int lblIndex = this.lines.size();
-
-		if(this.point != -1)
-			lblIndex = this.point;
-		
-		this.labels.put(label, new Integer(lblIndex - diff));
+		this.labels.add(new Label(label, this.point, anchor));
 	}
 
-	public boolean hasLabel(String label)
+	public void label(String lbl, int diff)
 	{
-		return this.labels.containsKey(label);
+		this.labels.add(new Label(lbl, this.point - diff));
 	}
 
-	public int getLabel(String label)
+	public boolean hasLabel(String lbl)
 	{
-		if(!this.labels.containsKey(label))
-			return -1;
-
-		return this.labels.get(label);
+		for(Label label : this.labels)
+			if(label.getLabel().equals(lbl))
+				return true;
+		return false;
 	}
 
-	public Map<String, Integer> getLabels()
+	public void anchorLabel(String lbl)
+	{
+		for(Label label : this.labels)
+			if(label.getLabel().equals(lbl))
+				label.anchor();
+	}
+
+	public int getLabel(String lbl)
+	{
+		for(Label label : this.labels)
+			if(label.getLabel().equals(lbl))
+				return label.getLine();
+
+		return -1;
+	}
+
+	public Vector<Label> getLabels()
 	{
 		return this.labels;
 	}
@@ -164,22 +116,12 @@ public class File
 
 	public Line getPointed()
 	{
-		int tmp = this.point;
-		
-		if(tmp == -1)
-			tmp = this.lines.size() - 1;
-
-		return this.lines.get(tmp);
+		return this.lines.get(this.point);
 	}
 
 	public Line getPointed(int diff)
 	{
-		int tmp = this.point + diff;
-		
-		if(tmp == -1)
-			tmp = this.lines.size() - 1;
-
-		return this.lines.get(tmp);
+		return this.lines.get(this.point + diff);
 	}
 
 	@Override
@@ -201,7 +143,7 @@ public class File
 		{
 			refined.point(0);
 
-			refined.add(new Line("GOTO %PROC_DEFS%"), true);
+			refined.add(new Line("GOTO %PROC_DEFS%"));
 
 			refined.point();
 		}
@@ -211,5 +153,88 @@ public class File
 		refined.number();
 
 		return refined;
+	}
+
+	public static String label_line(Line line, Vector<Label> labels)
+	{
+		String label = "";
+
+		int pIndex1 = line.toString().indexOf("%");
+
+		int pIndex2 = line.toString().lastIndexOf("%");
+
+		if(pIndex1 >= 0 && pIndex2 >= 0)
+		{
+			label = line.toString().substring(pIndex1 + 1, pIndex2);
+
+			int diff = 0;
+
+			int dIndex = label.indexOf("+");
+
+			if(dIndex >= 0)
+			{
+				diff = Integer.parseInt(label.substring(dIndex + 1, label.length()));
+				label = label.substring(0, dIndex);
+			}
+
+			// if(labels.get(label) == null)
+			// {
+			// 	int lineRef = labels.get(label).getLine() + diff;
+			// 	line.setLine(line.toString().substring(0, pIndex1) + lineRef);
+			// }
+			// else
+			// 	System.out.println("Labelling Error: " + label);
+
+			for(Label lbl : labels)
+				if(lbl.getLabel().equals(label))
+					line.setLine(line.toString().substring(0, pIndex1) + lbl.getLine() + diff);
+		}
+
+		return label;
+	}
+
+	private class Label 
+	{
+		int line;
+		String label;
+		boolean anchor;
+
+		public Label(String label, int line)
+		{
+			this.label = label;
+			this.line = line;
+			this.anchor = false;
+		}
+
+		public Label(String label, int line, boolean anchor)
+		{
+			this.label = label;
+			this.line = line;
+			this.anchor = anchor;
+		}
+		public String getLabel()
+		{
+			return this.label;
+		}
+
+		public void setLine(int line)
+		{
+			this.line = line;
+		}
+
+		public int getLine()
+		{
+			return this.line;
+		}
+
+		public void anchor()
+		{
+			this.anchor = !this.anchor;
+		}
+
+		public boolean isAnchor()
+		{
+			return this.anchor;
+		}
 	}
 }

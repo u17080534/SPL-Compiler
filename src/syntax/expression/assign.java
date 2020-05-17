@@ -15,14 +15,15 @@ public class assign extends Expression
 		this.assign_Ex = e2; 
 	}  
 
+	//CODE GEN FOR INSTR
 	public Line trans(File absFile)
 	{
-		Line l1 = this.varEx.trans(absFile);
+		String name = this.varEx.trans(absFile).toString();
 		
-		Line l2 = this.assign_Ex.trans(absFile);
+		String assn = this.assign_Ex.trans(absFile).toString();
 
-		String str = l1.toString() + " = " + l2.toString();
+		absFile.add(new Line(name + " = " + assn));
 
-		return new Line(str);
+		return null;
 	}
 }

@@ -65,76 +65,70 @@ public class bool extends Expression
 		return type;
 	}
 
+	//!address this
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		Line line = null;
+		System.out.println(this.expr);       
 
 		String temp = "TMPB" + this.getID();
 
 		if(this.action == null)
 		{
 			absFile.add(new Line(temp + " = " + this.e1.trans(absFile).toString()));
-			return new Line(temp);
-		}
-
-		String distinct = this.action.trans(absFile).toString();
-
-		if(this.e1 == null) // T / F
-		{
-			if(distinct.equals("T"))
-				line = new Line("1");
-			else if(distinct.equals("F"))
-				line = new Line("0");
 		}
 		else
 		{
-			if(this.e2 == null) // ID / NOT 
+			String distinct = this.action.trans(absFile).toString();
+
+			if(this.e1 == null) // T / F
 			{
-				if(distinct.equals("not"))
-				{
-					absFile.add(new Line(temp + " = NOT " + this.e1.trans(absFile).toString()));
-					line = new Line(temp);
-				}
-				else
-					System.out.println("ISSUE " + distinct);
+				if(distinct.equals("T"))
+					return new Line("1");
+
+				if(distinct.equals("F"))
+					return new Line("0");
 			}
-			else // EQ / > / < / AND / OR 
+			else
 			{
-				if(distinct.equals("eq"))
+				if(this.e2 == null) // ID / NOT 
 				{
-					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
-					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
-					absFile.add(new Line(temp + " = " + temp + "1 = " + temp + "2"));
-					line = new Line(temp);
+					if(distinct.equals("not"))
+					{
+						absFile.add(new Line(temp + " = NOT " + this.e1.trans(absFile).toString()));
+					}
 				}
-				else if(distinct.equals(">"))
+				else // EQ / > / < / AND / OR 
 				{
-					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
-					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
-					absFile.add(new Line(temp + " = " + temp + "1 > " + temp + "2"));
-					line = new Line(temp);				
+					if(distinct.equals("eq"))
+					{
+						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
+						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
+						absFile.add(new Line(temp + " = " + temp + "1 = " + temp + "2"));
+					}
+					else if(distinct.equals(">"))
+					{
+						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
+						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
+						absFile.add(new Line(temp + " = " + temp + "1 > " + temp + "2"));
+					}
+					else if(distinct.equals("<"))
+					{
+						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
+						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
+						absFile.add(new Line(temp + " = " + temp + "1 < " + temp + "2"));
+					}
+					else if(distinct.equals("and"))
+					{
+
+					}
+					else if(distinct.equals("or"))
+					{
+
+					}
 				}
-				else if(distinct.equals("<"))
-				{
-					absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
-					absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
-					absFile.add(new Line(temp + " = " + temp + "1 < " + temp + "2"));
-					line = new Line(temp);
-				}
-				else if(distinct.equals("and"))
-				{
-					line = new Line(temp);
-				}
-				else if(distinct.equals("or"))
-				{
-					line = new Line(temp);
-				}
-				else
-					System.out.println("ISSUE " + distinct);
 			}
 		}
 
-		return line;
+		return new Line(temp);
 	}
 }

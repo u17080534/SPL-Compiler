@@ -17,19 +17,19 @@ public class io extends Expression
 		this.expr = "IO";
 	}  
 
+	//CODE GEN FOR INSTR
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
 		String act = this.action.trans(absFile).toString();
 
 		if(act.equals("output"))
-			return new Line("PRINT " + this.varEx.trans(absFile));
+			absFile.add(new Line("PRINT " + this.varEx.trans(absFile)));
 
-		if(act.equals("input"))
+		else if(act.equals("input"))
 		{
 			String label = this.varEx.getLabel();
 			absFile.add(new Line("INPUT " + label));
-			return new Line(this.varEx.trans(absFile) + " = " + label);
+			absFile.add(new Line(this.varEx.trans(absFile) + " = " + label));
 		} 
 		
 		return null;

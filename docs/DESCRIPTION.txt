@@ -120,3 +120,15 @@
 	7) For for loops we use if statements to ensure that all the values within is of type boolean we can assume the calc statement within the loop is correct since it was already checked in step 5.
 
 		CONTRIBUTIONS:	PATRIC EDWARDS
+
+04 - VALUE CHECKING
+
+	<DESCRIPTION>
+
+		CONTRIBUTIONS:	BYRON TOMKINSON
+
+04 - CODE GENERATION
+
+	<DESCRIPTION>
+
+		CONTRIBUTIONS:	JORDAN MANAS

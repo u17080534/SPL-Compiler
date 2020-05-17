@@ -115,14 +115,11 @@ public class Grammar
 			{
 				this.readToken();
 				return PROC_DEFS();
-				// Expression e1 = PROC_DEFS();
-				// return new prog_(e1);
 			}
 
 			else if(this.lookahead != Token.Tok.TOK_CB && this.lookahead != Token.Tok.NULL)
 				throw new SyntaxException(this.current, "Instruction missing semicolon (;) as it has tokens following it");
 			
-			// return new prog_();
 			return null;
 		}
 		catch(Exception error)
@@ -157,11 +154,8 @@ public class Grammar
 			if(this.lookahead == Token.Tok.TOK_PROC)
 			{
 				return PROC_DEFS();
-				// Expression e = PROC_DEFS();
-				// return new proc_defs_(e);
 			}
 			
-			// return new proc_defs_();
 			return null;
 		}
 		catch(Exception ex)
@@ -237,19 +231,15 @@ public class Grammar
 		try
 		{
 			if(this.lookahead == Token.Tok.TOK_SEMI)
-			{
-				// this.readToken();
-				
+			{				
 				if(this.look(1) == Token.Tok.TOK_HALT || this.look(1) == Token.Tok.TOK_NUM || this.look(1) == Token.Tok.TOK_STRING || this.look(1) == Token.Tok.TOK_BOOL || this.look(1) == Token.Tok.TOK_INPUT || this.look(1) == Token.Tok.TOK_OUTPUT || this.look(1) == Token.Tok.TOK_IF || this.look(1) == Token.Tok.TOK_WHILE || this.look(1) == Token.Tok.TOK_FOR || this.look(1) == Token.Tok.TOK_ID)
 				{
 					this.readToken();
 					return CODE();
-					// Expression e = CODE();
-					// return new code_(e);
 				}
 			}
 
-			return new code_();
+			return null;
 		}
 		catch(Exception ex)
 		{
@@ -284,12 +274,10 @@ public class Grammar
 				{
 					this.readToken();
 					return DECL();
-					// Expression e1 = DECL();
-					// return new decl_(e1);
 				}
 			}
 
-			return new decl_();
+			return null;
 		}
 		catch(Exception ex)
 		{
@@ -361,7 +349,6 @@ public class Grammar
 					{
 						this.readToken();
 						return e;
-						// return new cond_branch_(e);
 					}
 
 					throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Closing Brace");
@@ -369,7 +356,6 @@ public class Grammar
 				throw new SyntaxException(this.current, "Invalid Conditional Syntax: Expected Opening Brace");
 			}
 
-			// return new cond_branch_();
 			return null;
 		}
 		catch(Exception ex)

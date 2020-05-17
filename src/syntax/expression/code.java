@@ -17,17 +17,11 @@ public class code extends Expression
 
 	public Line trans(File absFile)
 	{
-		//System.out.println(this.expr);       
-		Line l1 = null;
-
-		if(this.instrEx != null)
-			this.instrEx.trans(absFile);
-			
-		absFile.add(l1, true);
+		this.instrEx.trans(absFile);
 
 		if(this.code_Ex != null)
 			this.code_Ex.trans(absFile);
 		
-		return l1;
+		return null;
 	} 
 }
