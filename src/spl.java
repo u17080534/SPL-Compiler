@@ -28,11 +28,14 @@ public class SPL
 
         if(start == -1)
             start = 0;
+        
         if(end == -1)
             end = file.length();
 
         String filename = file.substring(start, end);
+
         this.filename = filename;
+
         BufferedReader buffer;
 
         try
@@ -63,8 +66,8 @@ public class SPL
                 if(this.parse(tokens))
                     this.analysis();
 
-            // File genFile = File.complete_file(this.tree.generation(this.filename));
-            // this.cache.export(genFile);
+            File genFile = File.complete_file(this.tree.generation(this.filename));
+            this.cache.export(genFile);
         }
         catch(Exception ex)
         {

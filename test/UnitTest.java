@@ -273,4 +273,82 @@ public class UnitTest
         
         System.out.println("\tTYPE CHECK UNIT TESTING COMPLETE...\n");
     } 
+
+    @Ignore
+    public void testValueCheck() 
+    { 
+        System.out.println("\tVALUE CHECK UNIT TESTING...\n");
+        
+        String[] args = {
+            "input/ValueCheck/ValueCheckTest1.spl"
+        };
+
+        String[] results = {
+            "" //1
+        };
+
+        for(int index = 0; index < args.length; index++)
+        {
+            String result = "";
+            try
+            {
+                SPL compiler = new SPL(args[index]);
+                System.out.println(compiler);
+                compiler.parse(compiler.tokenize());
+                compiler.checkScope();
+                compiler.checkType();
+                compiler.checkValues();
+            }
+            catch(Exception e)
+            {
+                result = e.toString();
+            }
+
+            if(result != "")
+                System.out.println("\t" + result + "\n");
+
+            assertEquals(result, results[index]);
+        }
+        
+        System.out.println("\tVALUE CHECK UNIT TESTING COMPLETE...\n");
+    } 
+
+    @Ignore
+    public void testCodeGeneration() 
+    { 
+        System.out.println("\tCODE GENERATION UNIT TESTING...\n");
+        
+        String[] args = {
+            "input/CodeGeneration/CodeGenerationTest1.spl"
+        };
+
+        String[] results = {
+            "" //1
+        };
+
+        for(int index = 0; index < args.length; index++)
+        {
+            String result = "";
+            try
+            {
+                SPL compiler = new SPL(args[index]);
+                System.out.println(compiler);
+                compiler.parse(compiler.tokenize());
+                compiler.checkScope();
+                compiler.checkType();
+                compiler.checkValues();
+            }
+            catch(Exception e)
+            {
+                result = e.toString();
+            }
+
+            if(result != "")
+                System.out.println("\t" + result + "\n");
+
+            assertEquals(result, results[index]);
+        }
+        
+        System.out.println("\tCODE GENERATION UNIT TESTING COMPLETE...\n");
+    } 
 }

@@ -44,14 +44,24 @@ public class bool extends Expression
 	@Override
 	public String getTerminalType()
 	{
-		String type = type = this.descendents.get(0).getTerminalType();
+		String type = this.descendents.get(0).getTerminalType();
 
-		for (int index = 1; index < this.descendents.size(); index++)
+		//SPECIAL ACCOUNTING FOR < AND >
+		if(this.action != null && (Expression.getValue(this.action.toString()).equals(">") || Expression.getValue(this.action.toString()).equals("<")))
 		{
-			if(!type.equals(this.descendents.get(index).getTerminalType()))
-				return "";
+			for (int index = 1; index < this.descendents.size(); index++)
+				if(!this.descendents.get(index).getTerminalType().equals("N"))
+					return "";
 		}
+		else
+		{
+			for (int index = 1; index < this.descendents.size(); index++)
+				if(!type.equals(this.descendents.get(index).getTerminalType()))
+					return "";
+		}
+
 		this.symbol.setType(type);
+
 		return type;
 	}
 

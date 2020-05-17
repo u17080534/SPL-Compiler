@@ -125,13 +125,12 @@ public abstract class Expression
 
 	public String getTerminalType()
 	{
-		String type = type = this.descendents.get(0).getTerminalType();
+		String type = this.descendents.get(0).getTerminalType();
 
 		for (int index = 1; index < this.descendents.size(); index++)
-		{
 			if(!type.equals(this.descendents.get(index).getTerminalType()))
 				return "";
-		}
+
 		this.symbol.setType(type);
 		return type;
 	}

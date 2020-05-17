@@ -1,0 +1,18 @@
+bool j;
+string rvqf;
+if (not and(eq(j, j), and(and(j, j), j))) then {
+  input(rvqf)
+};
+
+
+
+num kmd;
+halt;
+
+kmd = add(kmd, add(kmd, kmd));
+bool tc;
+halt;
+
+proc myproc {
+  num myvariablename
+}

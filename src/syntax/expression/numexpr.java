@@ -24,20 +24,6 @@ public class numexpr extends Expression
 		this.expr = "NUMEXPR";
 	}  
 
-	@Override
-	public String getTerminalType()
-	{
-		String type = type = this.descendents.get(0).getTerminalType();
-
-		for (int index = 1; index < this.descendents.size(); index++)
-		{
-			if(!type.equals(this.descendents.get(index).getTerminalType()))
-				return "";
-		}
-		this.symbol.setType(type);
-		return type;
-	}
-
 	public Line trans(File absFile)
 	{
 		//System.out.println(this.expr);       
