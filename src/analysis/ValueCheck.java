@@ -34,6 +34,7 @@ public class ValueCheck
 
 	private static Vector<Symbol> needsValue = new Vector<>();
 	private static Vector<Symbol> warnings = new Vector<>();
+	private static Vector<Symbol> warningsDisplay = new Vector<>();
 	private static int numOfCond_Branch;
 	private static int numOfCond_Loop;
 
@@ -51,6 +52,7 @@ public class ValueCheck
 
 		needsValue = new Vector<>();
 		warnings = new Vector<>();
+		warningsDisplay = new Vector<>();
 
 		Vector<Symbol> symbols = table.list();
 		boolean doElse;
@@ -105,11 +107,13 @@ public class ValueCheck
 								if(!(variableMap.get(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getDescendents().get(0).getExpr()) == 0)){
 									//variable it is being assign has a value
 									variableMap.put(symbols.get(i).getExpression(), 1);
+									symbols.get(i).hasValue(true);
 								}
 							}
 							else{
 								//not being assign a variable but a literal
 								variableMap.put(symbols.get(i).getExpression(),1);
+								symbols.get(i).hasValue(true);
 							}
 
 
@@ -120,6 +124,7 @@ public class ValueCheck
 						if(variableMap.get(symbols.get(i).getExpression()) != 1){
 
 							variableMap.put(symbols.get(i).getExpression(), 1);
+							symbols.get(i).hasValue(true);
 
 						}
 
@@ -146,6 +151,9 @@ public class ValueCheck
 								needsValueMessage.put(symbols.get(i), "undefined in while statement condition");
 							}
 
+						}
+						else if(variableMap.get(symbols.get(i).getExpression()) == 2 || variableMap.get(symbols.get(i).getExpression()) == 4 || variableMap.get(symbols.get(i).getExpression()) == 3 || variableMap.get(symbols.get(i).getExpression()) == 5){
+							warningsDisplay.add(symbols.get(i));
 						}
 					}
 
@@ -242,10 +250,12 @@ public class ValueCheck
 												//in first 'if' and not in a loop
 												variableMap.put(PROG1symbols.get(n).getExpression(), 2);
 												warnings.add(PROG1symbols.get(n));
+												PROG1symbols.get(n).hasValue(true);
 											}
 											else{
 												variableMap.put(PROG1symbols.get(n).getExpression(), 4);
 												warnings.add(PROG1symbols.get(n));
+												PROG1symbols.get(n).hasValue(true);
 											}
 										}
 									}
@@ -259,10 +269,12 @@ public class ValueCheck
 											//in first 'if' and not in a loop
 											variableMap.put(PROG1symbols.get(n).getExpression(), 2);
 											warnings.add(PROG1symbols.get(n));
+											PROG1symbols.get(n).hasValue(true);
 										}
 										else{
 											variableMap.put(PROG1symbols.get(n).getExpression(), 4);
 											warnings.add(PROG1symbols.get(n));
+											PROG1symbols.get(n).hasValue(true);
 										}
 									}
 
@@ -282,10 +294,12 @@ public class ValueCheck
 										//in first 'if' and not in a loop
 										variableMap.put(PROG1symbols.get(n).getExpression(), 2);
 										warnings.add(PROG1symbols.get(n));
+										PROG1symbols.get(n).hasValue(true);
 									}
 									else{
 										variableMap.put(PROG1symbols.get(n).getExpression(), 4);
 										warnings.add(PROG1symbols.get(n));
+										PROG1symbols.get(n).hasValue(true);
 									}
 
 								}
@@ -313,6 +327,9 @@ public class ValueCheck
 									}
 
 								}
+								else if(variableMap.get(PROG1symbols.get(n).getExpression()) == 2 || variableMap.get(PROG1symbols.get(n).getExpression()) == 4 || variableMap.get(PROG1symbols.get(n).getExpression()) == 3 || variableMap.get(PROG1symbols.get(n).getExpression()) == 5){
+									warningsDisplay.add(PROG1symbols.get(n));
+								}
 							}
 
 						}
@@ -338,6 +355,7 @@ public class ValueCheck
 									if(variableMap.get(PROG2symbols.get(n).getExpression()) != 1){
 										if(variableMap.get(PROG2symbols.get(n).getExpression()) == 2){
 											variableMap.put(PROG2symbols.get(n).getExpression(), 1);
+											PROG2symbols.get(n).hasValue(true);
 
 											//remove from warnings
 											for(int w = 0; w < warnings.size(); w++){
@@ -345,11 +363,17 @@ public class ValueCheck
 													warnings.removeElement(warnings.get(w));
 												}
 											}
+											for(int w = 0; w < warningsDisplay.size(); w++){
+												if (warningsDisplay.get(w).getExpression().equals(PROG2symbols.get(n).getExpression())){
+													warningsDisplay.removeElement(warningsDisplay.get(w));
+												}
+											}
 
 										}
 										else{
 											variableMap.put(PROG2symbols.get(n).getExpression(), 4);
 											warnings.add(PROG2symbols.get(n));
+											PROG2symbols.get(n).hasValue(true);
 										}
 									}
 
@@ -359,6 +383,7 @@ public class ValueCheck
 									if(variableMap.get(PROG2symbols.get(n).getExpression()) != 1){
 										if(variableMap.get(PROG2symbols.get(n).getExpression()) == 2){
 											variableMap.put(PROG2symbols.get(n).getExpression(), 1);
+											PROG2symbols.get(n).hasValue(true);
 
 											//remove from warnings
 											for(int w = 0; w < warnings.size(); w++){
@@ -371,6 +396,7 @@ public class ValueCheck
 										else{
 											variableMap.put(PROG2symbols.get(n).getExpression(), 4);
 											warnings.add(PROG2symbols.get(n));
+											PROG2symbols.get(n).hasValue(true);
 										}
 									}
 
@@ -393,7 +419,12 @@ public class ValueCheck
 											needsValueMessage.put(PROG2symbols.get(n), "undefined in BOOL condition");
 										}
 
+
 									}
+									else if(variableMap.get(PROG2symbols.get(n).getExpression()) == 2 || variableMap.get(PROG2symbols.get(n).getExpression()) == 4 || variableMap.get(PROG2symbols.get(n).getExpression()) == 3 || variableMap.get(PROG2symbols.get(n).getExpression()) == 5){
+										warningsDisplay.add(PROG2symbols.get(n));
+									}
+
 								}
 
 							}
@@ -454,6 +485,7 @@ public class ValueCheck
 									//assign
 									if(WHILEsymbols.get(n+3).getExpression().contains("variable '")){
 										variableMap.put(WHILEsymbols.get(n+3).getExpression(), 1);
+										WHILEsymbols.get(n+3).hasValue(true);
 									}
 
 									//check comparison
@@ -493,12 +525,14 @@ public class ValueCheck
 												//variable it is being assign has a value
 												variableMap.put(WHILEsymbols.get(n).getExpression(), 3);
 												warnings.add(WHILEsymbols.get(n));
+												WHILEsymbols.get(n).hasValue(true);
 											}
 										}
 										else{
 											//not being assigned a variable
 											variableMap.put(WHILEsymbols.get(n).getExpression(), 3);
 											warnings.add(WHILEsymbols.get(n));
+											WHILEsymbols.get(n).hasValue(true);
 										}
 
 
@@ -510,6 +544,7 @@ public class ValueCheck
 									if(variableMap.get(WHILEsymbols.get(n).getExpression()) != 1){
 										variableMap.put(WHILEsymbols.get(n).getExpression(), 3);
 										warnings.add(WHILEsymbols.get(n));
+										WHILEsymbols.get(n).hasValue(true);
 									}
 
 								}
@@ -535,6 +570,9 @@ public class ValueCheck
 										}
 
 									}
+									else if(variableMap.get(WHILEsymbols.get(n).getExpression()) == 2 || variableMap.get(WHILEsymbols.get(n).getExpression()) == 4 || variableMap.get(WHILEsymbols.get(n).getExpression()) == 3 || variableMap.get(WHILEsymbols.get(n).getExpression()) == 5){
+										warningsDisplay.add(WHILEsymbols.get(n));
+									}
 								}
 
 							}
@@ -550,6 +588,7 @@ public class ValueCheck
 						//assign
 						if(symbols.get(i+3).getExpression().contains("variable '")){
 							variableMap.put(symbols.get(i+3).getExpression(), 1);
+							symbols.get(i+3).hasValue(true);
 						}
 
 						//check comparison
@@ -577,6 +616,7 @@ public class ValueCheck
 										//assign
 										if(FORsymbols.get(n+3).getExpression().contains("variable '")){
 											variableMap.put(FORsymbols.get(n+3).getExpression(), 1);
+											FORsymbols.get(n+3).hasValue(true);
 										}
 
 										//check comparison
@@ -595,7 +635,7 @@ public class ValueCheck
 								}
 
 
-								if(FORsymbols.get(n).getExpression().contains("variable '")){
+								if(FORsymbols.get(n).getExpression().contains("variable '")){			//normal variables inside for loop
 
 									//if we haven't seen this variable before, initialize it with a 0.
 									if(!variableMap.containsKey(FORsymbols.get(n).getExpression())){
@@ -616,12 +656,14 @@ public class ValueCheck
 													//variable it is being assign has a value
 													variableMap.put(FORsymbols.get(n).getExpression(), 5);
 													warnings.add(FORsymbols.get(n));
+													FORsymbols.get(n).hasValue(true);
 												}
 											}
 											else{
 												//not being assigned a variable
 												variableMap.put(FORsymbols.get(n).getExpression(), 5);
 												warnings.add(FORsymbols.get(n));
+												FORsymbols.get(n).hasValue(true);
 											}
 
 
@@ -633,6 +675,7 @@ public class ValueCheck
 										if(variableMap.get(FORsymbols.get(n).getExpression()) != 1){
 											variableMap.put(FORsymbols.get(n).getExpression(), 5);
 											warnings.add(FORsymbols.get(n));
+											FORsymbols.get(n).hasValue(true);
 										}
 
 									}
@@ -657,6 +700,9 @@ public class ValueCheck
 												needsValueMessage.put(FORsymbols.get(n), "undefined in while statement condition");
 											}
 
+										}
+										else if(variableMap.get(FORsymbols.get(n).getExpression()) == 2 || variableMap.get(FORsymbols.get(n).getExpression()) == 4 || variableMap.get(FORsymbols.get(n).getExpression()) == 3 || variableMap.get(FORsymbols.get(n).getExpression()) == 5){
+											warningsDisplay.add(FORsymbols.get(n));
 										}
 									}
 
@@ -686,8 +732,7 @@ public class ValueCheck
 		});*/
 
 
-
-		for (Symbol symbol : warnings) 
+		for (Symbol symbol : warningsDisplay)
 			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
 
 		String valueErrors = "";
