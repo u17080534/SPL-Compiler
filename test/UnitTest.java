@@ -280,11 +280,17 @@ public class UnitTest
         System.out.println("\tVALUE CHECK UNIT TESTING...\n");
         
         String[] args = {
-            "input/ValueCheck/ValueCheckTest1.spl"
+            "input/ValueCheckTest/ValueCheckTest1.spl",
+                "input/ValueCheckTest/ValueCheckTest2.spl",
+                "input/ValueCheckTest/ValueCheckTest3.spl"
+		
         };
 
         String[] results = {
-            "" //1
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; ",
+                "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in if statement condition [variable 'answer'][46,17]; Variable undefined in if statement condition [variable 'other'][46,25]; ",
+                "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value to be outputted to the screen [variable 'a'][19,16]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable needs a value to be outputted to the screen [variable 'h'][80,16]; "
+
         };
 
         for(int index = 0; index < args.length; index++)
