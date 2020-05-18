@@ -732,6 +732,21 @@ public class ValueCheck
 		});*/
 
 
+
+
+		for(int i = 0; i < symbols.size(); i++){
+
+			if(symbols.get(i).getHasValue()){
+
+				for(int m = 0; m < symbols.size(); m++){
+					if(symbols.get(m).getExpression().equals(symbols.get(i).getExpression())){
+						symbols.get(m).hasValue(true);
+					}
+				}
+			}
+		}
+
+
 		for (Symbol symbol : warningsDisplay)
 			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
 
