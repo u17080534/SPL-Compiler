@@ -24,7 +24,6 @@ public class ValueCheck
 		//5 - maybe a value from a for loop
 
 	private static Map<String,Integer> variableMap = new HashMap<String, Integer>();
-	private static Map<String,Integer> assignmentInScope = new HashMap<String, Integer>();
 	private static Map<Symbol,String> needsValueMessage = new HashMap<Symbol, String>();
 
 	private static Vector<Symbol> PROG1symbols = new Vector<>();
@@ -35,14 +34,24 @@ public class ValueCheck
 
 	private static Vector<Symbol> needsValue = new Vector<>();
 	private static Vector<Symbol> warnings = new Vector<>();
-	private static Vector<Symbol> declarationWarnings = new Vector<>();
 	private static int numOfCond_Branch;
 	private static int numOfCond_Loop;
 
 
 	public static void check(SymbolTable table) throws ValueException
 	{
-		//System.out.println("Variable value test: ");
+		variableMap = new HashMap<String, Integer>();
+		needsValueMessage = new HashMap<Symbol, String>();
+
+		PROG1symbols = new Vector<>();
+		PROG2symbols = new Vector<>();
+		WHILEsymbols = new Vector<>();
+		FORsymbols = new Vector<>();
+		BOOLsymbols = new Vector<>();
+
+		needsValue = new Vector<>();
+		warnings = new Vector<>();
+
 		Vector<Symbol> symbols = table.list();
 		boolean doElse;
 
@@ -677,8 +686,6 @@ public class ValueCheck
 		});*/
 
 
-		for (Symbol symbol : declarationWarnings)
-			System.out.println("Value Warning: Variable might not be declared [" + symbol.getAlias() + "]" + symbol.getLocation());
 
 		for (Symbol symbol : warnings) 
 			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
@@ -695,6 +702,7 @@ public class ValueCheck
 
 			if(needsValueMessage.containsKey(symbol))
 				msg = needsValueMessage.get(symbol);
+
 
 			valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation() + "; ";
 		}
