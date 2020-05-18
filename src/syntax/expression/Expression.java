@@ -213,7 +213,7 @@ public abstract class Expression
 	@Override 
 	public String toString() 
 	{
-		return this.id + " " + this.expr + "\t" + this.symbol.getType();
+		return this.id + " " + this.expr + "\t" + this.symbol.getType() + this.symbol.hasValueString();
 	}
 
 	public static String getValue(String expr)

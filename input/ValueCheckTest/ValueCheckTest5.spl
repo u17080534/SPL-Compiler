@@ -5,12 +5,8 @@ num i;
 a = -1;
 i = -1;
 
-if((a < i)) then
-{
-    x = 10
-};
 
-if((a < i)) then
+if(or(not and((a < i), (a < i)), or((a < i), (a < i)))) then
 {
     x = 10
 }

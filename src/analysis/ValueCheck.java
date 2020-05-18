@@ -722,20 +722,6 @@ public class ValueCheck
 
 
 
-		for(int i = 0; i < symbols.size(); i++)
-		{
-			if(symbols.get(i).getHasValue()){
-
-				for(int m = 0; m < symbols.size(); m++)
-				{
-					if(symbols.get(m).getExpression().equals(symbols.get(i).getExpression())){
-						symbols.get(m).hasValue(true);
-					}
-				}
-
-			}
-		}
-
 
 		//done
 
@@ -744,10 +730,6 @@ public class ValueCheck
 			System.out.println(entry.getKey() + " " + entry.getValue());
 
 		});*/
-
-
-
-
 
 
 		for (Symbol symbol : warningsDisplay)

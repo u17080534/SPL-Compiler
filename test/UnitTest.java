@@ -1,18 +1,21 @@
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import java.io.*;
+import java.util.*;
+import lexer.*;
+import parser.*;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
+import org.junit.Ignore;
+import static org.junit.Assert.*;
 
 public class UnitTest
 {
     @BeforeClass
-	public static void enter()
-	{
+    public static void enter()
+    {
         System.out.println("\nENTERING TESTING ENVIRONMENT...");
-		System.out.println("\tNOTE: All the errors thrown within JUnit Testing are intended.");
-	} 
+        System.out.println("\tNOTE: All the errors thrown within JUnit Testing are intended.");
+    } 
 
     @AfterClass
     public static void exit()
@@ -21,9 +24,9 @@ public class UnitTest
     } 
 
     @Ignore
-	public void testLexer() 
+    public void testLexer() 
     { 
-		System.out.println("\tLEXER UNIT TESTING...\n");
+        System.out.println("\tLEXER UNIT TESTING...\n");
         
         String[] args = {
             "input/LexerTest/LexerTest1.spl",
@@ -285,10 +288,11 @@ public class UnitTest
         };
 
         String[] results = {
-            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable needs a value to be outputted to the screen [variable 's'][49,21]; ",
-            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in if statement condition [variable 'answer'][46,17]; Variable undefined in if statement condition [variable 'other'][46,25]; ",
-            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value to be outputted to the screen [variable 'a'][19,16]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable needs a value to be outputted to the screen [variable 'h'][79,16]; ",
-            "", ""
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][12,17]; Variable undefined when used in a for loop [variable 'a'][16,21]; Variable needs a value when being assigned to something else [variable 'other'][42,15]; Variable needs a value to be outputted to the screen [variable 't'][43,18]; Variable undefined in BOOL condition [variable 'answer'][45,17]; Variable undefined in BOOL condition [variable 'other'][45,25]; Variable needs a value to be outputted to the screen [variable 's'][48,21]",
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in if statement condition [variable 'answer'][46,17]; Variable undefined in if statement condition [variable 'other'][46,25]",
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value to be outputted to the screen [variable 'a'][19,16]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable needs a value to be outputted to the screen [variable 'h'][79,16]",
+            "",
+            ""
         };
 
         for(int index = 0; index < args.length; index++)
