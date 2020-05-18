@@ -95,6 +95,10 @@ public class Symbol
 	{
 		this.hasValue = has;
 	}
+
+	public boolean getHasValue(){
+		return this.hasValue;
+	}
 	
 	public boolean equals(Symbol other)
 	{
