@@ -234,35 +234,16 @@ public class TypeCheck
             //CHECK IF STATEMENTS
             if(now.indexOf("COND_BRANCH") >= 0)
             {
-                boolean correct = false;
-
-                if(symbols.get(i + 2).getType().equals("B"))
-                    correct = true;
-
-                if(symbols.get(i + 2).toString().indexOf("bool 'T'") >= 0 || symbols.get(i + 2).toString().indexOf("bool 'F'") >= 0)
-                    correct = true;
-
-                if(!correct)
-                    throw new TypeException(symbols.get(i + 3), "Boolean type mismatch inside if condition");
+                if(!symbols.get(i+1).getExpr().getTerminalType().equals("B"))
+                    throw new TypeException(symbols.get(i), "Boolean type mismatch inside if conditional branch");
             }
 
             //CHECKS WHILE LOOPS
-            if(now.indexOf("COND_LOOP") >= 0 && symbols.get(i + 1).toString().indexOf("while") >= 0)
+            // if(now.indexOf("COND_LOOP") >= 0 && symbols.get(i + 1).toString().indexOf("while") >= 0)
+            if(now.indexOf("loop 'while'") >= 0)
             {
-                boolean correct = false;
-
-                if(symbols.get(i + 3).toString().indexOf("bool 'T'") >= 0 )
-                    correct = true;
-
-                if((symbols.get(i + 3).getType().equals("B")) && (symbols.get(i + 3).toString().indexOf("VAR")==-1) )
-                    correct = true;
-
-                if(symbols.get(i + 4).getType().equals("B") && symbols.get(i + 3).toString().indexOf("VAR")==-1)
-                    correct = true;
-
-                if(!correct)
-                    throw new TypeException(symbols.get(i + 4), "Boolean type mismatch inside while loop condition");
-
+                if(!symbols.get(i+1).getExpr().getTerminalType().equals("B"))
+                    throw new TypeException(symbols.get(i), "Boolean type mismatch inside while loop condition");
             }
 
             //CHECKS CALC STATEMENTS

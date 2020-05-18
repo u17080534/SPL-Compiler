@@ -1,0 +1,23 @@
+num a;
+num x;
+num y;
+num i;
+a = -1;
+i = -1;
+
+if((a < i)) then
+{
+    x = 10
+};
+
+if((a < i)) then
+{
+    x = 10
+}
+else
+{
+	y = 12
+};
+
+output(x);
+output(y)

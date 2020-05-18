@@ -43,7 +43,7 @@ public class cond_branch extends Expression
 
 		String lblEnd = "IF_END" + this.getID();
 
-		if(this.cond_branch_Ex != null)
+		if(this.cond_branch_Ex == null)
 		{
 			absFile.add(new Line("TMPC = " + this.boolEx.trans(absFile).toString()));
 

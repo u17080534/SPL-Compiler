@@ -10,6 +10,7 @@ public class Symbol
 	private String proc;
 	private String type;
 	private String alias;
+	private boolean hasValue;
 
 	public Symbol(Expression expr)
 	{
@@ -18,6 +19,7 @@ public class Symbol
 		this.expr = expr;
 		this.alias = "";// this.expr.getID() + " " + this.expr.getExpr();
 		this.scope = -1;
+		this.hasValue = false;
 	}
 
 	public int getID()
@@ -89,6 +91,11 @@ public class Symbol
 		return this.expr.isTerminal();
 	}
 
+	public void hasValue(boolean has)
+	{
+		this.hasValue = has;
+	}
+	
 	public boolean equals(Symbol other)
 	{
 		return this.getID() == other.getID();
@@ -104,6 +111,11 @@ public class Symbol
 
 		if(!this.type.equals(""))
 			str += " " + this.type;
+
+		if(this.hasValue)
+			str += " Has-Value";
+		else
+			str += " No-Value";
 
 		return str;
 	}
@@ -125,7 +137,6 @@ public class Symbol
 	@Override
 	public String toString()
 	{	
-		// String strAlias = this.expr.getExpr();
 		String strType = "";
 
 		if(!this.type.equals(""))

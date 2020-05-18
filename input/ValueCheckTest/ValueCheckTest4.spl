@@ -1,0 +1,15 @@
+num a;
+num x;
+num i;
+a = -1;
+
+for (i = 0; i < a; i = add(i, 1))
+{
+    x = 10
+};
+
+
+while((a < x))
+{
+  output(x)
+}
