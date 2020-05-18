@@ -75,8 +75,6 @@ public class bool extends Expression
 	//!address this
 	public Line trans(File absFile)
 	{
-		System.out.println(this.expr);       
-
 		String temp = "TMPB" + this.getID();
 
 		if(this.action == null)

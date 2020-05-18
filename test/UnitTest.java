@@ -283,7 +283,8 @@ public class UnitTest
             "input/ValueCheckTest/ValueCheckTest1.spl",
             "input/ValueCheckTest/ValueCheckTest2.spl",
             "input/ValueCheckTest/ValueCheckTest3.spl",
-            "input/ValueCheckTest/ValueCheckTest4.spl"
+            "input/ValueCheckTest/ValueCheckTest4.spl",
+            "input/ValueCheckTest/ValueCheckTest5.spl"
         };
 
         String[] results = {

@@ -68,8 +68,6 @@ public class ValueCheck
 
 			});
 
-
-
 			//normal check
 			if(symbols.get(i).getExpression().contains("variable '")){
 
