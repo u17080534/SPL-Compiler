@@ -739,7 +739,7 @@ public class ValueCheck
 			if(symbols.get(i).getHasValue()){
 
 				for(int m = 0; m < symbols.size(); m++){
-					if(symbols.get(m).getExpression().equals(symbols.get(i).getExpression())){
+					if(symbols.get(m).getID() > symbols.get(i).getID() && symbols.get(m).getExpression().equals(symbols.get(i).getExpression())){
 						symbols.get(m).hasValue(true);
 					}
 				}
@@ -752,8 +752,21 @@ public class ValueCheck
 
 		String valueErrors = "";
 
-		for (Symbol symbol : needsValue) 
+		// for (Symbol symbol : needsValue) 
+		// {
+
+		// 	String msg = "undefined";
+
+		// 	if(needsValueMessage.containsKey(symbol))
+		// 		msg = needsValueMessage.get(symbol);
+
+
+		// 	valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation() + "; ";
+		// }
+
+		for(int index = 0; index < needsValue.size(); index++)
 		{
+			Symbol symbol = needsValue.get(index);
 
 			String msg = "undefined";
 
@@ -761,7 +774,9 @@ public class ValueCheck
 				msg = needsValueMessage.get(symbol);
 
 
-			valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation() + "; ";
+			valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation();
+			if(index + 1 < needsValue.size())
+				valueErrors += "; ";
 		}
 
 		if(!valueErrors.equals(""))

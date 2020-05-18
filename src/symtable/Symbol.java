@@ -96,8 +96,17 @@ public class Symbol
 		this.hasValue = has;
 	}
 
-	public boolean getHasValue(){
+	public boolean getHasValue()
+	{
 		return this.hasValue;
+	}
+
+	public String hasValueString()
+	{
+		if(this.hasValue)
+			return " Has-Value";
+		else
+			return " No-Value";
 	}
 
 	public boolean equals(Symbol other)
