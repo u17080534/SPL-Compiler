@@ -214,7 +214,7 @@ public class UnitTest
         System.out.println("\tSCOPE CHECKING UNIT TESTING COMPLETE...\n");
     } 
 
-    @Test
+    @Ignore
     public void testTypeCheck() 
     { 
         System.out.println("\tTYPE CHECK UNIT TESTING...\n");
@@ -239,14 +239,14 @@ public class UnitTest
             "Type Exception: Assignment must match type of variable [variable 'x'][36,4]", //2
             "Type Exception: Assignment must match type of variable [variable 'x'][36,5]", //3
             "Type Exception: Assignment must match type of variable [variable 'correct'][36,5]", //4
-            "Type Exception: Boolean type mismatch inside if condition [variable 'answer'][40,10]", //5
-            "Type Exception: Boolean type mismatch inside while loop condition [variable 'guess'][37,11]", //6
+            "Type Exception: Boolean type mismatch inside if conditional branch [COND_BRANCH][63,7]", //5
+            "Type Exception: Boolean type mismatch inside while loop condition [loop 'while'][37,5]", //6
             "Type Exception: Number expression contains symbols that are not of type num [calc 'add'][14,5]", //7
             "", //8
             "Type Exception: For loop expression types do no match [variable 'i'][17,10]", //9
             "", //10
             "Type Exception: Assignment must match type of variable [variable 'eqv'][14,6]", //11
-            "Type Exception: Boolean expression contains symbols that are not of type bool [bool 'not'][10,5]" //12
+            "Type Exception: Boolean type mismatch inside if conditional branch [COND_BRANCH][11,16]" //12
         };
 
         for(int index = 0; index < args.length; index++)
@@ -274,23 +274,24 @@ public class UnitTest
         System.out.println("\tTYPE CHECK UNIT TESTING COMPLETE...\n");
     } 
 
-    @Ignore
+    @Test
     public void testValueCheck() 
     { 
         System.out.println("\tVALUE CHECK UNIT TESTING...\n");
         
         String[] args = {
             "input/ValueCheckTest/ValueCheckTest1.spl",
-                "input/ValueCheckTest/ValueCheckTest2.spl",
-                "input/ValueCheckTest/ValueCheckTest3.spl"
-		
+            "input/ValueCheckTest/ValueCheckTest2.spl",
+            "input/ValueCheckTest/ValueCheckTest3.spl",
+            "input/ValueCheckTest/ValueCheckTest4.spl",
+            "input/ValueCheckTest/ValueCheckTest5.spl"
         };
 
         String[] results = {
-            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; ",
-                "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in if statement condition [variable 'answer'][46,17]; Variable undefined in if statement condition [variable 'other'][46,25]; ",
-                "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value to be outputted to the screen [variable 'a'][19,16]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable needs a value to be outputted to the screen [variable 'h'][80,16]; "
-
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to another variable [variable 'other'][43,15]; Variable needs a value to be outputted [variable 't'][44,18]; Variable undefined in bool condition [variable 'answer'][46,17]; Variable undefined in bool condition [variable 'other'][46,25]; Variable needs a value to be outputted [variable 's'][49,21]",
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to another variable [variable 'other'][43,15]; Variable needs a value to be outputted [variable 't'][44,18]; Variable undefined in bool condition [variable 'answer'][46,17]; Variable undefined in bool condition [variable 'other'][46,25]; Variable needs a value to be outputted [variable 's'][49,21]; Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to another variable [variable 'other'][43,15]; Variable needs a value to being outputted [variable 't'][44,18]; Variable undefined in if statement condition [variable 'answer'][46,17]; Variable undefined in if statement condition [variable 'other'][46,25]",
+            "Value Exception: Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to another variable [variable 'other'][43,15]; Variable needs a value to be outputted [variable 't'][44,18]; Variable undefined in bool condition [variable 'answer'][46,17]; Variable undefined in bool condition [variable 'other'][46,25]; Variable needs a value to be outputted [variable 's'][49,21]; Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value when being assigned to another variable [variable 'other'][43,15]; Variable needs a value to being outputted [variable 't'][44,18]; Variable undefined in if statement condition [variable 'answer'][46,17]; Variable undefined in if statement condition [variable 'other'][46,25]; Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value to be outputted [variable 'a'][19,16]; Variable needs a value when being assigned to another variable [variable 'other'][43,15]; Variable needs a value to be outputted [variable 't'][44,18]; Variable undefined in bool condition [variable 'answer'][46,17]; Variable undefined in bool condition [variable 'other'][46,25]; Variable needs a value to being outputted [variable 'h'][79,16]",
+            ""
         };
 
         for(int index = 0; index < args.length; index++)
@@ -300,9 +301,11 @@ public class UnitTest
             {
                 SPL compiler = new SPL(args[index]);
                 System.out.println(compiler);
+                compiler.output(false);
                 compiler.parse(compiler.tokenize());
                 compiler.checkScope();
                 compiler.checkType();
+                // compiler.output(true);
                 compiler.checkValues();
             }
             catch(Exception e)

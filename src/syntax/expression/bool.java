@@ -46,8 +46,15 @@ public class bool extends Expression
 	{
 		String type = this.descendents.get(0).getTerminalType();
 
+		//SPECIAL ACCOUNTING FOR eq
+		if(this.action != null && Expression.getValue(this.action.toString()).equals("eq"))
+		{
+			for (int index = 1; index < this.descendents.size(); index++)
+				if(!this.descendents.get(index).getTerminalType().equals("N") && !this.descendents.get(index).getTerminalType().equals("B") && !this.descendents.get(index).getTerminalType().equals("S"))
+					return "";
+		}
 		//SPECIAL ACCOUNTING FOR < AND >
-		if(this.action != null && (Expression.getValue(this.action.toString()).equals(">") || Expression.getValue(this.action.toString()).equals("<")))
+		else if(this.action != null && (Expression.getValue(this.action.toString()).equals(">") || Expression.getValue(this.action.toString()).equals("<")))
 		{
 			for (int index = 1; index < this.descendents.size(); index++)
 				if(!this.descendents.get(index).getTerminalType().equals("N"))
@@ -68,8 +75,6 @@ public class bool extends Expression
 	//!address this
 	public Line trans(File absFile)
 	{
-		System.out.println(this.expr);       
-
 		String temp = "TMPB" + this.getID();
 
 		if(this.action == null)

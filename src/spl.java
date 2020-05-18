@@ -126,7 +126,7 @@ public class SPL
         {
             this.checkScope();
             this.checkType();
-            // this.checkValues();
+            this.checkValues();
         }
         catch(AnalysisException ex)
         {
@@ -168,8 +168,7 @@ public class SPL
         try
         {
             ValueCheck.check(this.table);
-            //this.cache.export(this.tree);
-            //this.cache.export(this.table);
+            this.cache.export(this.table);
         }
         catch(ValueException ex)
         {

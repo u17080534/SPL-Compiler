@@ -45,8 +45,7 @@ proc guess
 
           if(eq(answer, other)) then
           {
-            answer = 5;
-            output (guess)
+            answer = 5
             }
           else{
             answer = 3
