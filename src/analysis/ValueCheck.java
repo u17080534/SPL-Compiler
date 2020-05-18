@@ -739,9 +739,6 @@ public class ValueCheck
 
 		for (Symbol symbol : needsValue) 
 		{
-			//throw new ValueException(symbol, "Variable needs value: ");
-
-			// OR
 
 			String msg = "undefined";
 
