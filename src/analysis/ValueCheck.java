@@ -41,6 +41,19 @@ public class ValueCheck
 
 	public static void check(SymbolTable table) throws ValueException
 	{
+		numOfCond_Branch = 0;
+		numOfCond_Loop = 0;
+
+		PROG1symbols = null;
+		PROG2symbols = null;
+		WHILEsymbols = null;
+		FORsymbols = null;
+		BOOLsymbols = null;
+
+		needsValue = null;
+		warnings = null;
+		warningsDisplay = null;
+
 		variableMap = new HashMap<String, Integer>();
 		needsValueMessage = new HashMap<Symbol, String>();
 
@@ -719,35 +732,25 @@ public class ValueCheck
 
 		}
 
-
-
-
-
-		//done
-
-		/*variableMap.entrySet().forEach(entry->{
-
-			System.out.println(entry.getKey() + " " + entry.getValue());
-
-		});*/
-
-
 		for (Symbol symbol : warningsDisplay)
 			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
 
 		String valueErrors = "";
 
-		for (Symbol symbol : needsValue) 
+		for(int index = 0; index < needsValue.size(); index++)
 		{
-
+			Symbol symbol = needsValue.get(index);
 			String msg = "undefined";
 
 			if(needsValueMessage.containsKey(symbol))
 				msg = needsValueMessage.get(symbol);
 
 
-			valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation() + "; ";
+			valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation();
+			if(index + 1 < needsValue.size())
+				valueErrors += "; ";
 		}
+
 
 		if(!valueErrors.equals(""))
 			throw new ValueException(valueErrors);

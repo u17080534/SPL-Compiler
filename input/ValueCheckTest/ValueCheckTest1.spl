@@ -9,7 +9,6 @@ hello;
 num i;
 num a;
 
-
 for (i = 0; i < a; i = add(i, 1))
 {
     output (correct);

@@ -95,7 +95,15 @@ public class Symbol
 	{
 		this.hasValue = has;
 	}
-	
+
+	public String hasValueString()
+	{
+		if(this.hasValue)
+			return " Has-Value";
+		else
+			return " No-Value";
+	}
+
 	public boolean equals(Symbol other)
 	{
 		return this.getID() == other.getID();
