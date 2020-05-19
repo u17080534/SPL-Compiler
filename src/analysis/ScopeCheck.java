@@ -214,8 +214,8 @@ public class ScopeCheck
 					else if(usage.getExpression().indexOf("call") == 0) //Proc Usage
 					{
 						if(decl.getScope() - usage.getScope() < 0 || (decl.getScope() == usage.getScope() && usage.getProc().equals(decl.getProc())))
-							// usage.setExpression("call '" + Expression.getValue(aliases.get(index_decl)) + "'");
-							usage.setExpression(aliases.get(index_decl));
+							usage.setExpression("call '" + Expression.getValue(aliases.get(index_decl)) + "'");
+							// usage.setExpression(aliases.get(index_decl));
 					}
 				}
 			}			
