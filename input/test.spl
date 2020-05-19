@@ -1,30 +1,86 @@
-num in;
-num i;
-message;
-input(in);
+string wrong;
+string correct;
+bool eqv;
+wrong = "w";
+correct = "c";
+eqv = F;
 
-for (i = 0; i < in; i = add(i, 1))
+
+hello;
+
+
+
+num i;
+num a;
+
+for (i = 0; i < a; i = add(i, 1))
 {
-	print
+    output (correct);
+
+    for (i = 0; i < a; i = add(i, 1))
+    {
+       output (correct)
+    }
 };
 
-proc message
+num other;
+
+proc guess
 {
-	string msg;
-	msg = "hello ";
-	output(msg);
-	msg = "please ";
-	output(msg);
-	msg = "enter ";
-	output(msg);
-	msg = "number ";
-	output(msg)
+    num x;
+    num other;
+    num answer;
+
+
+
+    x = 9;
+    x = add(3,8);
+
+    while(T)
+    {
+
+      if(eqv) then
+      {
+          num s;
+          num t;
+          t = other;
+          output(t);
+
+          if(eq(answer, other)) then
+          {
+            answer = 5;
+            output (s)
+            }
+          else{
+            answer = 3
+          };
+
+          output (answer)
+      }
+      else
+      {
+
+          output (wrong);
+          answer = 5
+      };
+
+        other = 7
+
+    };
+
+
+    output(answer)
 }
 
-proc print
+proc hello
 {
-	string msg;
-	msg = "decr ";
-	output(msg);
-	output(i)
+    string h;
+    h = "hello";
+    hello2;
+    guess;
+
+    proc hello2
+    {
+        output(h)
+    }
 }

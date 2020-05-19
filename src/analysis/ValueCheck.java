@@ -93,36 +93,6 @@ public class ValueCheck
 
 
 
-			//check for proc
-			if(symbols.get(i).getExpression().contains("CALL")){
-				if(symbols.get(i+1).getExpression().contains("proc '")){
-
-					procDo = true;
-
-					String procName = symbols.get(i+1).getExpression();
-					marker = i + 1;
-
-					while(!symbols.get(i).getExpression().contains("PROC_DEFS")){
-						i++;
-					}
-					while(!symbols.get(i).getExpression().contains(procName)){
-						i++;
-					}
-
-
-					if(symbols.get(i+1).getExpression().contains("PROG")){
-						PROCsymbols.clear();
-						recursiveProc(symbols.get(i+1).getExpr().getDescendents());
-
-						i = PROCsymbols.get(0).getID();
-						procEnd = PROCsymbols.get(PROCsymbols.size()-1).getID();
-
-						continue;
-					}
-
-				}
-			}
-
 
 
 
@@ -153,7 +123,6 @@ public class ValueCheck
 							}
 							else{
 								//not being assign a variable but a literal
-								System.out.println("symbols.get(i).getExpression() " + symbols.get(i).getExpression());
 								variableMap.put(symbols.get(i).getExpression(),1);
 								symbols.get(i).hasValue(true);
 							}
@@ -750,13 +719,6 @@ public class ValueCheck
 
 			}
 
-			if(procDo && i == procEnd){
-				procDo = false;
-				procEnd = -1;
-				i = marker;
-				marker = -1;
-			}
-
 		}
 
 
@@ -778,6 +740,7 @@ public class ValueCheck
 
 			if(symbols.get(i).getHasValue()){
 
+
 				for(int m = 0; m < symbols.size(); m++){
 					if(symbols.get(i).toString().contains("variable '"))
 					{
@@ -794,9 +757,13 @@ public class ValueCheck
 						}
 					}
 				}
+
 			}
 		}
 
+		System.out.println("Updated table:");
+		System.out.println(table.toString());
+		System.out.println();
 
 		for (Symbol symbol : warningsDisplay)
 			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());

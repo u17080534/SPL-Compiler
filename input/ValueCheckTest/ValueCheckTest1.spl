@@ -4,7 +4,11 @@ bool eqv;
 wrong = "w";
 correct = "c";
 eqv = F;
+
+
 hello;
+
+
 
 num i;
 num a;

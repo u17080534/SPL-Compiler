@@ -72,7 +72,6 @@ public class SPL
         catch(Exception ex)
         {
             System.out.println(ex);
-            ex.printStackTrace();
         }
     }
 
