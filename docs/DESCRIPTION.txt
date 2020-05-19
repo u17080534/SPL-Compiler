@@ -123,7 +123,18 @@
 
 04 - VALUE CHECKING
 
-	<DESCRIPTION>
+	The algorithm runs through the AST and checks for variable assignments and usages.
+
+	If a variable is assigned outside of any loops or if statements it puts that variable in a map with the value 1.
+
+	For the cases where variables are assigned in if statements, while statements and for loops, the map gives the variable a value of either 2, 3, 4, 5. All of these values indicate that the variable might not have a value. There is, however, a special case where if the variable is assigned in the 'then' part of the if statement it is given a 2 and if we see that same variable is also assigned in the 'else' part of the if statement AND this if statement is not nested in any other if statement or loops where the condition isn't directly T or F, then the variable gets a value of 1 instead of 2. We understand that there is no 'pocket calculator' in the value checker, however, when the algorithm sees a T or F in the conditions for a While loop or If statement, it chooses the correct part of the statement to do.
+
+	If a variable is then used it checks the map to see if it has a value of 0, 1, 2, 3, 4 or 5.
+	If the value is 0, an exception is thrown.
+	If the value is 1, nothing is wrong.
+	If the value is 2,3,4,5 a warning is thrown.
+
+	All symbols that have a value are also updated with Has-Value in the symbol table.
 
 		CONTRIBUTIONS:	BYRON TOMKINSON
 
