@@ -5,9 +5,9 @@ wrong = "w";
 correct = "c";
 eqv = F;
 
-
+string h;
 hello;
-
+output(h);
 
 
 num i;
@@ -74,7 +74,6 @@ proc guess
 
 proc hello
 {
-    string h;
     h = "hello";
     hello2;
     guess;

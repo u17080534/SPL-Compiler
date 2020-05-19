@@ -7,9 +7,9 @@ import syntax.expression.Expression;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.Vector;
-
-
+import java.util.stream.Collectors;
 
 
 public class ValueCheck
@@ -32,6 +32,7 @@ public class ValueCheck
 	private static Vector<Symbol> FORsymbols = new Vector<>();
 	private static Vector<Symbol> BOOLsymbols = new Vector<>();
 	private static Vector<Symbol> PROCsymbols = new Vector<>();
+	private static Vector<Symbol> PROCskip= new Vector<>();
 
 	private static Vector<Symbol> needsValue = new Vector<>();
 	private static Vector<Symbol> warnings = new Vector<>();
@@ -51,6 +52,7 @@ public class ValueCheck
 		FORsymbols = new Vector<>();
 		BOOLsymbols = new Vector<>();
 		PROCsymbols = new Vector<>();
+		PROCskip = new Vector<>();
 
 		needsValue = new Vector<>();
 		warnings = new Vector<>();
@@ -63,16 +65,16 @@ public class ValueCheck
 		int elseStart = -1;
 		int elseEnd = -1;
 
-		boolean procDo = false;
-		int procEnd  = -1;
-		int marker = -1;
+
+		Stack<Integer> markerStack = new Stack<>();
+		Stack<Integer> procEndStack = new Stack<>();
+		Vector<String> procDoneList = new Vector<>();
 
 		for(int i = 0; i < symbols.size(); i++)
 		{
 
 
 			doElse = false;
-
 			if(elseSkip && i == elseStart){
 				i = elseEnd;
 				elseSkip = false;
@@ -80,9 +82,6 @@ public class ValueCheck
 				elseEnd = -1;
 				continue;
 			}
-
-
-
 			variableMap.entrySet().forEach(entry->{
 
 				if(entry.getValue() == 2){
@@ -92,7 +91,35 @@ public class ValueCheck
 			});
 
 
+			//check for proc call
+			//...
+			if(symbols.get(i).getExpression().contains("call '")){
 
+				String procName = symbols.get(i).getExpression().substring(5);
+
+				markerStack.push(i+1);		//return here
+
+				for(int p = 0; p < symbols.size(); p++){
+					if(symbols.get(p).getExpression().contains("proc " + procName)){
+						procDoneList.add("proc " + procName);
+						if(symbols.get(p+1).getExpression().contains("PROG")){
+							PROCsymbols.clear();
+							recursiveProc(symbols.get(p+1).getExpr().getDescendents());
+							i = PROCsymbols.get(0).getID();
+
+							procEndStack.push(PROCsymbols.get(PROCsymbols.size()-1).getID());
+						}
+					}
+				}
+			}
+			else if(symbols.get(i).getExpression().contains("proc ")){
+				if(procDoneList.contains(symbols.get(i).getExpression())){
+					PROCskip.clear();
+					recursiveProcSkip(symbols.get(i+1).getExpr().getDescendents());
+					i = PROCskip.get(PROCskip.size()-1).getID();
+				}
+
+			}
 
 
 
@@ -719,6 +746,14 @@ public class ValueCheck
 
 			}
 
+
+			if(!procEndStack.empty()){
+				if(procEndStack.peek() == i){
+					procEndStack.pop();
+					i = markerStack.pop();
+				}
+			}
+
 		}
 
 
@@ -761,26 +796,27 @@ public class ValueCheck
 			}
 		}
 
+
+		//table
 		System.out.println("Updated table:");
 		System.out.println(table.toString());
 		System.out.println();
 
+
+
+		//warnings
+
+		warningsDisplay = warningsDisplay.stream().distinct().collect(Collectors.toCollection(Vector::new));
 		for (Symbol symbol : warningsDisplay)
 			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
 
+
+
+
+		//value errors
 		String valueErrors = "";
 
-		// for (Symbol symbol : needsValue) 
-		// {
-
-		// 	String msg = "undefined";
-
-		// 	if(needsValueMessage.containsKey(symbol))
-		// 		msg = needsValueMessage.get(symbol);
-
-
-		// 	valueErrors += "Variable " + msg + " [" + symbol.getAlias() + "]" + symbol.getLocation() + "; ";
-		// }
+		needsValue = needsValue.stream().distinct().collect(Collectors.toCollection(Vector::new));
 
 		for(int index = 0; index < needsValue.size(); index++)
 		{
@@ -874,6 +910,19 @@ public class ValueCheck
 
 			if (!expression.isTerminal()) {
 				recursiveProc(expression.getDescendents());
+			}
+		}
+
+	}
+
+	private static void recursiveProcSkip(Vector<Expression> code){
+
+		for (Expression expression : code) {
+
+			PROCskip.add(expression.getSymbol());
+
+			if (!expression.isTerminal()) {
+				recursiveProcSkip(expression.getDescendents());
 			}
 		}
 
