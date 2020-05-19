@@ -312,6 +312,7 @@ public class UnitTest
             catch(Exception e)
             {
                 result = e.toString();
+                e.printStackTrace();
             }
 
             if(result != "")

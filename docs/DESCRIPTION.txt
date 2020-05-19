@@ -137,9 +137,3 @@
 	All symbols that have a value are also updated with Has-Value in the symbol table.
 
 		CONTRIBUTIONS:	BYRON TOMKINSON
-
-04 - CODE GENERATION
-
-	<DESCRIPTION>
-
-		CONTRIBUTIONS:	JORDAN MANAS

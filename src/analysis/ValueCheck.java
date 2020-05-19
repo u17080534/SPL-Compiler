@@ -779,8 +779,19 @@ public class ValueCheck
 			if(symbols.get(i).getHasValue()){
 
 				for(int m = 0; m < symbols.size(); m++){
-					if(symbols.get(m).getID() > symbols.get(i).getID() && symbols.get(m).getExpression().equals(symbols.get(i).getExpression())){
-						symbols.get(m).hasValue(true);
+					if(symbols.get(i).toString().contains("variable '"))
+					{
+						if(symbols.get(m).getID() > symbols.get(i).getID() && symbols.get(m).getExpression().equals(symbols.get(i).getExpression()))
+						{
+							symbols.get(m).hasValue(true);
+						}
+					}
+					else
+					{
+						if(symbols.get(m).getExpression().equals(symbols.get(i).getExpression()))
+						{
+							symbols.get(m).hasValue(true);
+						}
 					}
 				}
 			}
