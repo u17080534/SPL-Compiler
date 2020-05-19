@@ -31,6 +31,7 @@ public class ValueCheck
 	private static Vector<Symbol> WHILEsymbols = new Vector<>();
 	private static Vector<Symbol> FORsymbols = new Vector<>();
 	private static Vector<Symbol> BOOLsymbols = new Vector<>();
+	private static Vector<Symbol> PROCsymbols = new Vector<>();
 
 	private static Vector<Symbol> needsValue = new Vector<>();
 	private static Vector<Symbol> warnings = new Vector<>();
@@ -49,6 +50,7 @@ public class ValueCheck
 		WHILEsymbols = new Vector<>();
 		FORsymbols = new Vector<>();
 		BOOLsymbols = new Vector<>();
+		PROCsymbols = new Vector<>();
 
 		needsValue = new Vector<>();
 		warnings = new Vector<>();
@@ -60,6 +62,10 @@ public class ValueCheck
 		boolean elseSkip = false;
 		int elseStart = -1;
 		int elseEnd = -1;
+
+		boolean procDo = false;
+		int procEnd  = -1;
+		int marker = -1;
 
 		for(int i = 0; i < symbols.size(); i++)
 		{
@@ -75,6 +81,8 @@ public class ValueCheck
 				continue;
 			}
 
+
+
 			variableMap.entrySet().forEach(entry->{
 
 				if(entry.getValue() == 2){
@@ -82,6 +90,39 @@ public class ValueCheck
 				}
 
 			});
+
+
+
+			//check for proc
+			if(symbols.get(i).getExpression().contains("CALL")){
+				if(symbols.get(i+1).getExpression().contains("proc '")){
+
+					procDo = true;
+
+					String procName = symbols.get(i+1).getExpression();
+					marker = i + 1;
+
+					while(!symbols.get(i).getExpression().contains("PROC_DEFS")){
+						i++;
+					}
+					while(!symbols.get(i).getExpression().contains(procName)){
+						i++;
+					}
+
+
+					if(symbols.get(i+1).getExpression().contains("PROG")){
+						PROCsymbols.clear();
+						recursiveProc(symbols.get(i+1).getExpr().getDescendents());
+
+						i = PROCsymbols.get(0).getID();
+						procEnd = PROCsymbols.get(PROCsymbols.size()-1).getID();
+
+						continue;
+					}
+
+				}
+			}
+
 
 
 
@@ -112,6 +153,7 @@ public class ValueCheck
 							}
 							else{
 								//not being assign a variable but a literal
+								System.out.println("symbols.get(i).getExpression() " + symbols.get(i).getExpression());
 								variableMap.put(symbols.get(i).getExpression(),1);
 								symbols.get(i).hasValue(true);
 							}
@@ -708,6 +750,12 @@ public class ValueCheck
 
 			}
 
+			if(procDo && i == procEnd){
+				procDo = false;
+				procEnd = -1;
+				i = marker;
+				marker = -1;
+			}
 
 		}
 
@@ -835,6 +883,19 @@ public class ValueCheck
 
 			if (!expression.isTerminal()) {
 				recursiveBool(expression.getDescendents());
+			}
+		}
+
+	}
+
+	private static void recursiveProc(Vector<Expression> code){
+
+		for (Expression expression : code) {
+
+			PROCsymbols.add(expression.getSymbol());
+
+			if (!expression.isTerminal()) {
+				recursiveProc(expression.getDescendents());
 			}
 		}
 
