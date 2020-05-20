@@ -1,0 +1,11 @@
+Assuming longest match:
+a: no error (364 tokens)
+b: error: identifiers with uppercase letters
+c: error: strings greater than 8 characters
+d: error: strings with uppercase letters
+e: 6th token should be identifier (599 tokens) [first match 2 keywords]
+f: error: number cannot start with 0 [first match should have multiple 0's]
+g: starts with kInteger(281) ends with kwString (540 tokens)
+h: starts with kwAdd ends with kUser(taxyto) (2377 tokens)
+i: all keywords (393 tokens)
+j: starts with kUser(af8) ends with kwThen (9393 tokens)

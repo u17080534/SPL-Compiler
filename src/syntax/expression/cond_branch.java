@@ -37,43 +37,21 @@ public class cond_branch extends Expression
 			%IF_END%        <CODE>
 		*/
 
-		Line codeTrans = null;
-
-		String lblElse = "IF_ELSE" + this.getID();
-
-		String lblEnd = "IF_END" + this.getID();
+		String temp = "TMPC" + this.getID();
 
 		if(this.cond_branch_Ex == null)
 		{
-			absFile.add(new Line("TMPC = " + this.boolEx.trans(absFile).toString()));
+			absFile.add(new Line(temp + " = NOT " + this.boolEx.trans(absFile).toString()));
 
-			absFile.add(new Line("TMPC = NOT TMPC"));
+			absFile.add(new Line("IF " + temp + " THEN GOTO %END" + this.getID() + "+1%"));
 
-			absFile.add(new Line("IF TMPC THEN GOTO %" + lblEnd + "+1%"));
+			this.codeEx.trans(absFile);
 
-			codeTrans = this.codeEx.trans(absFile);
-
-			absFile.label(lblEnd, 1);
+			absFile.label("END" +  this.getID(), -1, false);
 		}
 		else
 		{
-			absFile.add(new Line("TMPC = " + this.boolEx.trans(absFile).toString()));
-
-			absFile.add(new Line("IF TMPC THEN GOTO %" + lblElse + "%"));
-
-			this.cond_branch_Ex.trans(absFile);
-
-			absFile.add(new Line("GOTO %" + lblEnd + "+1%"));
-
-			absFile.label(lblElse);
-
-			absFile.add(new Line("TMPC = NOT TMPC"));
-
-			absFile.add(new Line("IF TMPC THEN GOTO %" + lblEnd + "+1%"));
-
-			codeTrans = this.codeEx.trans(absFile);
-
-			absFile.label(lblEnd, 1);
+			
 		}
 
 		return null;   

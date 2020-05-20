@@ -1,0 +1,74 @@
+p = and((t < p), eq(w, x));
+halt;
+p;
+halt;
+input(p);
+num n
+
+proc u {
+  halt;
+  halt;
+  if (eq(g, b)) then {
+    halt;
+    if (not f) then {
+      for (q = 0; k < h; r = add(d, 1)) {
+        if (and(and(T, (t > a)), and((w > e), q))) then {
+          input(l);
+          w = 93108
+        };
+        if (t) then {
+          input(k);
+          output(r)
+        };
+        f = ""
+      };
+      bool e;
+      bool e;
+      string c
+    };
+    output(d);
+    halt;
+    if (F) then {
+      while (not and((b > x), k)) {
+        halt;
+        if ((o > e)) then {
+          g;
+          e = "6ah"
+        }
+      };
+      input(p)
+    }
+  };
+  output(o)  
+}
+
+proc w {
+  z;
+  if (k) then {
+    halt;
+    string f;
+    while (T) {
+      f;
+      n
+    };
+    for (b = 0; n < c; w = add(r, 1)) {
+      num i;
+      halt;
+      halt
+    };
+    halt
+  }  
+}
+
+proc f {
+  halt;
+  bool x;
+  q;
+  if (and((e < j), (p < r))) then {
+    j;
+    input(z);
+    halt;
+    p
+  }  
+}
+

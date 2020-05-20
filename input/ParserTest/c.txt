@@ -1,0 +1,144 @@
+halt;
+bool u;
+
+proc t {
+  if (i) then {
+    input(f);
+    for (d = 0; d < s; x = add(o, 1)) {
+      output(q);
+      g
+    }
+  };
+  halt;
+  proc t {
+    if (i) then {
+      input(f);
+      for (d = 0; d < s; x = add(o, 1)) {
+        output(q);
+        g
+      }
+    };
+    halt;
+    proc t {
+      if (i) then {
+        input(f);
+        for (d = 0; d < s; x = add(o, 1)) {
+          output(q);
+          g
+        }
+      };
+      halt;
+      proc t {
+        if (i) then {
+          input(f);
+          for (d = 0; d < s; x = add(o, 1)) {
+            output(q);
+            g
+          }
+        };
+        halt;
+        proc t {
+          if (i) then {
+            input(f);
+            for (d = 0; d < s; x = add(o, 1)) {
+              output(q);
+              g
+            }
+          };
+          halt;
+          proc t {
+            if (i) then {
+              input(f);
+              for (d = 0; d < s; x = add(o, 1)) {
+                output(q);
+                g
+              }
+            };
+            halt;
+            proc t {
+              if (i) then {
+                input(f);
+                for (d = 0; d < s; x = add(o, 1)) {
+                  output(q);
+                  g
+                }
+              };
+              halt;
+              proc t {
+                if (i) then {
+                  input(f);
+                  for (d = 0; d < s; x = add(o, 1)) {
+                    output(q);
+                    g
+                  }
+                };
+                halt;
+                proc t {
+                  if (i) then {
+                    input(f);
+                    for (d = 0; d < s; x = add(o, 1)) {
+                      output(q);
+                      g
+                    }
+                  };
+                  halt;
+                  proc t {
+                    if (i) then {
+                      input(f);
+                      for (d = 0; d < s; x = add(o, 1)) {
+                        output(q);
+                        g
+                      }
+                    };
+                    halt;
+                    proc t {
+                      if (i) then {
+                        input(f);
+                        for (d = 0; d < s; x = add(o, 1)) {
+                          output(q);
+                          g
+                        }
+                      };
+                      halt;
+                      proc t {
+                        if (i) then {
+                          input(f);
+                          for (d = 0; d < s; x = add(o, 1)) {
+                            output(q);
+                            g
+                          }
+                        };
+                        halt;
+                        proc t {
+                          if (i) then {
+                            input(f);
+                            for (d = 0; d < s; x = add(o, 1)) {
+                              output(q);
+                              g
+                            }
+                          };
+                          halt;
+                          proc t {
+                            if (i) then {
+                              input(f);
+                              for (d = 0; d < s; x = add(o, 1)) {
+                                output(q);
+                                g
+                              }
+                            };
+                            halt
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

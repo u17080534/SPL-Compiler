@@ -17,6 +17,7 @@ public class bool_ extends Expression
 
 	public Line trans(File absFile)
 	{
+		// This will assign two new variables to this expression that BOOL will use with and/or
 		/*
 			BOOL_ will assign param values to two variables [TMPB<BOOL_ID><1/2>]
 			Perform operation between variables.
@@ -28,9 +29,9 @@ public class bool_ extends Expression
 				TMPB00 = TMPB991 && TMPB992
 		*/
 				
-		// This will assign two new variables to this expression that BOOL will use with and/or
 		absFile.add(new Line("TMPB" + this.getID() + "1 = " + this.boolEx1.trans(absFile).toString()));
-		absFile.add(new Line("TMPB" + this.getID() + "2 = " + this.boolEx1.trans(absFile).toString()));
+		
+		absFile.add(new Line("TMPB" + this.getID() + "2 = " + this.boolEx2.trans(absFile).toString()));
 		
 		return null;   
 	} 

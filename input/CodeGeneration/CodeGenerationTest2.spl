@@ -1,0 +1,18 @@
+string h;
+h = "hello";
+num a;
+num b;
+num c;
+a = 1;
+b = 2;
+c = 3;
+
+a = add(mult(b, c), sub(b, c));
+
+bool eqv;
+eqv = or((b < a), (a < c));
+
+if(eqv) then
+{
+	input(h)
+}

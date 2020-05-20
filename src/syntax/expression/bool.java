@@ -41,7 +41,7 @@ public class bool extends Expression
 		this.expr = "BOOL";
 	}  
 
-	@Override
+	@Override // For Type Checking
 	public String getTerminalType()
 	{
 		String type = this.descendents.get(0).getTerminalType();
@@ -72,7 +72,6 @@ public class bool extends Expression
 		return type;
 	}
 
-	//!address this
 	public Line trans(File absFile)
 	{
 		String temp = "TMPB" + this.getID();
@@ -97,10 +96,42 @@ public class bool extends Expression
 			{
 				if(this.e2 == null) // ID / NOT 
 				{
-					if(distinct.equals("not"))
+					if(distinct.equals("and"))
 					{
-						absFile.add(new Line(temp + " = NOT " + this.e1.trans(absFile).toString()));
+						String var1 = "TMPB" + this.e1.getID() + "1";
+						String var2 = "TMPB" + this.e1.getID() + "2";
+
+						this.e1.trans(absFile);
+
+						absFile.add(new Line(temp + " = 0"));
+						absFile.add(new Line("TMPBB" + this.getID() + " = NOT " + var1));
+						absFile.add(new Line("IF TMPBB" + this.getID() + " THEN GOTO %END" +  this.getID() + "+1%"));
+						absFile.add(new Line("TMPBB" + this.getID() + " = NOT " + var2));
+						absFile.add(new Line("IF TMPBB" + this.getID() + " THEN GOTO %END" +  this.getID() + "+1%"));
+						absFile.label("END" +  this.getID(), true);
+						absFile.add(new Line(temp + " = 1"));
+						absFile.anchorLabel("END" +  this.getID());
 					}
+					else if(distinct.equals("or"))
+					{
+						String var1 = "TMPB" + this.e1.getID() + "1";
+						String var2 = "TMPB" + this.e1.getID() + "2";
+
+						this.e1.trans(absFile);
+
+						absFile.add(new Line(temp + " = 1"));
+						absFile.add(new Line("TMPBB" + this.getID() + " = " + var1));
+						absFile.add(new Line("IF TMPBB" + this.getID() + " THEN GOTO %END" +  this.getID() + "+1%"));
+						absFile.add(new Line("TMPBB" + this.getID() + " = " + var2));
+						absFile.add(new Line("IF TMPBB" + this.getID() + " THEN GOTO %END" +  this.getID() + "+1%"));
+						absFile.label("END" +  this.getID(), true);
+						absFile.add(new Line(temp + " = 0"));
+						absFile.anchorLabel("END" +  this.getID());
+					}
+					else if(distinct.equals("not"))
+						absFile.add(new Line(temp + " = NOT " + this.e1.trans(absFile).toString()));
+					else
+						absFile.add(new Line(temp + " = " + this.e1.trans(absFile).toString()));
 				}
 				else // EQ / > / < / AND / OR 
 				{
@@ -121,14 +152,6 @@ public class bool extends Expression
 						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
 						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
 						absFile.add(new Line(temp + " = " + temp + "1 < " + temp + "2"));
-					}
-					else if(distinct.equals("and"))
-					{
-
-					}
-					else if(distinct.equals("or"))
-					{
-
 					}
 				}
 			}

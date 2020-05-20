@@ -39,13 +39,16 @@ public class File
 
 	public void add(Line line)
 	{
+		System.out.println(this.toString());
+		System.out.println(this.labels);
 		if(line != null)
 		{
 			for(Label label : this.labels)
-				if(!label.isAnchor() && label.getLine() > this.point)
+				if(!label.isAnchor() && label.getLine() >= this.point)
 					label.setLine(label.getLine() + 1);
 
-			this.lines.add(this.point++, line);
+			this.lines.add(this.point, line);
+			this.point++;
 		}
 	}
 
@@ -54,6 +57,7 @@ public class File
 	{
 		int tmp = this.point;
 		this.point = this.lines.size();
+		System.out.println("Pointing " + tmp + " -> " + this.point);
 		return tmp;
 	}
 
@@ -61,7 +65,8 @@ public class File
 	public int point(int index)
 	{
 		int tmp = this.point;
-		this.point = index;
+		this.point = Math.min(index, this.lines.size());
+		System.out.println("Pointing " + tmp + " -> " + this.point);
 		return tmp;
 	}
 
@@ -75,7 +80,7 @@ public class File
 		this.labels.add(new Label(label, this.point, anchor));
 	}
 
-	public void label(String lbl, int diff)
+	public void label(String lbl, int diff, boolean anchor)
 	{
 		this.labels.add(new Label(lbl, this.point - diff));
 	}
@@ -124,6 +129,11 @@ public class File
 		return this.lines.get(this.point + diff);
 	}
 
+	public int size()
+	{
+		return this.lines.size();
+	}
+
 	@Override
 	public String toString()
 	{
@@ -139,14 +149,11 @@ public class File
 	{
 		File refined = new File(file);
 
-		if(file.hasLabel("PROC_DEFS"))
-		{
-			refined.point(0);
+		refined.point(0);
 
-			refined.add(new Line("GOTO %PROC_DEFS%"));
+		refined.add(new Line("GOTO %START%"));
 
-			refined.point();
-		}
+		refined.point();
 
 		refined.add(new Line("END"));
 
@@ -187,7 +194,10 @@ public class File
 
 			for(Label lbl : labels)
 				if(lbl.getLabel().equals(label))
-					line.setLine(line.toString().substring(0, pIndex1) + lbl.getLine() + diff);
+				{
+					int lineRef = lbl.getLine() + diff;
+					line.setLine(line.toString().substring(0, pIndex1) + lineRef);
+				}
 		}
 
 		return label;
@@ -235,6 +245,12 @@ public class File
 		public boolean isAnchor()
 		{
 			return this.anchor;
+		}
+
+		@Override
+		public String toString()
+		{
+			return this.line + " : " + this.label + "(" + this.anchor + ")";
 		}
 	}
 }

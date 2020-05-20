@@ -1,18 +1,44 @@
-bool j;
-string rvqf;
-if (not and(eq(j, j), and(and(j, j), j))) then {
-  input(rvqf)
-};
+string h;
+h = "hello0";
+x;
+y;
 
+proc x
+{
+	string hx;
+	hx = "x";
+	xx;
+	xy;
 
+	proc xx
+	{
+		string hxx;
+		hxx = "xx"
+	}
 
-num kmd;
-halt;
+	proc xy
+	{
+		string hxy;
+		hxy = "xy"
+	}
+}
 
-kmd = add(kmd, add(kmd, kmd));
-bool tc;
-halt;
+proc y
+{
+	string hy;
+	hy = "y";
+	yx;
+	yy;
 
-proc myproc {
-  num myvariablename
+	proc yx
+	{
+		string hyx;
+		hyx = "yx"
+	}
+
+	proc yy
+	{
+		string hyy;
+		hyy = "yy"
+	}
 }

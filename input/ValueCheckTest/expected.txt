@@ -1,0 +1,10 @@
+a: no errors
+b: no errors
+c: ! line 15, 16 x has no value at use
+d: no errors
+e: ! line 56 nxi has not been assigned a value.
+f: no errors
+g: ! line 63 sll has no value
+h: no errors
+i: no errors
+j: ! line 29, 30 x and y no value or warning

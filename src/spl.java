@@ -124,8 +124,11 @@ public class SPL
         try
         {
             this.checkScope();
-            this.checkType();
-            this.checkValues();
+            // this.checkType();
+            // this.checkValues();
+
+            this.cache.export(this.tree);
+            this.cache.export(this.table);
         }
         catch(AnalysisException ex)
         {
@@ -139,8 +142,6 @@ public class SPL
         try
         {
             ScopeCheck.check(this.tree, this.table);
-            this.cache.export(this.tree);
-            this.cache.export(this.table);
         }
         catch(UsageException ex)
         {
@@ -153,8 +154,6 @@ public class SPL
         try
         {
             TypeCheck.check(this.tree, this.table);
-            this.cache.export(this.tree);
-            this.cache.export(this.table);
         }
         catch(TypeException ex)
         {
@@ -167,8 +166,6 @@ public class SPL
         try
         {
             ValueCheck.check(this.table);
-            this.cache.export(this.tree);
-            this.cache.export(this.table);
         }
         catch(ValueException ex)
         {

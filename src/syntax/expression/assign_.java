@@ -30,8 +30,8 @@ public class assign_ extends Expression
 
 		if(this.ex != null)
 		{
-			assn = this.ex.trans(absFile).toString();
-			absFile.add(new Line("TMPA" + this.getID() + " = " + assn)); //assign to temp var
+			assn = "TMPA" + this.getID();
+			absFile.add(new Line("TMPA" + this.getID() + " = " + this.ex.trans(absFile).toString())); //assign to temp var
 		}
 
 		return new Line(assn);

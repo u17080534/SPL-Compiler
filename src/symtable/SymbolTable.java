@@ -41,20 +41,61 @@ public class SymbolTable
 	{
 		String str = "";
 
-		for(int index = 0; index < this.symbols.size(); index++)
-		{
-			str += this.symbols.get(index).getSymbol();
-
-			if(index < this.symbols.size() - 1)
+		if(this.symbols.size() <= 100)
+			for(int index = 0; index < this.symbols.size(); index++)
 			{
-				if((index+1) % 5 == 0)
-					str += "\n";
-				else
+				str += this.symbols.get(index).getSymbol();
+
+				if(index < this.symbols.size() - 1)
 				{
-					int no_spaces = 45 - this.symbols.get(index).getSymbol().length();
-					if(no_spaces < 0) no_spaces = 0;
-					for(int s = 0; s < no_spaces; s++)
-						str += " ";
+					if((index+1) % 5 == 0)
+						str += "\n";
+					else
+					{
+						int no_spaces = 45 - this.symbols.get(index).getSymbol().length();
+						if(no_spaces < 0) no_spaces = 0;
+						for(int s = 0; s < no_spaces; s++)
+							str += " ";
+					}
+				}
+			}
+		else
+		{
+			for(int index = 0; index < 45; index++)
+			{
+				str += this.symbols.get(index).getSymbol();
+
+				if(index < this.symbols.size() - 1)
+				{
+					if((index+1) % 5 == 0)
+						str += "\n";
+					else
+					{
+						int no_spaces = 45 - this.symbols.get(index).getSymbol().length();
+						if(no_spaces < 0) no_spaces = 0;
+						for(int s = 0; s < no_spaces; s++)
+							str += " ";
+					}
+				}
+			}
+
+			str += "...\n";
+
+			for(int index = this.symbols.size() - 45; index < this.symbols.size(); index++)
+			{
+				str += this.symbols.get(index).getSymbol();
+
+				if(index < this.symbols.size() - 1)
+				{
+					if((index+1) % 5 == 0)
+						str += "\n";
+					else
+					{
+						int no_spaces = 45 - this.symbols.get(index).getSymbol().length();
+						if(no_spaces < 0) no_spaces = 0;
+						for(int s = 0; s < no_spaces; s++)
+							str += " ";
+					}
 				}
 			}
 		}

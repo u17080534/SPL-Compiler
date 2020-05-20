@@ -26,7 +26,20 @@ public class prog extends Expression
 
 	public Line trans(File absFile)
 	{
-		this.codeEx.trans(absFile);
+		if(this.symbol.getScope() == 0) //Label code block start
+			absFile.label("START", true);
+		else
+			absFile.label(this.symbol.getProc(), true);
+
+		this.codeEx.trans(absFile); //Add lines of code block
+
+		if(this.symbol.getScope() == 0) //Release label anchor, so that it will move when lines are added before it
+			absFile.anchorLabel("START");
+		else
+		{
+			absFile.add(new Line("RETURN"));
+			absFile.anchorLabel(this.symbol.getProc());
+		}
 
 		if(this.prog_Ex_ != null)
 			this.prog_Ex_.trans(absFile);   

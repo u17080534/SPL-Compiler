@@ -17,25 +17,18 @@ public class proc extends Expression
 	}  
 
 	//CODE GEN FOR INSTR
-	//!address this
 	public Line trans(File absFile)
 	{
-		//Label the start of the proc
-
-		int index = absFile.getLabel(this.proced.getSymbol().getProc()); //pos of current proc in file
-
 		int oldIndex = absFile.point(0); //where proc is defined in upper level
-		
-		absFile.label(this.proced.trans(absFile).toString());
-		
-		Line line = this.progEx.trans(absFile);
 
-		absFile.add(new Line("RETURN"));
+		int size = absFile.size();
 
-		absFile.label("PROC_DEFS");
+		this.progEx.trans(absFile);
 
-		absFile.point(oldIndex + absFile.getPointer());
+		size = absFile.size() - size;
 
-		return line; 
+		absFile.point(oldIndex + size);
+
+		return null; 
 	} 
 }

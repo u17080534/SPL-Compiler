@@ -1,0 +1,10 @@
+c;
+
+if (T) then {
+  x = 0;
+  
+  if (T) then {
+    num y
+} else {
+  num x
+}

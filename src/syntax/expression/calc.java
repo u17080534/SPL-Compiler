@@ -17,26 +17,38 @@ public class calc extends Expression
 		this.expr = "CALC";
 	}  
 
-	//!address this
 	public Line trans(File absFile)
 	{
 		/*
 			CALC_ will assign param values to two variables [TMPC<CALC_ID><1/2>]
 			Perform operation between variables.
 			eg.
-				* operation is +
+				* operation is +/-/*
 				* CALC's ID is 00
 				* CALC_'s ID is 99
 				* TMPC991 and TMPC992 are assigned to the result variables of the contained arguments.
 				TMPC00 = TMPC991 + TMPC992
 		*/
 
-		Line l1 = this.action.trans(absFile);
+		String temp = "TMPC" + this.getID();
+
+		String distinct = this.action.trans(absFile).toString();
 		
-		Line l2 = this.calc_Ex.trans(absFile);
+		String var1 = "TMPC" + this.calc_Ex.getID() + "1";
 
-		String str = "";
+		String var2 = "TMPC" + this.calc_Ex.getID() + "2";
 
-		return new Line(l1.toString() + l2.toString());
+		this.calc_Ex.trans(absFile);
+
+		if(distinct.equals("add"))
+			absFile.add(new Line(temp + " = " + var1 + " + " + var2));
+
+		else if(distinct.equals("sub"))
+			absFile.add(new Line(temp + " = " + var1 + " - " + var2));
+		
+		else if(distinct.equals("mult"))
+			absFile.add(new Line(temp + " = " + var1 + " * " + var2));
+
+		return new Line(temp);
 	} 
 }

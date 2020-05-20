@@ -21,7 +21,6 @@ public class calc_ extends Expression
 	public Line trans(File absFile)
 	{		
 		absFile.add(new Line("TMPC" + this.getID() + "1 = " + this.numexprEx1.trans(absFile).toString()));
-
 		absFile.add(new Line("TMPC" + this.getID() + "2 = " + this.numexprEx2.trans(absFile).toString()));
 
 		return null;
