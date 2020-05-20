@@ -5,10 +5,10 @@ wrong = "w";
 correct = "c";
 eqv = F;
 
+
 string h;
 hello;
 output(h);
-
 
 num i;
 num a;
@@ -19,7 +19,7 @@ for (i = 0; i < a; i = add(i, 1))
 
     for (i = 0; i < a; i = add(i, 1))
     {
-       output (correct)
+      output (correct)
     }
 };
 
@@ -27,11 +27,33 @@ num other;
 
 proc guess
 {
+
+
     num x;
     num other;
     num answer;
 
 
+    if(T) then
+    {
+      answer = 5
+    }
+    else{
+      answer = 2;
+      output(answer)
+    };
+
+    if(T) then
+    {
+      other = 4;
+      output(answer)
+    }
+    else{
+      answer = 5
+    };
+
+
+    output(answer);
 
     x = 9;
     x = add(3,8);
