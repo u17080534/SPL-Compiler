@@ -54,7 +54,7 @@ public class SPL
         this.tree = null;
     } 
 
-    public void compile(boolean debug)
+    public File compile(boolean debug)
     {
         this.output(debug);
 
@@ -67,12 +67,17 @@ public class SPL
                     this.analysis();
 
             File genFile = File.complete_file(this.tree.generation(this.filename));
+            
             this.cache.export(genFile);
+
+            return genFile;
         }
         catch(Exception ex)
         {
             System.out.println(ex);
         }
+
+        return null;
     }
 
     public List<Token> tokenize() throws LexerException
@@ -201,7 +206,6 @@ public class SPL
             {
                 if(args[index].equals("-test"))
                 {
-                    debug = true;
                     compilers.add(new SPL("input/test.spl"));
                     break;
                 }

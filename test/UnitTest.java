@@ -2,7 +2,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 public class UnitTest
@@ -20,7 +19,7 @@ public class UnitTest
         System.out.println("\nEXITING TESTING ENVIRONMENT...");
     } 
 
-    @Ignore
+    @Test
     public void testLexer() 
     { 
         System.out.println("\tLEXER UNIT TESTING...\n");
@@ -58,6 +57,7 @@ public class UnitTest
             {
                 SPL compiler = new SPL(args[index]); 
                 System.out.println(compiler);
+                compiler.output(false);
                 compiler.tokenize();
             }
             catch(Exception e)
@@ -74,7 +74,7 @@ public class UnitTest
         System.out.println("\tLEXER UNIT TESTING COMPLETE...\n");
     } 
 
-    @Ignore
+    @Test
     public void testParser() 
     { 
         System.out.println("\tPARSER UNIT TESTING...\n");
@@ -112,6 +112,7 @@ public class UnitTest
             {
                 SPL compiler = new SPL(args[index]); 
                 System.out.println(compiler);
+                compiler.output(false);
                 compiler.parse(compiler.tokenize());
             }
             catch(Exception e)
@@ -128,7 +129,7 @@ public class UnitTest
         System.out.println("\tPARSER UNIT TESTING COMPLETE...\n");
     } 
 
-    @Ignore
+    @Test
     public void testScopeCheck() 
     { 
         System.out.println("\tSCOPE CHECKING UNIT TESTING...\n");
@@ -166,7 +167,7 @@ public class UnitTest
             {
                 SPL compiler = new SPL(args[index]); 
                 System.out.println(compiler);
-                compiler.output(true);
+                compiler.output(false);
                 compiler.parse(compiler.tokenize());
                 compiler.checkScope();
             }
@@ -184,7 +185,7 @@ public class UnitTest
         System.out.println("\tSCOPE CHECKING UNIT TESTING COMPLETE...\n");
     } 
 
-    @Ignore
+    @Test
     public void testTypeCheck() 
     { 
         System.out.println("\tTYPE CHECK UNIT TESTING...\n");
@@ -222,6 +223,7 @@ public class UnitTest
             {
                 SPL compiler = new SPL(args[index]);
                 System.out.println(compiler);
+                compiler.output(false);
                 compiler.parse(compiler.tokenize());
                 compiler.checkScope();
                 compiler.checkType();
@@ -240,7 +242,7 @@ public class UnitTest
         System.out.println("\tTYPE CHECK UNIT TESTING COMPLETE...\n");
     } 
 
-    @Ignore
+    @Test
     public void testValueCheck() 
     { 
         System.out.println("\tVALUE CHECK UNIT TESTING...\n");
@@ -282,7 +284,6 @@ public class UnitTest
                 compiler.parse(compiler.tokenize());
                 compiler.checkScope();
                 compiler.checkType();
-                compiler.output(true);
                 compiler.checkValues();
             }
             catch(Exception e)
@@ -310,20 +311,22 @@ public class UnitTest
         };
 
         String[] results = {
-            "",
-            ""
+            "0 GOTO 23\n1 V6$ = \"yy\"\n2 PRINT V6$\n3 RETURN\n4 V5$ = \"yx\"\n5 PRINT V5$\n6 RETURN\n7 V2$ = \"y\"\n8 PRINT V2$\n9 GOSUB 4\n10 GOSUB 1\n11 RETURN\n12 V4$ = \"xy\"\n13 PRINT V4$\n14 RETURN\n15 V3$ = \"xx\"\n16 PRINT V3$\n17 RETURN\n18 V1$ = \"x\"\n19 PRINT V1$\n20 GOSUB 15\n21 GOSUB 12\n22 RETURN\n23 V0$ = \"hello0\"\n24 GOSUB 18\n25 GOSUB 7\n26 END\n",
+            "0 GOTO 13\n1 TMPN123 = V2\n2 TMPC1221 = TMPN123\n3 TMPN126 = V4\n4 TMPC1222 = TMPN126\n5 TMPC120 = TMPC1221 * TMPC1222\n6 TMPN119 = TMPC120\n7 TMPA117 = TMPN119\n8 V2 = TMPA117\n9 RETURN\n10 PRINT V1\n11 PRINT V2\n12 RETURN\n13 V0$ = \"counter\"\n14 PRINT V0$\n15 TMPN50 = 10\n16 TMPA48 = TMPN50\n17 V3 = TMPA48\n18 TMPN59 = 2\n19 TMPA57 = TMPN59\n20 V4 = TMPA57\n21 TMPN68 = 1\n22 TMPA66 = TMPN68\n23 V2 = TMPA66\n24 V1 = 0\n25 TEMPB72 = V1 < V3\n26 TEMPB72 = NOT TEMPB72\n27 IF TEMPB72 THEN GOTO 32\n28 GOSUB 1\n29 GOSUB 10\n30 V1 = V1 + 1\n31 GOTO 25\n32 END\n"
         };
 
         for(int index = 0; index < args.length; index++)
         {
             String result = "";
             SPL compiler = null;
+            syntax.code.File resFile = null;
 
             try
             {
                 compiler = new SPL(args[index]);
                 System.out.println(compiler);
-                compiler.compile(false);
+                compiler.output(false);
+                resFile = compiler.compile(false);
             }
             catch(Exception e)
             {
@@ -332,15 +335,8 @@ public class UnitTest
 
             if(result == "")
             {
-                try
-                {
-                    Runtime rt = Runtime.getRuntime();
-                    Process pr = rt.exec("./extern/BASIC [" + compiler.getFilename() + ".bas]");
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
+                if(resFile != null)
+                    result = resFile.toString();
             }
             else
                 System.out.println("\t" + result + "\n");
