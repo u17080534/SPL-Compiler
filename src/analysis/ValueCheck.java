@@ -11,6 +11,7 @@ public class ValueCheck
 {
 	public static void check(SymbolTable table) throws ValueException
 	{
+		//All these are objects that are passed by reference to functions
 		Map<String,Integer> variableMap = new HashMap<String, Integer>();
 		Map<Symbol,String> needsValueMessage = new HashMap<Symbol, String>();
 		Vector<String> ifCheck = new Vector<>();
@@ -26,12 +27,12 @@ public class ValueCheck
 		Stack<Integer> procEndStack = new Stack<>();
 		Vector<String> procDoneList = new Vector<>();
 		Vector<Symbol> symbols = table.list();
+		//This object is so that primitive variables may be accessed by reference and not be static
 		CheckObject checkObj = new CheckObject(-1, -1, false, false, -1);
 
 		try{
 
-			for(int i = 0; i < symbols.size(); i++)
-			{
+			for(int i = 0; i < symbols.size(); i++){
 
 
 
@@ -174,7 +175,7 @@ public class ValueCheck
 									}
 									else{
 										//not being assign a variable but a literal
-										variableMap.put(symbols.get(i).getExpression(),3);
+										variableMap.put(symbols.get(i).getExpression(), 3);
 									}
 								}
 							}
@@ -221,13 +222,14 @@ public class ValueCheck
 								}
 								else{
 									//not being assign a variable but a literal
-									variableMap.put(symbols.get(i).getExpression(),3);
+									variableMap.put(symbols.get(i).getExpression(), 3);
 								}
 							}
 
 						}
 					}
-					else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("DECL")){			//type
+					else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("DECL")){			
+						//type
 						variableMap.put(symbols.get(i).getExpression(),0);
 					}
 					else{
@@ -269,13 +271,13 @@ public class ValueCheck
 			exception.printStackTrace();
 		}
 
-
 		//warnings
 		warningsDisplay = warningsDisplay.stream().distinct().collect(Collectors.toCollection(Vector::new));
-
 		for (Symbol symbol : warningsDisplay)
-			System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
-
+		{
+			if(symbol.getHasValue() == false)
+				System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
+		}
 
 		//value errors
 		needsValue = needsValue.stream().distinct().collect(Collectors.toCollection(Vector::new));
@@ -301,6 +303,27 @@ public class ValueCheck
 	}
 
 
+	private static int findBranchParentID(Symbol symbol)
+	{
+		int branch_parent_id = 0;
+		if(symbol != null && symbol.getExpr().getParent() != null)
+		{
+			Symbol parent = symbol.getExpr().getParent().getSymbol();
+
+			while(parent != null)
+			{
+				if(parent.getExpression().equals("COND_BRANCH") || parent.getExpression().equals("COND_LOOP"))
+					branch_parent_id = parent.getID();
+
+				if(parent.getExpr().getParent() != null)
+					parent = parent.getExpr().getParent().getSymbol();
+				else
+					parent = null;
+			}
+		}
+
+		return branch_parent_id;
+	}
 
 
 	private static void recursiveProc(Vector<Expression> code, Vector<Symbol> PROCsymbols){

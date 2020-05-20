@@ -94,6 +94,8 @@ public class Symbol
 	public void hasValue(boolean has)
 	{
 		this.hasValue = has;
+		if(this.expr.getSymbol() != this)
+			this.expr.getSymbol().hasValue(has);
 	}
 
 	public boolean getHasValue()
