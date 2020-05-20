@@ -137,3 +137,17 @@
 	All symbols that have a value are also updated with Has-Value in the symbol table.
 
 		CONTRIBUTIONS:	BYRON TOMKINSON
+
+05 - CODE GENERATION
+
+	Code generation is performed recursively down the abstract syntax tree.
+
+	Each concrete expression node has its own implementation of the trans(File) function, through which a File object is passed.
+		At each call to the trans function, the node may add Lines of code to the file, and/or call its children nodes' trans functions.
+		Labels also may be added to certain lines and within the code using the syntax %LABEL% (or even %LABEL+N%) to reference an abstract position in the file.
+
+	Every proc is printed at the top of their respective scope 'area' in the BASIC code generation, and the instructions of that scope are printed directly after it - the first instruction in the code will jump over all the proc definitions to the start of the code at scope 0.
+
+	All loops and conditoins have been implemented using only goto logic and  all simple instructions are implemented with the respective BASIC commands as per the spec.
+
+		CONTRIBUTIONS:	JORDAN MANAS

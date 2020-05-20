@@ -39,8 +39,6 @@ public class File
 
 	public void add(Line line)
 	{
-		System.out.println(this.toString());
-		System.out.println(this.labels);
 		if(line != null)
 		{
 			for(Label label : this.labels)
@@ -57,7 +55,6 @@ public class File
 	{
 		int tmp = this.point;
 		this.point = this.lines.size();
-		System.out.println("Pointing " + tmp + " -> " + this.point);
 		return tmp;
 	}
 
@@ -66,7 +63,6 @@ public class File
 	{
 		int tmp = this.point;
 		this.point = Math.min(index, this.lines.size());
-		System.out.println("Pointing " + tmp + " -> " + this.point);
 		return tmp;
 	}
 
@@ -155,6 +151,8 @@ public class File
 
 		refined.point();
 
+		refined.label("END", true);
+
 		refined.add(new Line("END"));
 
 		refined.number();
@@ -184,19 +182,12 @@ public class File
 				label = label.substring(0, dIndex);
 			}
 
-			// if(labels.get(label) == null)
-			// {
-			// 	int lineRef = labels.get(label).getLine() + diff;
-			// 	line.setLine(line.toString().substring(0, pIndex1) + lineRef);
-			// }
-			// else
-			// 	System.out.println("Labelling Error: " + label);
-
 			for(Label lbl : labels)
 				if(lbl.getLabel().equals(label))
 				{
 					int lineRef = lbl.getLine() + diff;
 					line.setLine(line.toString().substring(0, pIndex1) + lineRef);
+					break;
 				}
 		}
 

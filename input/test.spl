@@ -1,107 +1,38 @@
-string wrong;
-string correct;
-bool eqv;
-wrong = "w";
-correct = "c";
-eqv = F;
-
-
 string h;
-hello;
-output(h);
+h = "hello";
+num a;
+num b;
+num c;
+a = 1;
+b = 2;
+c = 3;
+
+a = add(mult(b, c), sub(b, c));
+
+bool eqv;
+
+eqv = or((b < a), (a < c));
 
 num i;
-num a;
-
-for (i = 0; i < a; i = add(i, 1))
+for(i = 0; i < a; i = add(i,1))
 {
-    output (correct);
+	output(i);
 
-    for (i = 0; i < a; i = add(i, 1))
-    {
-      output (correct)
-    }
+	if(eq(i,a)) then
+	{
+		halt
+	}
 };
 
-num other;
+a = 299;
 
-proc guess
+if(eqv) then
 {
-
-
-    num x;
-    num other;
-    num answer;
-
-
-    if(T) then
-    {
-      answer = 5
-    }
-    else{
-      answer = 2;
-      output(answer)
-    };
-
-    if(T) then
-    {
-      other = 4;
-      output(answer)
-    }
-    else{
-      answer = 5
-    };
-
-
-    output(answer);
-
-    x = 9;
-    x = add(3,8);
-
-    while(T)
-    {
-
-      if(eqv) then
-      {
-          num s;
-          num t;
-          t = other;
-          output(t);
-
-          if(eq(answer, other)) then
-          {
-            answer = 5;
-            output (s)
-            }
-          else{
-            answer = 3
-          };
-
-          output (answer)
-      }
-      else
-      {
-
-          output (wrong);
-          answer = 5
-      };
-
-        other = 7
-
-    };
-
-
-    output(answer)
+	input(h)
 }
-
-proc hello
+else
 {
-    h = "hello";
-    hello2;
-    guess;
+	output(h)
+};
 
-    proc hello2
-    {
-        output(h)
-    }
-}
+a = 2

@@ -41,7 +41,7 @@ public class SymbolTable
 	{
 		String str = "";
 
-		if(this.symbols.size() <= 100)
+		if(this.symbols.size() <= 500)
 			for(int index = 0; index < this.symbols.size(); index++)
 			{
 				str += this.symbols.get(index).getSymbol();
@@ -61,7 +61,7 @@ public class SymbolTable
 			}
 		else
 		{
-			for(int index = 0; index < 45; index++)
+			for(int index = 0; index < 100; index++)
 			{
 				str += this.symbols.get(index).getSymbol();
 
@@ -81,7 +81,7 @@ public class SymbolTable
 
 			str += "...\n";
 
-			for(int index = this.symbols.size() - 45; index < this.symbols.size(); index++)
+			for(int index = this.symbols.size() - 100; index < this.symbols.size(); index++)
 			{
 				str += this.symbols.get(index).getSymbol();
 

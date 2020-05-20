@@ -7,19 +7,22 @@ proc x
 {
 	string hx;
 	hx = "x";
+	output(hx);
 	xx;
 	xy;
 
 	proc xx
 	{
 		string hxx;
-		hxx = "xx"
+		hxx = "xx";
+		output(hxx)
 	}
 
 	proc xy
 	{
 		string hxy;
-		hxy = "xy"
+		hxy = "xy";
+		output(hxy)
 	}
 }
 
@@ -27,18 +30,21 @@ proc y
 {
 	string hy;
 	hy = "y";
+	output(hy);
 	yx;
 	yy;
 
 	proc yx
 	{
 		string hyx;
-		hyx = "yx"
+		hyx = "yx";
+		output(hyx)
 	}
 
 	proc yy
 	{
 		string hyy;
-		hyy = "yy"
+		hyy = "yy";
+		output(hyy)
 	}
 }

@@ -4,7 +4,6 @@ import exception.ValueException;
 import symtable.Symbol;
 import symtable.SymbolTable;
 import syntax.expression.Expression;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,6 @@ public class ValueCheck
 		Stack<Integer> procEndStack = new Stack<>();
 		Vector<String> procDoneList = new Vector<>();
 		Vector<Symbol> symbols = table.list();
-
 		CheckObject checkObj = new CheckObject(-1, -1, false, false, -1);
 
 		try{

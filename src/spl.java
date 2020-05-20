@@ -124,8 +124,8 @@ public class SPL
         try
         {
             this.checkScope();
-            // this.checkType();
-            // this.checkValues();
+            this.checkType();
+            this.checkValues();
 
             this.cache.export(this.tree);
             this.cache.export(this.table);
@@ -178,10 +178,15 @@ public class SPL
         this.cache.output(out);
     }
 
+    public String getFilename()
+    {
+        return this.filename;
+    }
+
     @Override 
     public String toString() 
     {
-        return "SPL-Compiler version \"1.0.1\"\n\tfile : " + this.filename + ".spl";
+        return "SPL-Compiler version \"1.0.2\"\n\tfile : " + this.filename + ".spl";
     }
 
     public static void main(String[] args) 

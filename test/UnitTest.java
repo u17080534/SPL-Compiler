@@ -240,7 +240,7 @@ public class UnitTest
         System.out.println("\tTYPE CHECK UNIT TESTING COMPLETE...\n");
     } 
 
-    @Test
+    @Ignore
     public void testValueCheck() 
     { 
         System.out.println("\tVALUE CHECK UNIT TESTING...\n");
@@ -299,37 +299,50 @@ public class UnitTest
         System.out.println("\tVALUE CHECK UNIT TESTING COMPLETE...\n");
     } 
 
-    @Ignore
+    @Test
     public void testCodeGeneration() 
     { 
         System.out.println("\tCODE GENERATION UNIT TESTING...\n");
         
         String[] args = {
-            "input/CodeGeneration/CodeGenerationTest1.spl"
+            "input/CodeGeneration/a.spl",
+            "input/CodeGeneration/b.spl"
         };
 
         String[] results = {
-            "" //1
+            "",
+            ""
         };
 
         for(int index = 0; index < args.length; index++)
         {
             String result = "";
+            SPL compiler = null;
+
             try
             {
-                SPL compiler = new SPL(args[index]);
+                compiler = new SPL(args[index]);
                 System.out.println(compiler);
-                compiler.parse(compiler.tokenize());
-                compiler.checkScope();
-                compiler.checkType();
-                compiler.checkValues();
+                compiler.compile(false);
             }
             catch(Exception e)
             {
                 result = e.toString();
             }
 
-            if(result != "")
+            if(result == "")
+            {
+                try
+                {
+                    Runtime rt = Runtime.getRuntime();
+                    Process pr = rt.exec("./extern/BASIC [" + compiler.getFilename() + ".bas]");
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            else
                 System.out.println("\t" + result + "\n");
 
             assertEquals(result, results[index]);

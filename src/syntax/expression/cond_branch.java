@@ -18,23 +18,21 @@ public class cond_branch extends Expression
 	}  
 
 	//CODE GEN FOR INSTR
-	//!address this
 	public Line trans(File absFile)
 	{
 		/*
 		IF:
-			N   		 	TMPC = <BOOL>
-			N   			TMPC = NOT TMPC
-			N   			IF TMPC THEN GOTO %IF_END+1%
-			%IF_END%        <CODE>
+			N			TEMPC<ID> = NOT <bool>
+			N			IF TEMPC<ID> THEN GOTO %END<ID>+1%
+			%END<ID>%	<code>
+
 		IF-ELSE:
-			N   		 	TMPC = <BOOL>
-			N   			IF TMPC THEN GOTO %IF_ELSE%
-			N   			<ELSE>
-			N 				GOTO %IF_END+1%
-			%IF_ELSE%    	TMPC = NOT TMPC
-			N 			   	IF TMPC THEN GOTO %IF_END+1%
-			%IF_END%        <CODE>
+			N			TEMPC<ID> = NOT <bool>
+			N			IF TEMPC<ID> THEN GOTO %ELSE<ID>%
+			N			<codex>
+			N			GOTO %END<ID>+1%
+			%ELSE<ID>%	<codey>
+			%END<ID>%
 		*/
 
 		String temp = "TMPC" + this.getID();
@@ -47,11 +45,25 @@ public class cond_branch extends Expression
 
 			this.codeEx.trans(absFile);
 
-			absFile.label("END" +  this.getID(), -1, false);
+			absFile.label("END" +  this.getID(), 1, false);
 		}
 		else
 		{
-			
+			absFile.add(new Line(temp + " = NOT " + this.boolEx.trans(absFile).toString()));
+
+			absFile.add(new Line("IF " + temp + " THEN GOTO %ELSE" + this.getID() + "%"));
+
+			this.codeEx.trans(absFile);
+
+			absFile.add(new Line("GOTO %END" + this.getID() + "+1%"));
+
+			absFile.label("ELSE" +  this.getID(), true);
+
+			this.cond_branch_Ex.trans(absFile);
+
+			absFile.anchorLabel("ELSE" +  this.getID());
+
+			absFile.label("END" +  this.getID(), 1, false);
 		}
 
 		return null;   
