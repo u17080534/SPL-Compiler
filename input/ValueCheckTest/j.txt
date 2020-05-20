@@ -1,0 +1,31 @@
+num x;
+num y;
+num a;
+num b;
+
+bool t;
+bool u;
+input(t);
+input(u);
+
+if (t) then {
+  x = 0;
+  a = 0
+} else {
+  y = 1;
+  a = 1
+};
+
+if (u) then {
+  y = 0;
+  b = 0
+} else {
+  x = 1;
+  b = 1
+};
+
+output(a);
+output(b);
+output(x);
+output(y)
+

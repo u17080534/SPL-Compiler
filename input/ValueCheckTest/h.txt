@@ -1,0 +1,17 @@
+num x;
+num y;
+
+foo;
+bar;
+
+output(x);
+output(y);
+
+
+proc foo {
+  x = 20
+}
+
+proc bar {
+  y = 10
+}

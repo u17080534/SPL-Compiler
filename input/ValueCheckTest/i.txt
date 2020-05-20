@@ -1,0 +1,37 @@
+num a;
+num b;
+
+bool t;
+input(t);
+
+if (t) then {
+  y;
+  x
+} else {
+  x;
+  y
+};
+
+output(a);
+output(b);
+
+
+proc x {
+  bool t;
+  input(t);
+  if (t) then {
+    input(a)
+  } else {
+    input(a)
+  }
+}
+
+proc y {
+  bool t;
+  input(t);
+  if (t) then {
+    input(b)
+  } else {
+    input(b)
+  }
+}
