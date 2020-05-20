@@ -1,0 +1,113 @@
+bool r;
+r = F;
+input(r);
+num a;
+num b;
+string iuj;
+iuj = "";
+if (eq(iuj, iuj)) then {
+  halt;
+  num iu;
+  iu = 0;
+  input(iu);
+  num i1;
+  i1 = 0;
+  for (iu = 0; iu < iu; iu = add(i1, 1)) {
+    halt;
+    while (F) {
+      while (F) {
+        num wjv;
+        wjv = 4
+      };
+      gp
+    };
+    halt;
+    num pyb;
+    pyb = 0;
+    num s1cj;
+    s1cj = 0;
+    bool tyv;
+    tyv = F;
+    tyv = (pyb < s1cj)
+  }
+} else {
+  bool vsh;
+  vsh = F;
+  b = 0;
+  if (and(vsh, (b < b))) then {
+    string k;
+    k = "";
+    halt;
+    num wf0c;
+    wf0c = 0;
+    num pu;
+    pu = 0;
+    num ynebr;
+    ynebr = 0;
+    num v;
+    v = 0;
+    num gh9h;
+    gh9h = 0;
+    for (wf0c = 0; pu < ynebr; v = add(gh9h, 1)) {
+      halt;
+      num hwp;
+      hwp = 0;
+      num n;
+      n = 0;
+      num gu;
+      gu = 0;
+      for (hwp = 0; n < pu; pu = add(gu, 1)) {
+        bool s;
+        s = F;
+        output(s);
+        d0
+      };
+      halt
+    }
+  };
+  string d;
+  d = "";
+  halt;
+  d = "puc"
+};
+
+proc gp {
+  num m6u;
+  m6u = 0;
+  num ugp;
+  ugp = 0;
+  num my5;
+  my5 = 0;
+  for (m6u = 0; ugp < m6u; ugp = add(my5, 1)) {
+    if (r) then {
+      halt;
+      halt
+    };
+    num lt;
+    lt = 0;
+    while (and(T, and(eq(m6u, ugp), (lt < lt)))) {
+      halt
+    }
+  };
+  bool g1z;
+  g1z = F;
+  input(g1z);
+  if (g1z) then {
+    a = 10
+  } else {
+    a = 10
+  };
+  if (not g1z) then {
+    b = 10
+  } else {
+    b = 10
+  }
+}
+proc d0 {
+  gp;
+  
+  if ((a < b)) then {
+    output(a);
+    output(b)
+  }
+}

@@ -1,0 +1,18 @@
+hi;
+bool e;
+e = F;
+num x;
+num y;
+x = 0;
+y = 0;
+output(e);
+
+proc hi {
+  num x;
+  num y;
+  num z;
+  y = 0;
+  z = add(sub(x, y), mult(x, y));
+  output(x);
+  halt
+}

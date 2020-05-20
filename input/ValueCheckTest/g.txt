@@ -1,0 +1,317 @@
+num h3;
+h3 = 0;
+halt;
+output(h3);
+for (h3 = 0; h3 < h3; h3 = add(h3, 1)) {
+  string ei;
+  ei = "";
+  input(ei);
+  num db;
+  db = 0;
+  db = sub(6458, h3);
+  string hal;
+  hal = ""
+};
+halt;
+for (h3 = 0; h3 < h3; h3 = add(h3, 1)) {
+  num nq;
+  nq = 0;
+  for (nq = 0; nq < h3; h3 = add(nq, 1)) {
+    num y;
+    y = 0;
+    for (y = 0; y < nq; y = add(y, 1)) {
+      nq = mult(add(6880, h3), sub(y, 360));
+      num x2g;
+      x2g = 0;
+      num a76;
+      a76 = 0
+    };
+    y = 6239469;
+    y = add(y, 3389);
+    h3 = h3
+  };
+  string mi;
+  mi = "";
+  if (eq(mi, mi)) then {
+    if (T) then {
+      while (F) {
+        lbk;
+        s5r
+      };
+      bool a;
+      a = F;
+      bool yn;
+      yn = F;
+      if (eq(a, yn)) then {
+        mi = "yk92mo";
+        halt
+      }
+    } else {
+      string lb1;
+      lb1 = "";
+      lb1 = "";
+      string q9;
+      q9 = "";
+      input(q9);
+      bool g4;
+      g4 = F;
+      num dg;
+      dg = 0;
+      bool sll;
+      bool n47;
+      n47 = F;
+      if (and(not not not and(g4, (h3 < dg)), eq(sll, n47))) then {
+        vm8;
+        bool km3;
+        km3 = F;
+        num e;
+        e = 0;
+        sll = or(and(and(or(F, km3), T), n47), (e > h3))
+      } else {
+        num ee;
+        ee = 0;
+        while (or((ee > h3), T)) {
+          bool t;
+          t = F;
+          sll = t;
+          halt
+        };
+        halt;
+        while ((dg < nq)) {
+          string dhe;
+          dhe = "";
+          input(dhe);
+          num xglj;
+          xglj = 0;
+          xglj = sub(e, 856624)
+        }
+      }
+    };
+    bool j;
+    j = F;
+    j = F;
+    num u;
+    u = 0;
+    for (u = 0; u < u; u = add(u, 1)) {
+      u = 25;
+      input(nq);
+      h
+    }
+  } else {
+    mml;
+    mx;
+    string i;
+    i = "";
+    output(i)
+  };
+  mi = "ilmqe"
+};
+
+proc lbk {
+  num xg0;
+  xg0 = 0;
+  for (xg0 = 0; xg0 < xg0; h3 = add(h3, 1)) {
+    bool nf;
+    nf = F;
+    bool t3k;
+    t3k = F;
+    t3k = or(nf, not F);
+    halt
+  };
+  zt6;
+  output(xg0);
+  zt6;
+
+  proc zt6 {
+    halt;
+    bool el;
+    el = F;
+    while (el) {
+      bool uls;
+      uls = F;
+      h3 = 92
+    }
+  }
+
+}
+proc s5r {
+  yx1i;
+  bool as;
+  as = F;
+  output(as);
+  bool g0g;
+  g0g = F;
+  string o;
+  o = "";
+  output(o);
+
+  proc yx1i {
+    bool nw;
+    nw = F;
+    output(nw);
+    num j8o6;
+    j8o6 = 0;
+    num nm;
+    nm = 0;
+    nm = sub(2817, mult(j8o6, 90))
+  }
+
+}
+proc vm8 {
+  halt;
+  halt;
+  bool yk;
+  yk = F
+}
+proc h {
+  num ds;
+  ds = 0;
+  while ((ds > ds)) {
+    jm;
+    bool d;
+    d = F;
+    input(d);
+    num m;
+    m = 0;
+    m = 9707375;
+    if (F) then {
+      jm;
+      bool tc;
+      tc = F;
+      bool d9;
+      d9 = F;
+      while (eq(tc, d9)) {
+        num wg;
+        wg = 0;
+        input(wg);
+        wg = mult(48, mult(45, 587))
+      }
+    }
+  };
+  bool wgb;
+  wgb = F;
+  tmb;
+  input(wgb);
+
+  proc jm {
+    num p;
+    p = 0;
+    for (p = 0; h3 < h3; p = add(ds, 1)) {
+      tm;
+      string cw;
+      cw = ""
+    };
+    bf;
+    if (wgb) then {
+      num mz0;
+      mz0 = 0;
+      string t;
+      t = "";
+      output(t)
+    };
+
+    proc tm {
+      halt
+    }
+    proc bf {
+      halt
+    }
+
+  }
+  proc tmb {
+    tmb;
+    num g;
+    g = 0;
+    if ((g > ds)) then {
+      string z0e;
+      z0e = "";
+      string cf;
+      cf = ""
+    }
+  }
+
+}
+proc mml {
+  num av;
+  av = 0;
+  if ((h3 < av)) then {
+    halt;
+    num ak;
+    ak = 0
+  };
+  halt;
+  bool h;
+  h = F;
+  ws;
+  ws;
+
+  proc ws {
+    halt;
+    num oh6;
+    oh6 = 0;
+    h = not h
+  }
+
+}
+proc mx {
+  num f9i;
+  f9i = 0;
+  if ((f9i < f9i)) then {
+    string f;
+    f = "";
+    output(f);
+    halt;
+    num c;
+    c = 0
+  };
+  for (h3 = 0; h3 < f9i; h3 = add(h3, 1)) {
+    i;
+    halt;
+    string iwd;
+    iwd = "";
+    bool x;
+    x = F;
+    while (or(or(F, eq(iwd, iwd)), x)) {
+      bool ns;
+      ns = F;
+      ns = (h3 > f9i);
+      halt
+    }
+  };
+  input(f9i);
+
+  proc i {
+    if (or(T, T)) then {
+      halt;
+      bool c80;
+      c80 = F;
+      c80 = F
+    } else {
+      halt;
+      d
+    };
+    num w;
+    w = 0;
+    if ((w > h3)) then {
+      bool xlj;
+      xlj = F;
+      xlj = T;
+      input(w)
+    } else {
+      nz;
+      bool o9m;
+      o9m = F;
+      o9m = eq(w, f9i)
+    };
+    halt;
+
+    proc d {
+      halt
+    }
+    proc nz {
+      halt
+    }
+
+  }
+
+}

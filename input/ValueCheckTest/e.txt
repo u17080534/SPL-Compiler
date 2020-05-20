@@ -1,0 +1,93 @@
+while (F) {
+  n;
+  num g8;
+  g8 = 0;
+  while ((g8 > g8)) {
+    gy;
+    num qga;
+    qga = 0;
+    bool hq6m;
+    hq6m = F;
+    bool xv;
+    xv = F;
+    while (not not and(F, and((qga > g8), and(eq(hq6m, xv), T)))) {
+      bool y7;
+      y7 = F;
+      input(y7);
+      num b;
+      b = 0
+    };
+    input(xv)
+  }
+};
+string nxi;
+nxi = "";
+nxi = nxi;
+
+string text;
+bool truth;
+truth = eq(nxi, nxi);
+
+if (truth) then {
+  usen
+} else {
+  shown
+};
+
+output(text);
+
+proc usen {
+  getn
+}
+
+proc shown {
+  setn
+}
+
+proc getn {
+  input(text)
+}
+
+proc setn {
+  text = ""
+}
+
+proc n {
+  while (eq(nxi, nxi)) {
+    string bea9pj;
+    bea9pj = "";
+    input(bea9pj)
+  };
+  num js;
+  js = 0;
+  if (not (js > js)) then {
+    num de;
+    de = 0;
+    output(de);
+    tjh4z7
+  } else {
+    halt;
+    num y4fr0;
+    y4fr0 = 0;
+    y4fr0 = add(21792745, 7)
+  };
+
+  proc tjh4z7 {
+    halt
+  }
+
+}
+proc gy {
+  halt;
+  num b;
+  b = 0;
+  if ((b > b)) then {
+    f0;
+    halt
+  };
+
+  proc f0 {
+    halt
+  }
+
+}

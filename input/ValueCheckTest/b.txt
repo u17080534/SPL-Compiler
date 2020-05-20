@@ -1,0 +1,12 @@
+num a;
+num b;
+b = 0;
+cd6;
+
+proc cd6 {
+  a = 0;
+  num c;
+  c = add(a, b);
+  output(c);
+  halt
+}

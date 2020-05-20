@@ -1,0 +1,11 @@
+num a;
+bool b;
+string c;
+
+a = 0;
+b = T;
+c = "";
+
+output(a);
+output(b);
+output(c)

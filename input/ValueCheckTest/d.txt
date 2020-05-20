@@ -1,0 +1,24 @@
+string n;
+usen;
+shown;
+
+
+proc usen {
+  getn;
+  output(n)
+}
+
+proc shown {
+  setn;
+  string a;
+  a = n;
+  output(a)
+}
+
+proc getn {
+  input(n)
+}
+
+proc setn {
+  n = ""
+}
