@@ -5,52 +5,52 @@ import symtable.Symbol;
 import symtable.SymbolTable;
 import syntax.expression.Expression;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.*;
 import java.util.stream.Collectors;
+
+
 
 
 public class ValueCheck
 {
+
+	public static Map<String,Integer> variableMap = new HashMap<String, Integer>();
+	public static Map<Symbol,String> needsValueMessage = new HashMap<Symbol, String>();
+
+	public static Vector<String> ifCheck = new Vector<>();
+	public static Vector<Symbol> PROCsymbols = new Vector<>();
+	public static Vector<Symbol> PROCskip= new Vector<>();
+
+	public static Vector<Symbol> needsValue = new Vector<>();
+	public static Vector<Symbol> warnings = new Vector<>();
+	public static Vector<Symbol> warningsDisplay = new Vector<>();
+	public static int numOfCond_Branch = -1;
+	public static int numOfCond_Loop = -1;
+	public static Expression ifBranch = null;
+	public static Expression prevIfBranch = null;
+	public static boolean thenPart = false;
+	public static boolean elsePart = false;
+	public static int stackCount = -1;
+
+
+	public static Stack<Integer> markerStack = new Stack<>();
+	public static Stack<Integer> holderStack = new Stack<>();
+	public static Stack<Integer> procEndStack = new Stack<>();
+	public static Vector<String> procDoneList = new Vector<>();
+
+	public static Vector<Symbol> symbols = new Vector<>();
+
 
 	//display final variable value table
 		//0 - no value
 		//1 - value
 		//3 - maybe a value
 
-	private static Map<String,Integer> variableMap = new HashMap<String, Integer>();
-	private static Map<Symbol,String> needsValueMessage = new HashMap<Symbol, String>();
-
-	private static Vector<String> ifCheck = new Vector<>();
-	private static Vector<Symbol> PROCsymbols = new Vector<>();
-	private static Vector<Symbol> PROCskip= new Vector<>();
-
-	private static Vector<Symbol> needsValue = new Vector<>();
-	private static Vector<Symbol> warnings = new Vector<>();
-	private static Vector<Symbol> warningsDisplay = new Vector<>();
-	private static int numOfCond_Branch;
-	private static int numOfCond_Loop;
-	private static Expression ifBranch;
-	private static Expression prevIfBranch;
-	private static boolean thenPart;
-	private static boolean elsePart;
-	private static int stackCount;
-
-
-	private static Stack<Integer> markerStack = new Stack<>();
-	private static Stack<Integer> holderStack = new Stack<>();
-	private static Stack<Integer> procEndStack = new Stack<>();
-	private static Vector<String> procDoneList = new Vector<>();
-
-	private static Vector<Symbol> symbols;
-
-
 
 
 	public static void check(SymbolTable table) throws ValueException
 	{
+
 		variableMap = new HashMap<String, Integer>();
 		needsValueMessage = new HashMap<Symbol, String>();
 
@@ -58,240 +58,270 @@ public class ValueCheck
 		PROCsymbols = new Vector<>();
 		PROCskip = new Vector<>();
 
+
 		needsValue = new Vector<>();
 		warnings = new Vector<>();
 		warningsDisplay = new Vector<>();
 
+		numOfCond_Branch = -1;
+		numOfCond_Loop = -1;
+		ifBranch = null;
+		prevIfBranch = null;
+		thenPart = false;
+		elsePart = false;
+		stackCount = -1;
+
+
+		markerStack = new Stack<>();
+		holderStack = new Stack<>();
+		procEndStack = new Stack<>();
+		procDoneList = new Vector<>();
+
+		symbols = new Vector<>();
 		symbols = table.list();
 
 
-
-
-		for(int i = 0; i < symbols.size(); i++)
-		{
-
+		try{
+			for(int i = 0; i < symbols.size(); i++)
+			{
 
 
 
-			if(i != symbols.size()-1){
-				if(symbols.get(i+1).getExpression().contains("loop 'for'")) { //for loop
+				if(i != symbols.size()-1){
+					if(symbols.get(i+1).getExpression().contains("loop 'for'")) { //for loop
 
-					//assign
-					if (symbols.get(i + 3).getExpression().contains("variable '")) {
-						variableMap.put(symbols.get(i + 3).getExpression(), 1);
-						symbols.get(i + 3).hasValue(true);
-					}
-
-					//check comparison
-					if (symbols.get(i + 7).getExpression().contains("variable '")) {
-						if (!variableMap.containsKey(symbols.get(i + 7).getExpression())) {
-							variableMap.put(symbols.get(i + 7).getExpression(), 0);
+						//assign
+						if (symbols.get(i + 3).getExpression().contains("variable '")) {
+							variableMap.put(symbols.get(i + 3).getExpression(), 1);
+							symbols.get(i + 3).hasValue(true);
 						}
-						if (variableMap.get(symbols.get(i + 7).getExpression()) == 0) {
 
-							needsValue.add(symbols.get(i + 7));
-							needsValueMessage.put(symbols.get(i + 7), "undefined when used in a for loop");
-						}
-					}
-					i = i + 11;
-					continue;
-				}
-			}
-
-
-			//check for proc call
-			//...
-			if(symbols.get(i).getExpression().contains("call '")){
-
-				String procName = symbols.get(i).getExpression().substring(5);
-
-				markerStack.push(i+1);		//return here
-
-				for(int p = 0; p < symbols.size(); p++){
-					if(symbols.get(p).getExpression().contains("proc " + procName)){
-						procDoneList.add("proc " + procName);
-						if(symbols.get(p+1).getExpression().contains("PROG")){
-							PROCsymbols.clear();
-							recursiveProc(symbols.get(p+1).getExpr().getDescendents());
-							i = PROCsymbols.get(0).getID();
-
-							procEndStack.push(PROCsymbols.get(PROCsymbols.size()-1).getID());
-						}
-					}
-				}
-			}
-			else if(symbols.get(i).getExpression().contains("proc ")){
-				if(procDoneList.contains(symbols.get(i).getExpression())){
-					PROCskip.clear();
-					recursiveProcSkip(symbols.get(i+1).getExpr().getDescendents());
-					i = PROCskip.get(PROCskip.size()-1).getID();
-				}
-			}
-
-
-
-
-
-
-			if(symbols.get(i).getExpression().contains("variable '")){
-
-				//if we haven't seen this variable before, initialize it with a 0.
-				if(!variableMap.containsKey(symbols.get(i).getExpression())){
-					variableMap.put(symbols.get(i).getExpression(),0);
-				}
-
-				if(symbols.get(i).getExpr().getParent().getParent().getExpr().equals("ASSIGN")){			// =
-
-
-
-					if(variableMap.get(symbols.get(i).getExpression()) != 1){
-
-
-						numOfCond_Loop = 0;
-						numOfCond_Branch = 0;
-						stackCount = 0;
-						recursiveGetParent(symbols.get(i).getExpr());
-
-
-						if(numOfCond_Branch == 1 && numOfCond_Loop == 0){
-
-							thenPart = false;
-							elsePart = false;
-							prevIfBranch = ifBranch;
-							recursiveCheckIf(symbols.get(i).getExpr());
-							if(prevIfBranch != ifBranch){
-								ifCheck.clear();
+						//check comparison
+						if (symbols.get(i + 7).getExpression().contains("variable '")) {
+							if (!variableMap.containsKey(symbols.get(i + 7).getExpression())) {
+								variableMap.put(symbols.get(i + 7).getExpression(), 0);
 							}
+							if (variableMap.get(symbols.get(i + 7).getExpression()) == 0) {
 
-							if(thenPart){
-								ifCheck.add(symbols.get(i).getExpression());
+								needsValue.add(symbols.get(i + 7));
+								needsValueMessage.put(symbols.get(i + 7), "undefined when used in a for loop");
 							}
-							else if(elsePart){
-								if(ifCheck.contains(symbols.get(i).getExpression()) && prevIfBranch == ifBranch){
-									//System.out.println("in both");
-									variableMap.put(symbols.get(i).getExpression(), 1);
-									symbols.get(i).hasValue(true);
+						}
+						i = i + 11;
+						continue;
+					}
+				}
+
+
+				//check for proc call
+				//...
+				if(symbols.get(i).getExpression().contains("call '")){
+
+					String procName = symbols.get(i).getExpression().substring(5);
+
+					if(!procDoneList.contains("proc " + procName)){		//if we haven't done proc
+						markerStack.push(i+1);		//return here
+
+						for(int p = 0; p < symbols.size(); p++){
+
+							if(symbols.get(p).getExpression().contains("proc " + procName)){
+
+								procDoneList.add("proc " + procName);
+								if(symbols.get(p).getID()+1 != symbols.size()){
+
+									if(symbols.get(p+1).getExpression().contains("PROG")){
+										PROCsymbols.clear();
+										recursiveProc(symbols.get(p+1).getExpr().getDescendents());
+
+
+
+										i = PROCsymbols.get(0).getID();
+
+
+										procEndStack.push(PROCsymbols.get(PROCsymbols.size()-1).getID());
+									}
 								}
 							}
-
 						}
+					}
+
+				}
+				else if(symbols.get(i).getExpression().contains("proc ")){
+					if(procDoneList.contains(symbols.get(i).getExpression())){
+						PROCskip.clear();
+						recursiveProcSkip(symbols.get(i+1).getExpr().getDescendents());
+						i = PROCskip.get(PROCskip.size()-1).getID();
+					}
+				}
+
+
+
+
+
+
+				if(symbols.get(i).getExpression().contains("variable '")){
+					//if we haven't seen this variable before, initialize it with a 0.
+					if(!variableMap.containsKey(symbols.get(i).getExpression())){
+						variableMap.put(symbols.get(i).getExpression(),0);
+					}
+
+					if(symbols.get(i).getExpr().getParent().getParent().getExpr().equals("ASSIGN")){			// =
+
+
+
 						if(variableMap.get(symbols.get(i).getExpression()) != 1){
-							if(numOfCond_Loop == 0 && numOfCond_Branch == 0){
-								if(symbols.get(i+2).getExpression().contains("assign 'variable'")){
-									//is being assigned a variable
-									if(!(variableMap.get(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getDescendents().get(0).getExpr()) == 0)){
-									//variable it is being assign has a value
+
+
+							numOfCond_Loop = 0;
+							numOfCond_Branch = 0;
+							stackCount = 0;
+							recursiveGetParent(symbols.get(i).getExpr());
+
+
+							if(numOfCond_Branch == 1 && numOfCond_Loop == 0){
+
+								thenPart = false;
+								elsePart = false;
+								prevIfBranch = ifBranch;
+								recursiveCheckIf(symbols.get(i).getExpr());
+								if(prevIfBranch != ifBranch){
+									ifCheck.clear();
+								}
+
+								if(thenPart){
+									ifCheck.add(symbols.get(i).getExpression());
+								}
+								else if(elsePart){
+									if(ifCheck.contains(symbols.get(i).getExpression()) && prevIfBranch == ifBranch){
+										//System.out.println("in both");
 										variableMap.put(symbols.get(i).getExpression(), 1);
 										symbols.get(i).hasValue(true);
 									}
 								}
+
+							}
+							if(variableMap.get(symbols.get(i).getExpression()) != 1){
+								if(numOfCond_Loop == 0 && numOfCond_Branch == 0){
+									if(symbols.get(i+2).getExpression().contains("assign 'variable'")){
+										//is being assigned a variable
+										if(!(variableMap.get(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getDescendents().get(0).getExpr()) == 0)){
+											//variable it is being assign has a value
+											variableMap.put(symbols.get(i).getExpression(), 1);
+											symbols.get(i).hasValue(true);
+										}
+									}
+									else{
+										//not being assign a variable but a literal
+										variableMap.put(symbols.get(i).getExpression(),1);
+										symbols.get(i).hasValue(true);
+									}
+								}
 								else{
+									if(symbols.get(i+2).getExpression().contains("assign 'variable'")){
+										//is being assigned a variable
+										if(!(variableMap.get(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getDescendents().get(0).getExpr()) == 0)){
+											//variable it is being assign has a value
+											variableMap.put(symbols.get(i).getExpression(), 3);
+										}
+									}
+									else{
+										//not being assign a variable but a literal
+										variableMap.put(symbols.get(i).getExpression(),3);
+									}
+								}
+							}
+						}
+
+					}else if(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(0).getExpr().contains("input")){
+
+						if(variableMap.get(symbols.get(i).getExpression()) != 1){
+							numOfCond_Loop = 0;
+							numOfCond_Branch = 0;
+							stackCount = 0;
+							recursiveGetParent(symbols.get(i).getExpr());
+
+
+							if(numOfCond_Branch == 1 && numOfCond_Loop == 0){
+
+								thenPart = false;
+								elsePart = false;
+								prevIfBranch = ifBranch;
+								recursiveCheckIf(symbols.get(i).getExpr());
+								if(prevIfBranch != ifBranch){
+									ifCheck.clear();
+								}
+
+								if(thenPart){
+									ifCheck.add(symbols.get(i).getExpression());
+								}
+								else if(elsePart){
+									if(ifCheck.contains(symbols.get(i).getExpression()) && prevIfBranch == ifBranch){
+										//System.out.println("in both");
+										variableMap.put(symbols.get(i).getExpression(), 1);
+										symbols.get(i).hasValue(true);
+									}
+								}
+
+							}
+							if(variableMap.get(symbols.get(i).getExpression()) != 1){
+								if(numOfCond_Loop == 0 && numOfCond_Branch == 0){
+
 									//not being assign a variable but a literal
 									variableMap.put(symbols.get(i).getExpression(),1);
 									symbols.get(i).hasValue(true);
-								}
-							}
-							else{
-								if(symbols.get(i+2).getExpression().contains("assign 'variable'")){
-									//is being assigned a variable
-									if(!(variableMap.get(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(1).getDescendents().get(1).getDescendents().get(0).getExpr()) == 0)){
-										//variable it is being assign has a value
-										variableMap.put(symbols.get(i).getExpression(), 3);
-									}
+
 								}
 								else{
 									//not being assign a variable but a literal
 									variableMap.put(symbols.get(i).getExpression(),3);
 								}
 							}
+
 						}
 					}
+					else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("DECL")){			//type
+						variableMap.put(symbols.get(i).getExpression(),0);
+					}
+					else{
+						//other variable usage
+						if(variableMap.get(symbols.get(i).getExpression()) == 0){
 
-				}else if(symbols.get(i).getExpr().getParent().getParent().getDescendents().get(0).getExpr().contains("input")){
+							needsValue.add(symbols.get(i));
 
-					if(variableMap.get(symbols.get(i).getExpression()) != 1){
-						numOfCond_Loop = 0;
-						numOfCond_Branch = 0;
-						stackCount = 0;
-						recursiveGetParent(symbols.get(i).getExpr());
-
-
-						if(numOfCond_Branch == 1 && numOfCond_Loop == 0){
-
-							thenPart = false;
-							elsePart = false;
-							prevIfBranch = ifBranch;
-							recursiveCheckIf(symbols.get(i).getExpr());
-							if(prevIfBranch != ifBranch){
-								ifCheck.clear();
+							if(symbols.get(i-2).getExpression().contains("io 'output'")){
+								needsValueMessage.put(symbols.get(i), "needs a value to be outputted to the screen");
 							}
-
-							if(thenPart){
-								ifCheck.add(symbols.get(i).getExpression());
+							else if(symbols.get(i-2).getExpression().contains("assign '")){
+								needsValueMessage.put(symbols.get(i), "needs a value when being assigned to something else");
 							}
-							else if(elsePart){
-								if(ifCheck.contains(symbols.get(i).getExpression()) && prevIfBranch == ifBranch){
-									//System.out.println("in both");
-									variableMap.put(symbols.get(i).getExpression(), 1);
-									symbols.get(i).hasValue(true);
-								}
+							else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("BOOL")){
+								needsValueMessage.put(symbols.get(i), "undefined in BOOL condition");
+							}
+							else if(symbols.get(i-3).getExpression().contains("loop 'while'")){
+								needsValueMessage.put(symbols.get(i), "undefined in while statement condition");
 							}
 
 						}
-						if(variableMap.get(symbols.get(i).getExpression()) != 1){
-							if(numOfCond_Loop == 0 && numOfCond_Branch == 0){
-
-								//not being assign a variable but a literal
-								variableMap.put(symbols.get(i).getExpression(),1);
-								symbols.get(i).hasValue(true);
-
-							}
-							else{
-								//not being assign a variable but a literal
-								variableMap.put(symbols.get(i).getExpression(),3);
-							}
+						else if(variableMap.get(symbols.get(i).getExpression()) == 3){
+							warningsDisplay.add(symbols.get(i));
 						}
-
 					}
 				}
-				else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("DECL")){			//type
-					variableMap.put(symbols.get(i).getExpression(),0);
-				}
-				else{
-					//other variable usage
-					if(variableMap.get(symbols.get(i).getExpression()) == 0){
 
-						needsValue.add(symbols.get(i));
-
-						if(symbols.get(i-2).getExpression().contains("io 'output'")){
-							needsValueMessage.put(symbols.get(i), "needs a value to be outputted to the screen");
-						}
-						else if(symbols.get(i-2).getExpression().contains("assign '")){
-							needsValueMessage.put(symbols.get(i), "needs a value when being assigned to something else");
-						}
-						else if(symbols.get(i).getExpr().getParent().getParent().getExpr().contains("BOOL")){
-							needsValueMessage.put(symbols.get(i), "undefined in BOOL condition");
-						}
-						else if(symbols.get(i-3).getExpression().contains("loop 'while'")){
-							needsValueMessage.put(symbols.get(i), "undefined in while statement condition");
-						}
-
-					}
-					else if(variableMap.get(symbols.get(i).getExpression()) == 3){
-						warningsDisplay.add(symbols.get(i));
+				if(!procEndStack.empty()){
+					if(procEndStack.peek() == i){
+						procEndStack.pop();
+						i = markerStack.pop();
 					}
 				}
+
 			}
-
-
-			if(!procEndStack.empty()){
-				if(procEndStack.peek() == i){
-					procEndStack.pop();
-					i = markerStack.pop();
-				}
-			}
-
 		}
+		catch(EmptyStackException exception) {
+			exception.printStackTrace();
+		}
+
+
 
 
 
@@ -342,6 +372,7 @@ public class ValueCheck
 
 		for (Expression expression : code) {
 
+
 			PROCsymbols.add(expression.getSymbol());
 
 			if (!expression.isTerminal()) {
@@ -367,19 +398,21 @@ public class ValueCheck
 	private static void recursiveGetParent(Expression code){
 
 
-
 		if(code.getExpr().contains("PROC")){
 
-			for(int i = 0; i < stackCount; i++){
-				holderStack.push(markerStack.pop());
-			}
-			code = symbols.get(markerStack.peek()).getExpr();
+			if(!markerStack.empty()){
+				for(int i = 0; i < stackCount; i++){
+					holderStack.push(markerStack.pop());
+				}
+				code = symbols.get(markerStack.peek()).getExpr();
 
-			for(int i = 0; i < stackCount; i++){
-				markerStack.push(holderStack.pop());
+				for(int i = 0; i < stackCount; i++){
+					markerStack.push(holderStack.pop());
+				}
+
+				stackCount++;
 			}
 
-			stackCount++;
 		}
 
 		if(code.getExpr().contains("COND_BRANCH")){
@@ -426,8 +459,6 @@ public class ValueCheck
 		}
 
 	}
-
-
 
 
 

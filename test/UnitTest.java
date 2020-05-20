@@ -277,17 +277,27 @@ public class UnitTest
         System.out.println("\tVALUE CHECK UNIT TESTING...\n");
         
         String[] args = {
-            "input/ValueCheckTest/ValueCheckTest1.spl",
-            "input/ValueCheckTest/ValueCheckTest2.spl",
-            "input/ValueCheckTest/ValueCheckTest3.spl",
-            "input/ValueCheckTest/ValueCheckTest4.spl",
-            "input/ValueCheckTest/ValueCheckTest5.spl"
+            "input/ValueCheckTest/a.txt",
+            "input/ValueCheckTest/b.txt",
+            "input/ValueCheckTest/c.txt",
+            "input/ValueCheckTest/d.txt",
+            "input/ValueCheckTest/e.txt",
+            "input/ValueCheckTest/f.txt",
+            "input/ValueCheckTest/g.txt",
+            "input/ValueCheckTest/h.txt",
+            "input/ValueCheckTest/i.txt",
+            "input/ValueCheckTest/j.txt"
         };
 
         String[] results = {
-            "Value Exception: Variable needs a value when being assigned to something else [variable 'other'][46,15]; Variable needs a value to be outputted to the screen [variable 't'][47,18]; Variable undefined in BOOL condition [variable 'answer'][49,17]; Variable undefined in BOOL condition [variable 'other'][49,25]; Variable needs a value to be outputted to the screen [variable 's'][52,21]; Variable undefined when used in a for loop [variable 'a'][16,17]; Variable undefined when used in a for loop [variable 'a'][20,21]",
-            "Value Exception: Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]",
-            "Value Exception: Variable needs a value to be outputted to the screen [variable 'h'][79,16]; Variable needs a value when being assigned to something else [variable 'other'][43,15]; Variable needs a value to be outputted to the screen [variable 't'][44,18]; Variable undefined in BOOL condition [variable 'answer'][46,17]; Variable undefined in BOOL condition [variable 'other'][46,25]; Variable undefined when used in a for loop [variable 'a'][13,17]; Variable undefined when used in a for loop [variable 'a'][17,21]; Variable needs a value to be outputted to the screen [variable 'a'][19,16]",
+            "",
+            "",
+            "Value Exception: Variable undefined [variable 'x'][15,15]; Variable undefined [variable 'x'][15,27]; Variable needs a value to be outputted to the screen [variable 'x'][16,10]",
+            "",
+            "Value Exception: Variable undefined in BOOL condition [variable 'nxi'][56,13]; Variable undefined in BOOL condition [variable 'nxi'][56,18]",
+            "",
+            "Value Exception: Variable undefined in BOOL condition [variable 'sll'][63,50]; Variable undefined in BOOL condition [variable 'wgb'][205,9]",
+            "",
             "",
             ""
         };
