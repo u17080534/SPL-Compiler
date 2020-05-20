@@ -306,6 +306,7 @@ public class ValueCheck
 	private static int findBranchParentID(Symbol symbol)
 	{
 		int branch_parent_id = 0;
+		
 		if(symbol != null && symbol.getExpr().getParent() != null)
 		{
 			Symbol parent = symbol.getExpr().getParent().getSymbol();
@@ -313,7 +314,10 @@ public class ValueCheck
 			while(parent != null)
 			{
 				if(parent.getExpression().equals("COND_BRANCH") || parent.getExpression().equals("COND_LOOP"))
+				{
 					branch_parent_id = parent.getID();
+					break;
+				}
 
 				if(parent.getExpr().getParent() != null)
 					parent = parent.getExpr().getParent().getSymbol();
