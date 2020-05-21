@@ -28,6 +28,9 @@ public class io extends Expression
 		else if(act.equals("input"))
 		{
 			String label = this.varEx.getLabel();
+			if(this.varEx.getType().equals("S"))
+				label += "$";
+			
 			absFile.add(new Line("INPUT " + label));
 			absFile.add(new Line(this.varEx.trans(absFile) + " = " + label));
 		} 

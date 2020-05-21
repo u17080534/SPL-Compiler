@@ -160,6 +160,12 @@ public class TerminalExpression extends Expression
 
 	public Line trans(File absFile)
 	{     
-		return new Line(this.value);
+		String name = this.value;
+
+		// String variables append $
+		if(this.symbol.getType().equals("S") && !this.alias.equals("string_literal"))
+			name += "$";
+
+		return new Line(name);
 	}
 } 

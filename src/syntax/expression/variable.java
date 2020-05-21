@@ -25,8 +25,8 @@ public class variable extends Expression
 		String name = this.variable.trans(absFile).toString();
 
 		//String variables append $
-		if(this.variable.getType().equals("S"))
-			name += "$";
+		// if(this.variable.getType().equals("S"))
+		// 	name += "$";
 
 		return new Line(name);   
 	}

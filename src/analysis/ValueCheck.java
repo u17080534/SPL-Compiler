@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 public class ValueCheck
 {
+	private static boolean WARNINGS = false;
+	
 	public static void check(SymbolTable table) throws ValueException
 	{
 		//All these are objects that are passed by reference to functions
@@ -253,7 +255,30 @@ public class ValueCheck
 
 						}
 						else if(variableMap.get(symbols.get(i).getExpression()) == 3){
-							warningsDisplay.add(symbols.get(i));
+
+							boolean assigned = false;
+							int idOfLoopOrIF = recursiveCheckForLoopOrIf(symbols.get(i).getExpr());
+							if(idOfLoopOrIF != -1){
+								//usage was in a loop or if statement
+								for(int t = idOfLoopOrIF; t < symbols.get(i).getID(); t++){
+									//check for assign or input in the loop or if statement above the variable usage
+									if(symbols.get(t).getExpression().contains(symbols.get(i).getExpression())){
+
+										if(symbols.get(t).getExpr().getParent().getParent().getExpr().equals("ASSIGN")){
+											assigned = true;
+											break;
+										}
+										if(symbols.get(t).getExpr().getParent().getParent().getDescendents().get(0).getExpr().contains("input")){
+											assigned = true;
+											break;
+										}
+
+									}
+								}
+							}
+							if(!assigned){
+								warningsDisplay.add(symbols.get(i));
+							}
 						}
 					}
 				}
@@ -273,11 +298,13 @@ public class ValueCheck
 
 		//warnings
 		warningsDisplay = warningsDisplay.stream().distinct().collect(Collectors.toCollection(Vector::new));
-		for (Symbol symbol : warningsDisplay)
-		{
-			if(symbol.getHasValue() == false)
-				System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
-		}
+
+		if(WARNINGS)
+			for (Symbol symbol : warningsDisplay)
+			{
+				if(symbol.getHasValue() == false)
+					System.out.println("Value Warning: Variable might not be assigned a value [" + symbol.getAlias() + "]" + symbol.getLocation());
+			}
 
 		//value errors
 		needsValue = needsValue.stream().distinct().collect(Collectors.toCollection(Vector::new));
@@ -356,6 +383,23 @@ public class ValueCheck
 		}
 
 	}
+
+	private static int recursiveCheckForLoopOrIf(Expression code){
+
+		int r = -1;
+
+		if(code.getExpr().contains("COND_BRANCH") || code.getExpr().contains("COND_LOOP")){
+			r = code.getSymbol().getID();
+			return r;
+		}
+
+		if(code.getParent() != null){
+			r = recursiveCheckForLoopOrIf(code.getParent());
+		}
+
+		return r;
+	}
+
 
 	private static void recursiveGetParent(Expression code, Vector<Symbol> symbols, Stack<Integer> markerStack, Stack<Integer> holderStack, CheckObject checkObj){
 

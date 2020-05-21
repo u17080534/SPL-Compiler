@@ -130,7 +130,7 @@ public class SPL
         {
             this.checkScope();
             this.checkType();
-            this.checkValues();
+            // // this.checkValues();
 
             this.cache.export(this.tree);
             this.cache.export(this.table);

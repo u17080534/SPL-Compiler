@@ -87,20 +87,19 @@ public class bool extends Expression
 			if(this.e1 == null) // T / F
 			{
 				if(distinct.equals("T"))
-					return new Line("1");
+					absFile.add(new Line(temp + " = 1"));
 
 				if(distinct.equals("F"))
-					return new Line("0");
+					absFile.add(new Line(temp + " = 0"));
 			}
 			else
 			{
 				if(this.e2 == null) // ID / NOT 
 				{
+					String var1 = "TMPB" + this.e1.getID() + "1";
+					String var2 = "TMPB" + this.e1.getID() + "2";
 					if(distinct.equals("and"))
 					{
-						String var1 = "TMPB" + this.e1.getID() + "1";
-						String var2 = "TMPB" + this.e1.getID() + "2";
-
 						this.e1.trans(absFile);
 
 						absFile.add(new Line(temp + " = 0"));
@@ -114,9 +113,6 @@ public class bool extends Expression
 					}
 					else if(distinct.equals("or"))
 					{
-						String var1 = "TMPB" + this.e1.getID() + "1";
-						String var2 = "TMPB" + this.e1.getID() + "2";
-
 						this.e1.trans(absFile);
 
 						absFile.add(new Line(temp + " = 1"));
@@ -135,23 +131,37 @@ public class bool extends Expression
 				}
 				else // EQ / > / < / AND / OR 
 				{
+					String var1 = temp + "1";
+					String var2 = temp + "2";
+
 					if(distinct.equals("eq"))
 					{
-						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
-						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
-						absFile.add(new Line(temp + " = " + temp + "1 = " + temp + "2"));
+						if(this.e1.getType().equals("S") && this.e2.getType().equals("S"))
+						{
+							var1 += "$";
+							var2 += "$";
+							absFile.add(new Line(var1 + " = " + this.e1.trans(absFile).toString()));
+							absFile.add(new Line(var2 + " = " + this.e2.trans(absFile).toString()));
+							absFile.add(new Line(temp + " = " + var1 + " = " + var2));
+						}
+						else
+						{
+							absFile.add(new Line(var1 + " = " + this.e1.trans(absFile).toString()));
+							absFile.add(new Line(var2 + " = " + this.e2.trans(absFile).toString()));
+							absFile.add(new Line(temp + " = " + var1 + " = " + var2));
+						}
 					}
 					else if(distinct.equals(">"))
 					{
-						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
-						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
-						absFile.add(new Line(temp + " = " + temp + "1 > " + temp + "2"));
+						absFile.add(new Line(var1 + " = " + this.e1.trans(absFile).toString()));
+						absFile.add(new Line(var2 + " = " + this.e2.trans(absFile).toString()));
+						absFile.add(new Line(temp + " = " + var1 + " > " + var2));
 					}
 					else if(distinct.equals("<"))
 					{
-						absFile.add(new Line(temp + "1 = " + this.e1.trans(absFile).toString()));
-						absFile.add(new Line(temp + "2 = " + this.e2.trans(absFile).toString()));
-						absFile.add(new Line(temp + " = " + temp + "1 < " + temp + "2"));
+						absFile.add(new Line(var1 + " = " + this.e1.trans(absFile).toString()));
+						absFile.add(new Line(var2 + " = " + this.e2.trans(absFile).toString()));
+						absFile.add(new Line(temp + " = " + var1 + " < " + var2));
 					}
 				}
 			}
